@@ -8,18 +8,19 @@
     flex-direction: column;
     justify-content: center;
     margin: auto;
+
     
 }
 
 .squareRow {
     display: flex;
-    width: 240px;
-    height: 30px;
+    width: 480px;
+    height: 60px;
     background-color: aqua;
 }
 .square{
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 60px;
     margin: auto;
 
 
@@ -30,4 +31,11 @@
 }
 .black {
     background-color: #779556;
+}
+
+
+.piece {
+    /* width: 60px;
+    height: 60px;
+    margin: auto; */
 }

@@ -13,4 +13,6 @@ import { initGameRender } from "./Render/main.js";
 
 // console.log(initGame());
 
-initGameRender(initGame());
+const gobalData = initGame();
+
+initGameRender(gobalData);
