@@ -7,12 +7,17 @@ function pieceRender(data) {
   // Implementation for rendering pieces
   data.forEach((row) => {
     row.forEach((square) => {
+      // console.log(square);
+
       // if square has a piece, render it
-      if (square.piece) {
+      if (square.piece != "null") {
+        // console.log(square.piece);
+
         const squareElement = document.getElementById(square.id);
 
         // Create piece element
         const piece = document.createElement("img");
+
         piece.src = square.piece.img;
         piece.classList.add("piece");
 
@@ -27,7 +32,7 @@ function pieceRender(data) {
 // (OR) use whwn you want to render board for first time when you start game.
 function initGameRender(data) {
   // Render each board row and square into the root container.
-
+  // OR
   // Each element array represents a row, and each square object includes color.
   data.forEach((element) => {
     const rowElement = document.createElement("div");
@@ -55,7 +60,7 @@ function initGameRender(data) {
     rowElement.classList.add("squareRow");
     //     console.log(rowElement);
   });
-  console.log(data);
+  // console.log(data);
   pieceRender(data);
 }
 

@@ -1,16 +1,15 @@
 function blackPawn(current_Position) {
   return {
     current_Position,
-    img: "./assets/pieces/blackPawn.png",
+    img: "./Assets/Pieces/black/pawn.png",
   };
 }
 
 function whitePawn(current_Position) {
   return {
     current_Position,
-    img: "./assets/pieces/whitePawn.png",
+    img: "./Assets/Pieces/white/pawn.png",
   };
 }
 
-export { blackPawn };
-export { whitePawn };
+export { blackPawn, whitePawn };

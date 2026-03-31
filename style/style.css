@@ -1,6 +1,10 @@
 *{
-    background-color: black;
+    box-sizing: border-box;
     color: white;
+}
+
+body{
+    background-color: black;
 }
 
 #root {
@@ -35,7 +39,9 @@
 
 
 .piece {
-    /* width: 60px;
+    width: 60px;
     height: 60px;
-    margin: auto; */
+    margin: auto;    
+    /* background-color: transparent; */
+    display: block;
 }
