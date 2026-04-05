@@ -1,9 +1,9 @@
 // import { blackPawn } from "../Data/pieces.js";
 // import { whitePawn } from "../Data/pieces.js";
-
+import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
+import { gobalData } from "../index.js";
 
-const ROOT_DIV = document.getElementById("root");
 // Use when you want to render pieces on board (after first time when you start game).
 function pieceRender(data) {
   // Implementation for rendering pieces
@@ -113,4 +113,23 @@ function initGameRender(data) {
   pieceRender(data);
 }
 
-export { initGameRender };
+// render highlight circle.
+function renderHightlight(sqaureId) {
+  // console.log(sqaureId);
+  const hightlightSpan = document.createElement("span");
+  hightlightSpan.classList.add("highlight");
+  document.getElementById(sqaureId).appendChild(hightlightSpan);
+}
+
+// clear all highlights circle from the board
+function clearHighlight() {
+  const flatArray = gobalData.flat();
+
+  flatArray.forEach((el) => {
+    if (el.highlighted) {
+      document.getElementById(el.id).innerHTML = "";
+      el.highlighted = false;
+    }
+  });
+}
+export { initGameRender, renderHightlight, clearHighlight };

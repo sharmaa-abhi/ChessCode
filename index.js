@@ -10,9 +10,13 @@ console.log(Square("white", "pawn", "a2"));
 
 import { initGame } from "./Data/data.js";
 import { initGameRender } from "./Render/main.js";
+import { globalEvent } from "./Events/Global.js";
 
 // console.log(initGame());
 
 const gobalData = initGame();
 
+export { gobalData };
+
 initGameRender(gobalData);
+globalEvent();

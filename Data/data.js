@@ -1,10 +1,19 @@
+import { renderHightlight } from "../Render/main.js";
+import { gobalData } from "../index.js";
+
 function Greet() {
   alert("Hello");
 }
 
 // for each square
 function Square(color, piece, id) {
-  return { color, piece, id };
+  const hightLight = function () {
+    renderHightlight(this.id);
+    this.highlighted = true;
+    // console.log(gobalData);
+  };
+
+  return { color, piece, id, hightLight };
 }
 
 function squareRow(rowId) {
