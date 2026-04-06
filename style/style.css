@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: black;
+  background-color: #302E2B;
 }
 
 #root {
@@ -34,6 +34,9 @@ body {
   background-color: #779556;
 }
 
+.highlightYellow {
+  background-color:#f7f769;
+}
 .piece {
   width: 60px;
   height: 60px;

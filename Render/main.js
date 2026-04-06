@@ -4,6 +4,21 @@ import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
 import { gobalData } from "../index.js";
 
+function clearPreviousSelfHighlight(piece) {
+  // console.log(piece);
+  if (piece) {
+    document
+      .getElementById(piece.current_Position)
+      .classList.remove("highlightYellow");
+  }
+}
+
+function selfHighLight(piece) {
+  document
+    .getElementById(piece.current_Position)
+    .classList.add("highlightYellow");
+}
+
 // Use when you want to render pieces on board (after first time when you start game).
 function pieceRender(data) {
   // Implementation for rendering pieces
@@ -132,4 +147,10 @@ function clearHighlight() {
     }
   });
 }
-export { initGameRender, renderHightlight, clearHighlight };
+export {
+  initGameRender,
+  renderHightlight,
+  clearHighlight,
+  selfHighLight,
+  clearPreviousSelfHighlight,
+};

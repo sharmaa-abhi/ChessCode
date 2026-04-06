@@ -2,12 +2,22 @@ import { ROOT_DIV } from "../Helper/constant.js";
 import { gobalData } from "../index.js";
 import { renderHightlight } from "../Render/main.js";
 import { clearHighlight } from "../Render/main.js";
+import { selfHighLight } from "../Render/main.js";
+import { clearPreviousSelfHighlight } from "../Render/main.js";
 // import { sqaure } from "../Data/data.js";
 
 //hightlight or not => state.
 let highlightState = false;
 
+// current self-highlighted square state
+let selfHighlightState = null;
+
 function whitePawnClick({ piece }) {
+  //higlight clicked element
+  clearPreviousSelfHighlight(selfHighlightState);
+  selfHighLight(piece);
+  selfHighlightState = piece;
+
   const current_pos = piece.current_Position;
   //on initial position
   if (piece.current_Position[1] == "2") {
@@ -27,10 +37,6 @@ function whitePawnClick({ piece }) {
           }
         });
       });
-
-      // if (highlightState) clearHighlight();
-      // renderHightlight(highLight);
-      // highlightState = true;
     });
   }
 
