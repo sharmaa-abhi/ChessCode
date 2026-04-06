@@ -4,6 +4,7 @@ import { renderHightlight } from "../Render/main.js";
 import { clearHighlight } from "../Render/main.js";
 import { selfHighLight } from "../Render/main.js";
 import { clearPreviousSelfHighlight } from "../Render/main.js";
+import { moveElement } from "../Render/main.js";
 // import { sqaure } from "../Data/data.js";
 
 //hightlight or not => state.
@@ -12,11 +13,25 @@ let highlightState = false;
 // current self-highlighted square state
 let selfHighlightState = null;
 
+//  In move state or not
+let moveState = null;
+
 function whitePawnClick({ piece }) {
+  // if clicked on same element twuce.
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    selfHighlightState = null;
+    clearHighlight();
+    return;
+  }
+
   //higlight clicked element
   clearPreviousSelfHighlight(selfHighlightState);
   selfHighLight(piece);
   selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
 
   const current_pos = piece.current_Position;
   //on initial position
@@ -53,6 +68,27 @@ function globalEvent() {
 
       if (sqaure.piece.piece_name === "WHITE_PAWN") {
         whitePawnClick(sqaure);
+      }
+    } else {
+      const childElementOfClickedElement = Array.from(event.target.childNodes);
+
+      if (
+        childElementOfClickedElement.length == 1 ||
+        event.target.localName === "span"
+      ) {
+        if (event.target.localName === "span") {
+          const id = event.target.parentNode.id;
+          moveElement(moveState, id);
+          moveState = null;
+        } else {
+          const id = event.target.id;
+          moveElement(moveState, id);
+          moveState = null;
+        }
+      } else {
+        // clear highlight
+        clearHighlight();
+        clearPreviousSelfHighlight(selfHighlightState);
       }
     }
   });

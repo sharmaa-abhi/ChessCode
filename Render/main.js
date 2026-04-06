@@ -4,6 +4,32 @@ import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
 import { gobalData } from "../index.js";
 
+// move element with sqaure id
+function moveElement(piece, Id) {
+  const flatData = gobalData.flat();
+
+  flatData.forEach((el) => {
+    if (el.id === piece.current_Position) {
+      delete el.piece;
+    }
+
+    if (el.id === Id) {
+      el.piece = piece;
+    }
+  });
+
+  clearHighlight();
+
+  const previousPiece = document.getElementById(piece.current_Position);
+  previousPiece.classList.remove("highlightYellow");
+  const currentPiece = document.getElementById(Id);
+
+  currentPiece.innerHTML = previousPiece.innerHTML;
+  previousPiece.innerHTML = "";
+
+  piece.current_Position = Id;
+}
+
 function clearPreviousSelfHighlight(piece) {
   // console.log(piece);
   if (piece) {
@@ -153,4 +179,5 @@ export {
   clearHighlight,
   selfHighLight,
   clearPreviousSelfHighlight,
+  moveElement,
 };
