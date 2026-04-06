@@ -23,7 +23,6 @@ function moveElement(piece, Id) {
   const previousPiece = document.getElementById(piece.current_Position);
   previousPiece.classList.remove("highlightYellow");
   const currentPiece = document.getElementById(Id);
-
   currentPiece.innerHTML = previousPiece.innerHTML;
   previousPiece.innerHTML = "";
 

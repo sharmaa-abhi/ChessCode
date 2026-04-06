@@ -16,6 +16,7 @@ let selfHighlightState = null;
 //  In move state or not
 let moveState = null;
 
+// white pawn click event handler
 function whitePawnClick({ piece }) {
   // if clicked on same element twuce.
   if (piece == selfHighlightState) {
@@ -26,7 +27,6 @@ function whitePawnClick({ piece }) {
   }
 
   //higlight clicked element
-  clearPreviousSelfHighlight(selfHighlightState);
   selfHighLight(piece);
   selfHighlightState = piece;
 
@@ -39,6 +39,90 @@ function whitePawnClick({ piece }) {
     const highlightedSquareIds = [
       `${current_pos[0]}${Number(current_pos[1]) + 1}`,
       `${current_pos[0]}${Number(current_pos[1]) + 2}`,
+    ];
+
+    // clear board for any  previous highlights.
+    clearHighlight();
+
+    highlightedSquareIds.forEach((highLight) => {
+      gobalData.forEach((row) => {
+        row.forEach((element) => {
+          if (element.id === highLight) {
+            element.hightLight(true);
+          }
+        });
+      });
+    });
+  } else {
+    const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${current_pos[0]}${Number(current_pos[1]) + 1}`;
+    const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${current_pos[0]}${Number(current_pos[1]) + 1}`;
+
+    console.log(col1, col2);
+    console.log(current_pos);
+
+    const captureIds = [];
+
+    const highlightedSquareIds = [
+      `${current_pos[0]}${Number(current_pos[1]) + 1}`,
+    ];
+
+    // clear board for any  previous highlights.
+    clearHighlight();
+
+    highlightedSquareIds.forEach((highLight) => {
+      gobalData.forEach((row) => {
+        row.forEach((element) => {
+          if (element.id === highLight) {
+            element.hightLight(true);
+          }
+        });
+      });
+    });
+  }
+
+  // console.log(gobalData);
+}
+
+// black pawn click event handler
+function blackPawnClick({ piece }) {
+  // if clicked on same element twuce.
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    selfHighlightState = null;
+    clearHighlight();
+    return;
+  }
+
+  //higlight clicked element
+  selfHighLight(piece);
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  //on initial position
+  if (piece.current_Position[1] == "7") {
+    const highlightedSquareIds = [
+      `${current_pos[0]}${Number(current_pos[1]) - 1}`,
+      `${current_pos[0]}${Number(current_pos[1]) - 2}`,
+    ];
+
+    // clear board for any  previous highlights.
+    clearHighlight();
+
+    highlightedSquareIds.forEach((highLight) => {
+      gobalData.forEach((row) => {
+        row.forEach((element) => {
+          if (element.id === highLight) {
+            element.hightLight(true);
+          }
+        });
+      });
+    });
+  } else {
+    const highlightedSquareIds = [
+      `${current_pos[0]}${Number(current_pos[1]) - 1}`,
     ];
 
     // clear board for any  previous highlights.
@@ -68,6 +152,8 @@ function globalEvent() {
 
       if (sqaure.piece.piece_name === "WHITE_PAWN") {
         whitePawnClick(sqaure);
+      } else if (sqaure.piece.piece_name === "BLACK_PAWN") {
+        blackPawnClick(sqaure);
       }
     } else {
       const childElementOfClickedElement = Array.from(event.target.childNodes);
@@ -85,10 +171,15 @@ function globalEvent() {
           moveElement(moveState, id);
           moveState = null;
         }
+        // clear highlight
+        clearHighlight();
+        clearPreviousSelfHighlight(selfHighlightState);
+        selfHighlightState = null;
       } else {
         // clear highlight
         clearHighlight();
         clearPreviousSelfHighlight(selfHighlightState);
+        selfHighlightState = null;
       }
     }
   });
