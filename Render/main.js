@@ -1,19 +1,41 @@
-// import { blackPawn } from "../Data/pieces.js";
-// import { whitePawn } from "../Data/pieces.js";
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
-import { gobalData } from "../index.js";
+import { globalData } from "../index.js";
 
-// move element with sqaure id
-function moveElement(piece, Id) {
-  const flatData = gobalData.flat();
+// function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
+function globalStateRender() {
+  globalData.forEach((row) => {
+    row.forEach((element) => {
+      // if square highlight is true
+      if (element.highlight) {
+        const highlightSpan = document.createElement("span");
+        highlightSpan.classList.add("highlight");
+        document.getElementById(element.id).appendChild(highlightSpan);
+      } else if (element.highlight === null) {
+        const el = document.getElementById(element.id);
+        const highlights = Array.from(el.getElementsByTagName("span"));
+        highlights.forEach((element) => {
+          el.removeChild(element);
+        });
+      }
+
+      // Implementation for rendering pieces
+      if (element.piece != "null") {
+      }
+    });
+  });
+}
+
+// move element with square id
+function moveElement(piece, id) {
+  const flatData = globalData.flat();
 
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
       delete el.piece;
     }
 
-    if (el.id === Id) {
+    if (el.id === id) {
       el.piece = piece;
     }
   });
@@ -22,11 +44,11 @@ function moveElement(piece, Id) {
 
   const previousPiece = document.getElementById(piece.current_Position);
   previousPiece.classList.remove("highlightYellow");
-  const currentPiece = document.getElementById(Id);
+  const currentPiece = document.getElementById(id);
   currentPiece.innerHTML = previousPiece.innerHTML;
   previousPiece.innerHTML = "";
 
-  piece.current_Position = Id;
+  piece.current_Position = id;
 }
 
 function clearPreviousSelfHighlight(piece) {
@@ -38,7 +60,7 @@ function clearPreviousSelfHighlight(piece) {
   }
 }
 
-function selfHighLight(piece) {
+function selfHighlight(piece) {
   document
     .getElementById(piece.current_Position)
     .classList.add("highlightYellow");
@@ -71,7 +93,7 @@ function pieceRender(data) {
 }
 
 // this function calls when game starts (only for one time)
-// (OR) use whwn you want to render board for first time when you start game.
+// (OR) use when you want to render board for first time when you start game.
 function initGameRender(data) {
   // Render each board row and square into the root container.
   // OR
@@ -86,7 +108,6 @@ function initGameRender(data) {
       // Render blackPawn
       if (square.id[1] == 7) {
         square.piece = pieces.blackPawn(square.id);
-        // console.log("black pawn,", square.piece);
       }
 
       // Render blackKnight
@@ -114,7 +135,6 @@ function initGameRender(data) {
       // Render whitePawn
       if (square.id[1] == 2) {
         square.piece = pieces.whitePawn(square.id);
-        // console.log("white pawn,", square.piece);
       }
 
       // Render whiteKnight
@@ -154,29 +174,34 @@ function initGameRender(data) {
 }
 
 // render highlight circle.
-function renderHightlight(sqaureId) {
-  // console.log(sqaureId);
-  const hightlightSpan = document.createElement("span");
-  hightlightSpan.classList.add("highlight");
-  document.getElementById(sqaureId).appendChild(hightlightSpan);
+function renderHighlight(squareId) {
+  // console.log(squareId);
+  const highlightSpan = document.createElement("span");
+  highlightSpan.classList.add("highlight");
+  document.getElementById(squareId).appendChild(highlightSpan);
 }
 
 // clear all highlights circle from the board
 function clearHighlight() {
-  const flatArray = gobalData.flat();
+  const flatArray = globalData.flat();
 
   flatArray.forEach((el) => {
-    if (el.highlighted) {
-      document.getElementById(el.id).innerHTML = "";
-      el.highlighted = false;
+    // if (el.captureHighlight) {
+    //   document.getElementById(el.id).classList.remove("captureColor");
+    // }
+
+    if (el.highlight) {
+      el.highlight = null;
     }
+    globalStateRender();
   });
 }
 export {
   initGameRender,
-  renderHightlight,
+  renderHighlight,
   clearHighlight,
-  selfHighLight,
+  selfHighlight,
   clearPreviousSelfHighlight,
   moveElement,
+  globalStateRender,
 };

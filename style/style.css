@@ -46,6 +46,10 @@ body {
   cursor: pointer;
 }
 
+.captureColor{
+  background-color: #EE4b2b;
+}
+
 .highlight {
   position: absolute;
   top: 50%;

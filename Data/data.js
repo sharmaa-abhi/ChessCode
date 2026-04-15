@@ -1,5 +1,5 @@
-import { renderHightlight } from "../Render/main.js";
-import { gobalData } from "../index.js";
+import { renderHighlight } from "../Render/main.js";
+import { globalData } from "../index.js";
 
 function Greet() {
   alert("Hello");
@@ -7,13 +7,13 @@ function Greet() {
 
 // for each square
 function Square(color, piece, id) {
-  const hightLight = function () {
-    renderHightlight(this.id);
-    this.highlighted = true;
-    // console.log(gobalData);
-  };
+  // const highlight = function () {
+  //   renderHighlight(this.id);
+  //   this.highlighted = true;
 
-  return { color, piece, id, hightLight };
+  // };
+
+  return { color, piece, id };
 }
 
 function squareRow(rowId) {

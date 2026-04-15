@@ -14,9 +14,9 @@ import { globalEvent } from "./Events/Global.js";
 
 // console.log(initGame());
 
-const gobalData = initGame();
+const globalData = initGame();
 
-export { gobalData };
-
-initGameRender(gobalData);
+initGameRender(globalData);
 globalEvent();
+
+export { globalData };
