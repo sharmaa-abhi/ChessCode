@@ -7,15 +7,15 @@ import { clearPreviousSelfHighlight } from "../Render/main.js";
 import { moveElement } from "../Render/main.js";
 import { checkPieceOfOpponentOnElement } from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
-// import { square } from "../Data/data.js";
+import { Square } from "../Data/data.js";
 
-// highlight or not => state.
+// Whether highlight mode is active.
 let highlightState = false;
 
-// current self-highlighted square state
+// Current self-highlighted square state.
 let selfHighlightState = null;
 
-// In move state or not
+// Whether a piece is currently selected to move.
 let moveState = null;
 
 // Local helper that clears highlights and resets highlight state.
@@ -24,7 +24,7 @@ function clearHighlightLocal() {
   highlightState = false;
 }
 
-// move piece piece X-square to Y-square
+// Move a piece from X-square to Y-square.
 function movePieceFromXtoY(from, to) {
   // console.log(from, to);
 }
@@ -36,7 +36,7 @@ function whitePawnClick({ piece }) {
 
   clearPreviousSelfHighlight(selfHighlightState);
 
-  // if clicked on same element twice.
+  // If clicked on same element twice.
   if (piece == selfHighlightState) {
     clearPreviousSelfHighlight(selfHighlightState);
     selfHighlightState = null;
@@ -49,24 +49,24 @@ function whitePawnClick({ piece }) {
   highlightState = true;
   selfHighlightState = piece;
 
-  // add piece as move state
+  // Add piece as move state.
   moveState = piece;
 
   const current_pos = piece.current_Position;
-  //on initial position
+  // On initial position.
   if (piece.current_Position[1] == "2") {
     const highlightedSquareIds = [
       `${current_pos[0]}${Number(current_pos[1]) + 1}`,
       `${current_pos[0]}${Number(current_pos[1]) + 2}`,
     ];
 
-    // clear board for any  previous highlights.
+    // Clear board for any previous highlights.
     // clearHighlight();
 
-    highlightedSquareIds.forEach((highLight) => {
+    highlightedSquareIds.forEach((highlightId) => {
       globalData.forEach((row) => {
         row.forEach((element) => {
-          if (element.id === highLight) {
+          if (element.id === highlightId) {
             // element.highlight = true;
             element.highlight = true;
             // console.log(element);
@@ -98,10 +98,10 @@ function whitePawnClick({ piece }) {
     // console.log(current_pos);
     // console.log(highlightedSquareIds);
 
-    highlightedSquareIds.forEach((highLight) => {
+    highlightedSquareIds.forEach((highlightId) => {
       globalData.forEach((row) => {
         row.forEach((element) => {
-          if (element.id === highLight) {
+          if (element.id === highlightId) {
             element.highlight = true;
           }
         });
@@ -120,7 +120,7 @@ function blackPawnClick({ piece }) {
     return;
   }
   clearPreviousSelfHighlight(selfHighlightState);
-  // if clicked on same element twice.
+  // If clicked on same element twice.
   if (piece == selfHighlightState) {
     clearPreviousSelfHighlight(selfHighlightState);
     selfHighlightState = null;
@@ -133,24 +133,24 @@ function blackPawnClick({ piece }) {
   highlightState = true;
   selfHighlightState = piece;
 
-  // add piece as move state
+  // Add piece as move state.
   moveState = piece;
 
   const current_pos = piece.current_Position;
-  //on initial position
+  // On initial position.
   if (piece.current_Position[1] == "7") {
     const highlightedSquareIds = [
       `${current_pos[0]}${Number(current_pos[1]) - 1}`,
       `${current_pos[0]}${Number(current_pos[1]) - 2}`,
     ];
 
-    // clear board for any  previous highlights.
+    // Clear board for any previous highlights.
     // clearHighlight();
 
-    highlightedSquareIds.forEach((highLight) => {
+    highlightedSquareIds.forEach((highlightId) => {
       globalData.forEach((row) => {
         row.forEach((element) => {
-          if (element.id === highLight) {
+          if (element.id === highlightId) {
             element.highlight = true;
           }
         });
@@ -166,10 +166,10 @@ function blackPawnClick({ piece }) {
     // // clear board for any  previous highlights.
     // clearHighlight();
 
-    highlightedSquareIds.forEach((highLight) => {
+    highlightedSquareIds.forEach((highlightId) => {
       globalData.forEach((row) => {
         row.forEach((element) => {
-          if (element.id === highLight) {
+          if (element.id === highlightId) {
             element.highlight = true;
           }
         });
@@ -186,11 +186,15 @@ function globalEvent() {
       const clickId = event.target.parentNode.id;
       const flatArray = globalData.flat();
       const square = flatArray.find((el) => el.id === clickId);
+      const pieceName =
+        square && square.piece && typeof square.piece === "object"
+          ? square.piece.piece_name
+          : null;
       // console.log(square.piece.piece_name);
 
-      if (square.piece.piece_name === "WHITE_PAWN") {
+      if (pieceName === "WHITE_PAWN") {
         whitePawnClick(square);
-      } else if (square.piece.piece_name === "BLACK_PAWN") {
+      } else if (pieceName === "BLACK_PAWN") {
         blackPawnClick(square);
       }
     } else {
@@ -214,8 +218,6 @@ function globalEvent() {
         // clearPreviousSelfHighlight(selfHighlightState);
         // selfHighlightState = null;}
       } else {
-        // clear highlight
-        // clearHighlight();
         clearHighlightLocal();
         clearPreviousSelfHighlight(selfHighlightState);
         selfHighlightState = null;

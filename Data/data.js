@@ -58,4 +58,4 @@ function initGame() {
   ];
 }
 
-export { initGame };
+export { initGame, Square };

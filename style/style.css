@@ -11,18 +11,19 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
+  width: max-content;
+  margin: 20px auto;
 }
 
 .squareRow {
   display: flex;
-  width: 480px;
-  height: 60px;
+  width: 560px;
+  height: 70px;
   background-color: aqua;
 }
 .square {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   margin: auto;
   position: relative;
 }
@@ -38,8 +39,8 @@ body {
   background-color:#f7f769;
 }
 .piece {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   margin: auto;
   /* background-color: transparent; */
   display: block;
