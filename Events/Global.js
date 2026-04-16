@@ -213,10 +213,10 @@ function globalEvent() {
           moveElement(moveState, id);
           moveState = null;
         }
-        // {// clear highlight
-        // clearHighlight();
-        // clearPreviousSelfHighlight(selfHighlightState);
-        // selfHighlightState = null;}
+        // Clear highlights and reset state after move
+        clearHighlightLocal();
+        clearPreviousSelfHighlight(selfHighlightState);
+        selfHighlightState = null;
       } else {
         clearHighlightLocal();
         clearPreviousSelfHighlight(selfHighlightState);

@@ -9,7 +9,11 @@ function checkPieceOfOpponentOnElement(id, color) {
   for (let i = 0; i < flatData.length; i++) {
     const element = flatData[i];
     if (element.id === id) {
-      if (element.piece && element.piece.piece_name.includes(opponentColor)) {
+      if (
+        element.piece &&
+        element.piece.piece_name &&
+        element.piece.piece_name.includes(opponentColor)
+      ) {
         const el = document.getElementById(id);
         el.classList.add("captureColor");
         element.captureHighlight = true;
