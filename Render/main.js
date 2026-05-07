@@ -1,6 +1,7 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
 import { globalData } from "../index.js";
+import { movePieceFromXtoY } from "../Events/Global.js";
 
 // function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
 function globalStateRender() {
@@ -17,10 +18,17 @@ function globalStateRender() {
         highlights.forEach((element) => {
           el.removeChild(element);
         });
-      }
+      } 
 
       // Implementation for rendering pieces
       if (element.piece != "null") {
+        // pieceRender();
+      } else {
+        const el = document.getElementById(element.id);
+        const piece = Array.from(el.getElementsByClassName("piece"));
+        piece.forEach((element) => {
+          el.removeChild(element);
+        });
       }
     });
   });
@@ -28,7 +36,29 @@ function globalStateRender() {
 
 // move element with square id
 function moveElement(piece, id) {
-  const flatData = globalData.flat();
+  // const flatData = globalData.flat();
+
+  // const from = flatData.find((el) => {
+  //   if (el.id === piece.current_Position) return el;
+  // });
+
+  // const to = flatData.find((el) => {
+  //   if (el.id === id) return el;
+  // });
+
+
+  // to.piece = from.piece;
+  // to.piece.current_Position = to.id;
+  // from.piece = null;
+
+  // console.log(from, to);
+  // movePieceFromXtoY(from, to);
+
+  clearHighlight();
+
+
+  // to = piece;
+  // piece.piece = "null";
 
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
