@@ -9,6 +9,18 @@ ChessCode is a browser-based chess project built with vanilla HTML, CSS, and Jav
 - Move highlighting and selection styling
 - Global state used to track board and piece positions
 
+## Key Technologies
+
+- Vanilla HTML, CSS, and JavaScript
+- ES modules for imports/exports
+- No build tooling required (static files)
+
+## Runtime Flow
+
+- `index.html` loads `index.js` and provides the `#root` mount point.
+- `index.js` initializes board data, renders the board/pieces, and wires global events.
+- Rendering and interaction state are held in memory (`globalData`).
+
 ## Project Structure
 
 - `index.html`: App entry point
@@ -17,6 +29,7 @@ ChessCode is a browser-based chess project built with vanilla HTML, CSS, and Jav
 - `Render/main.js`: Board and piece rendering utilities
 - `Data/`: Game data, piece factories, and initial state
 - `Events/`: Event handlers for interactions
+- `Helper/`: Shared constants and helper utilities
 - `Assets/Pieces/`: Piece image assets
 
 ## Getting Started
