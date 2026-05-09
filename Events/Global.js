@@ -27,8 +27,7 @@ function clearHighlightLocal() {
 // Move a piece from X-square to Y-square.
 function movePieceFromXtoY(from, to) {
   to.piece = from.piece;
-  // to.piece.current_Position = from.id;  
-  from.piece = "null";
+  from.piece = null;
   globalStateRender();
 }
 
@@ -116,7 +115,8 @@ function whitePawnClick({ piece }) {
 function blackPawnClick({ piece }) {
 
   if (highlightState) {
-    movePieceFromXtoY(selfHighlightState, piece);
+    // movePieceFromXtoY(selfHighlightState, piece);
+    moveElement(selfHighlightState, piece.current_Position);
     return;
   }
 
@@ -290,17 +290,19 @@ function globalEvent() {
         event.target.localName === "span"
       ) {
         if (event.target.localName === "span") {
+          clearPreviousSelfHighlight(selfHighlightState);
           const id = event.target.parentNode.id;
           moveElement(moveState, id);
           moveState = null;
         } else {
+          clearPreviousSelfHighlight(selfHighlightState);
           const id = event.target.id;
           moveElement(moveState, id);
           moveState = null;
         } 
-        globalStateRender(); 
+        // globalStateRender(); 
       } else {
-        // Clear highlights and reset state after move
+        
         //clear highlights
         clearHighlightLocal();
         clearPreviousSelfHighlight(selfHighlightState);

@@ -21,23 +21,33 @@ function globalStateRender() {
       } 
 
       // Implementation for rendering pieces
-      if (element.piece != "null") {
-        // pieceRender();
-      } else {
-        const el = document.getElementById(element.id);
-        const piece = Array.from(el.getElementsByClassName("piece"));
-        piece.forEach((element) => {
-          el.removeChild(element);
-        });
-      }
+      // if (element.piece?.change != "null" && element.piece != null) {
+       
+      //   const square = element;
+      //   const squareElement = document.getElementById(square.id);
+      //   squareElement.innerHTML = ""; // Clear existing content
+      //   // Create piece element
+      //   const piece = document.createElement("img");
+
+      //   piece.src = square.piece.img;
+      //   piece.classList.add("piece");
+
+      //   // insert into square element
+      //   squareElement.appendChild(piece);
+      // } else if (element.change != "null" && element.piece != null) {
+      //   const el = document.getElementById(element.id);
+      //   const piece = Array.from(el.getElementsByClassName("piece"));
+      //   piece.forEach((element) => {
+      //     el.removeChild(element);
+      //   });
+      // }
     });
   });
 }
 
 // move element with square id
 function moveElement(piece, id) {
-  // const flatData = globalData.flat();
-
+  const flatData = globalData.flat();
   // const from = flatData.find((el) => {
   //   if (el.id === piece.current_Position) return el;
   // });
@@ -48,36 +58,32 @@ function moveElement(piece, id) {
 
 
   // to.piece = from.piece;
+  // to.piece.change = true;
   // to.piece.current_Position = to.id;
+  // from.piece.change = true;
   // from.piece = null;
+  // from.change = true;
 
   // console.log(from, to);
   // movePieceFromXtoY(from, to);
-
-  clearHighlight();
-
-
-  // to = piece;
-  // piece.piece = "null";
-
+ 
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
       delete el.piece;
     }
-
+    
     if (el.id === id) {
       el.piece = piece;
     }
   });
-
+  
+  
   clearHighlight();
-
   const previousPiece = document.getElementById(piece.current_Position);
   previousPiece.classList.remove("highlightYellow");
   const currentPiece = document.getElementById(id);
   currentPiece.innerHTML = previousPiece.innerHTML;
   previousPiece.innerHTML = "";
-
   piece.current_Position = id;
 }
 
@@ -216,9 +222,10 @@ function clearHighlight() {
   const flatArray = globalData.flat();
 
   flatArray.forEach((el) => {
-    // if (el.captureHighlight) {
-    //   document.getElementById(el.id).classList.remove("captureColor");
-    // }
+    if (el.captureHighlight) {
+      document.getElementById(el.id).classList.remove("captureColor");
+      el.captureHighlight = false;
+    }
 
     if (el.highlight) {
       el.highlight = null;
