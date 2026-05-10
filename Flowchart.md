@@ -11,8 +11,8 @@ flowchart TB
 
     W3 -- No --> W7[selfHighlight + set highlightState/selfHighlightState/moveState]
     W7 --> W8{current_Position[1] == "2"?}
-    W8 -- Yes --> W9[highlight +1 and +2 squares]
-    W9 --> W10[clearHighlightLocal]
+    W8 -- Yes --> W9[clearHighlightLocal]
+    W9 --> W10[set highlight = true on +1 and +2 squares]
     W10 --> W11[globalStateRender]
     W11 --> W12([End])
 
@@ -25,7 +25,7 @@ flowchart TB
 
   subgraph BlackPawnClick
     B1([Start]) --> B2{highlightState?}
-    B2 -- Yes --> B3[movePieceFromXtoY]
+    B2 -- Yes --> B3["moveElement(selfHighlightState, piece.current_Position)"]
     B3 --> B4([Return])
 
     B2 -- No --> B5[clearPreviousSelfHighlight]
@@ -36,8 +36,8 @@ flowchart TB
 
     B6 -- No --> B10[selfHighlight + set highlightState/selfHighlightState/moveState]
     B10 --> B11{current_Position[1] == "7"?}
-    B11 -- Yes --> B12[highlight -1 and -2 squares]
-    B12 --> B13[clearHighlightLocal]
+    B11 -- Yes --> B12[clearHighlightLocal]
+    B12 --> B13[set highlight = true on -1 and -2 squares]
     B13 --> B14[globalStateRender]
     B14 --> B15([End])
 

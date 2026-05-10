@@ -15,8 +15,9 @@ ChessCode is a browser-based chess project built with vanilla HTML, CSS, and Jav
 - `index.js`: Bootstraps data, rendering, and event wiring
 - `style/style.css`: Board, squares, and piece styling
 - `Render/main.js`: Board and piece rendering utilities
-- `Data/`: Game data, piece factories, and initial state
-- `Events/`: Event handlers for interactions
+- `Data/`: Game data, piece factories, and initial board state
+- `Events/`: Click event handlers and game interaction logic
+- `Helper/`: Shared constants (`constant.js`) and utility functions (`commonHelper.js`)
 - `Assets/Pieces/`: Piece image assets
 
 ## Getting Started
@@ -33,8 +34,4 @@ If you use VS Code, you can run a quick server with any static server extension,
 
 ## License
 
-No license has been specified yet.
-
-
-
-## branch - move
+No license has been specified yet.
