@@ -10,7 +10,7 @@ flowchart TB
     W5 --> W6([Return])
 
     W3 -- No --> W7[selfHighlight + set highlightState/selfHighlightState/moveState]
-    W7 --> W8{current_Position[1] == 2?}
+    W7 --> W8{rank is 2?}
     W8 -- Yes --> W9[clearHighlightLocal]
     W9 --> W10[set highlight = true on +1 and +2 squares]
     W10 --> W11[globalStateRender]
@@ -35,7 +35,7 @@ flowchart TB
     B8 --> B9([Return])
 
     B6 -- No --> B10[selfHighlight + set highlightState/selfHighlightState/moveState]
-    B10 --> B11{current_Position[1] == 7?}
+    B10 --> B11{rank is 7?}
     B11 -- Yes --> B12[clearHighlightLocal]
     B12 --> B13[set highlight = true on -1 and -2 squares]
     B13 --> B14[globalStateRender]
