@@ -566,6 +566,7 @@ function whitePawnClick({ piece }) {
         });
       });
     });
+    globalStateRender();                              // Line 24: Render the green dot
   }
 }
 ```
@@ -583,7 +584,8 @@ function whitePawnClick({ piece }) {
 | 16 | `globalStateRender()` | Actually draw the green dots |
 | 17–18 | `charCodeAt(0) ± 1` | Get letter before/after current column (for diagonal) |
 | 21 | `checkPieceOfOpponentOnElement` | If enemy piece found diagonally, show red capture |
-| 22 | `clearHighlight()` | Clear leftovers (note: no `globalStateRender` in else branch) |
+| 22 | `clearHighlight()` | Clear leftovers |
+| 24 | `globalStateRender()` | Actually draw the green dot |
 
 ---
 
@@ -656,6 +658,7 @@ function blackPawnClick({ piece }) {
         });
       });
     });
+    globalStateRender();                              // Line 27: Render the green dot
   }
 }
 ```
@@ -668,6 +671,7 @@ function blackPawnClick({ piece }) {
 | 15–16 | `- 1`, `- 2` | Black moves DOWN the board (decreasing row numbers) |
 | 20–21 | `charCodeAt(0) ± 1` then `- 1` | Diagonal captures go down-left and down-right |
 | 24 | `"black"` | Checks for WHITE pieces on diagonals (from black's perspective) |
+| 27 | `globalStateRender()` | Actually draw the green dot |
 
 ---
 

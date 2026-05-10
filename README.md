@@ -22,16 +22,20 @@ ChessCode is a browser-based chess project built with vanilla HTML, CSS, and Jav
 
 ## Getting Started
 
-1. Open `index.html` directly in a browser, or
-2. Serve the folder with a simple static server.
+1. **Serve the folder with a local static server** (required for ES Modules).
 
-If you use VS Code, you can run a quick server with any static server extension, then open the local URL in your browser.
+   Examples:
+   - **Python:** `python -m http.server 8000`
+   - **Node.js:** `npx http-server`
+   - **VS Code:** Use the Live Server extension
+
+> **⚠️ Important:** Do **NOT** open `index.html` directly using `file://` — this will fail because the code uses ES Modules which require HTTP/HTTPS. You must serve the folder via a local server.
 
 ## Notes
 
-- The project uses ES modules, so serving via a local server is recommended for consistent module loading.
+- The project uses ES modules, so serving via a local server is required. Do not open `index.html` directly using a `file://` URL, as it will fail to load modules.
 - Game logic and legal move validation can be extended inside `Data/` and `Events/`.
 
 ## License
 
-No license has been specified yet.
+No license has been specified yet.

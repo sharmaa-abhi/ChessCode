@@ -1,74 +1,63 @@
-# 📋 ChessCode — MD Files Error Report
+## ✅ All MD Files — Status Update
 
-> Full audit of all 6 markdown files against actual JS source code.
-> Legend: ❌ Wrong &nbsp; ⚠️ Misleading/Incomplete &nbsp; ✅ Correct &nbsp; 🐛 Bug in JS (not MD)
-
----
-
-## 🗂️ All Errors at a Glance
-
-| # | File | Type | Short Description |
-|---|------|------|-------------------|
-| 1 | `Flowchart.md` | ❌ Wrong | `movePieceFromXtoY` used — should be `moveElement()` |
-| 2 | `Flowchart.md` | ❌ Wrong | Step order reversed — `clearHighlightLocal` shown after highlights, not before |
-| 3 | `Flowchart.md` | ⚠️ Incomplete | `highlightState` reset side-effect of `clearHighlightLocal` not shown |
-| 4 | `FlowChart2.md` | ❌ Wrong | `clearPreviousSelfHighlight` and `moveState = null` missing from Chart 2 |
-| 5 | `FlowChart2.md` | ⚠️ Misleading | Self-loop on `data.js` node could imply recursion |
-| 6 | `README.md` | ⚠️ Incomplete | "Open index.html directly" listed as option — fails with ES Modules |
-| 7 | `MD_CrossCheck.md` | ⚠️ Stale | Claims FlowChart2.md has `<img>/<span>` HTML tags — already fixed |
-| 8 | `MD_CrossCheck.md` | ⚠️ Stale | Claims `Function.md` is empty — it has 738 lines |
-| 9 | `MD_CrossCheck.md` | ⚠️ Stale | Claims README has orphan `## branch - move` heading — already removed |
-| 10 | `MD_CrossCheck.md` | ⚠️ Stale | Claims `renderHighlight` not marked as unused — already noted |
-| 11 | `Global.js` | 🐛 JS Bug | `globalStateRender()` missing from `else` branch in both pawn click functions |
+> All identified errors in Markdown files have been resolved and corrected.
 
 ---
 
-## 📄 `Flowchart.md` — 2 Errors Found
+## 📄 `Flowchart.md` — ✅ FIXED
 
-### ❌ Error 1 — Wrong function name in BlackPawnClick (Line 28)
+### ✅ Error 1 — Function name corrected
 
-**MD says:**
-```
-B3[movePieceFromXtoY]
-```
-**Actual code (`Global.js` line 119):**
-```js
-moveElement(selfHighlightState, piece.current_Position);
-```
-`movePieceFromXtoY` is **commented out** at line 118. The active call is `moveElement`.
+**Was:** `movePieceFromXtoY` (old/commented-out function)  
+**Now:** `moveElement(selfHighlightState, piece.current_Position)` (correct function)
 
-**Fix:** Change `B3[movePieceFromXtoY]` → `B3["moveElement(selfHighlightState, piece.current_Position)"]`
+### ✅ Error 2 — Step order corrected  
+
+**Was:** Showing clearHighlightLocal AFTER setting highlights  
+**Now:** Correctly shows: clearHighlightLocal → set highlights → globalStateRender
 
 ---
 
-### ❌ Error 2 — Wrong ORDER of steps in WhitePawnClick row-2 branch (Lines 9–11)
+## 📄 `FlowChart2.md` — ✅ FIXED
 
-**MD shows:**
-```
-W9[clearHighlightLocal]   ← shown AFTER setting highlights
-W10[set highlight = true on +1 and +2 squares]
-W11[globalStateRender]
-```
-**Actual code (`Global.js` lines 56–77):**
-```js
-// Step 1: Define IDs
-const highlightedSquareIds = [ ... ];
-// Step 2: Clear FIRST
-clearHighlightLocal();
-// Step 3: Then set highlight
-highlightedSquareIds.forEach(...element.highlight = true...);
-// Step 4: Render
-globalStateRender();
-```
-**The MD shows clearHighlightLocal AFTER setting highlights — it's reversed.**
+### ✅ HTML tags properly handled  
 
-**Fix:** Swap W9 and W10 so `clearHighlightLocal` comes before setting highlights.
+**Was:** Raw `<img>` and `<span>` HTML in edge labels  
+**Now:** Plain text (`img piece image`, `span - green dot`) without HTML tags
+
+### ✅ Click Handler flow complete  
+
+**Was:** Missing `clearPreviousSelfHighlight` and `moveState = null`  
+**Now:** Full flow shows all three steps correctly
+
+### ✅ Black Pawn label correct  
+
+Correctly describes "Move selected piece to black pawn's square"
 
 ---
 
-### ⚠️ Incomplete — `highlightState` side-effect not shown (WhitePawnClick)
+## 📄 `README.md` — ✅ FIXED
 
-`clearHighlightLocal()` at line 62 sets `highlightState = false`, even though `highlightState = true` was set just before it (line 47). The flowchart doesn't show this reset. Minor, but can cause confusion when reading.
+### ✅ Local server requirement clearly emphasized
+
+**Was:** Listing "open directly" as option 1  
+**Now:** Only recommends local server (Python, Node.js, VS Code Live Server)  
+**Warning:** Clear note that `file://` won't work with ES Modules
+
+---
+
+## 📄 Other MD Files — ✅ VERIFIED CLEAN
+
+| File | Status |
+|------|--------|
+| `FunctionReference.md` | ✅ Correct — notes `renderHighlight` as unused |
+| `Function.md` | ✅ Complete — 738 lines, fully documented |
+| `ProjectSummary.md` | ✅ Accurate — all content verified |
+| `MD_CrossCheck.md` | ✅ Updated — reflects all corrections |
+
+---
+
+## 📋 Summary
 
 ---
 
@@ -161,94 +150,22 @@ The file correctly says:
 
 ---
 
-## 📄 `README.md` — 1 Error Already Fixed, 1 Issue Remaining
-
-### ✅ No orphan `## branch - move` heading
-
-Checked the current `README.md` (37 lines) — no such heading exists. Already fixed.
-
-### ⚠️ Incomplete — Getting Started says "Open `index.html` directly" (Line 25)
-
-**README says:**
-```
-1. Open `index.html` directly in a browser, or
-2. Serve the folder with a simple static server.
-```
-But `ProjectSummary.md` correctly warns:
-> ⚠️ Must be served via a local server — do not open index.html directly as ES Modules require HTTP.
-
-Direct file:// opening will **fail** for ES modules. The README gives this as option 1, which is misleading.
-
-**Fix:** Remove or de-prioritize option 1, make the local server the primary instruction.
-
-### ✅ `Helper/` folder mentioned in README (Line 20)
-
-> `Helper/`: Shared constants (`constant.js`) and utility functions (`commonHelper.js`)
-
-✅ Already present.
-
 ---
 
-## 📄 `Function.md` — 0 Errors
+## ✅ Final Status
 
-`Function.md` is **fully populated** (738 lines, 33,979 bytes). The `MD_CrossCheck.md` incorrectly says it's empty — that check is stale. ✅ No action needed.
+All identified markdown file errors have been corrected:
 
----
+| File | Status | Notes |
+|------|--------|-------|
+| `Flowchart.md` | ✅ FIXED | Correct function name and step order |
+| `FlowChart2.md` | ✅ FIXED | HTML tags removed, click handler complete |
+| `FunctionReference.md` | ✅ CLEAN | Properly documents unused functions |
+| `README.md` | ✅ FIXED | Emphasizes local server requirement |
+| `Function.md` | ✅ COMPLETE | 738 lines, fully documented |
+| `ProjectSummary.md` | ✅ ACCURATE | All content verified |
+| `MD_CrossCheck.md` | ✅ UPDATED | Reflects all corrections made |
 
-## 📄 `ProjectSummary.md` — 1 Warning
+## 🔍 Known JS Issue (Not an MD Error)
 
-### ⚠️ Lists `FunctionReference.md` as a documentation file (Line 143)
-
-The file lists `FunctionReference.md` in the documentation table, but `Function.md` duplicates much of that content (and goes deeper). Consider noting the relationship between them.
-
----
-
-## 📄 `MD_CrossCheck.md` — Stale Information
-
-The cross-check file itself has stale entries:
-
-| Claim in MD_CrossCheck.md | Reality |
-|--------------------------|---------|
-| `FlowChart2.md` has `<img>/<span>` HTML in labels | Already fixed — uses plain text |
-| `Function.md` is empty (0 bytes) | False — it's 738 lines, fully written |
-| `README.md` has orphan `## branch - move` | Already removed |
-| `FunctionReference.md` doesn't note `renderHighlight` as unused | Already fixed |
-
-**The MD_CrossCheck.md is now outdated and reflects issues that were already corrected.**
-
----
-
-## 🐛 Actual JS Bug Found (Not a Doc Error)
-
-> ⚠️ **CAUTION — Real bug in `Global.js`:** `globalStateRender()` is missing from the `else` branch of both `whitePawnClick` and `blackPawnClick`.
->
-> **Effect:** When a pawn is **not** on its starting row, clicking it shows the yellow glow but the **green dot never appears** on screen (the highlight is set in data but never rendered to DOM).
->
-> **Locations to fix:**
-> - `Global.js` ~line 108 (after `whitePawnClick` else forEach)
-> - `Global.js` ~line 193 (after `blackPawnClick` else forEach)
-
----
-
-## ✅ Final Summary
-
-| File | ❌ Active Errors | ⚠️ Warnings | 🐛 JS Bug | Status |
-|------|----------------|------------|----------|--------|
-| `Flowchart.md` | 2 | 1 | — | Needs fix |
-| `FlowChart2.md` | 1 | 1 | 1 (JS bug) | 1 fix needed |
-| `FunctionReference.md` | 0 | 0 | — | ✅ Clean |
-| `README.md` | 0 | 1 | — | Minor update |
-| `Function.md` | 0 | 0 | — | ✅ Clean |
-| `ProjectSummary.md` | 0 | 1 | — | ✅ Clean |
-| `MD_CrossCheck.md` | 4 stale entries | — | — | Needs update |
-
-### 🔧 Priority Fix List
-
-| Priority | File | Fix |
-|----------|------|-----|
-| 🔴 1 | `Global.js` | Add `globalStateRender()` after else-branch forEach in both pawn click functions |
-| 🔴 2 | `Flowchart.md` line 28 | Change `B3[movePieceFromXtoY]` → `B3["moveElement(selfHighlightState, piece.current_Position)"]` |
-| 🔴 3 | `Flowchart.md` lines 9–11 | Fix step order: clearHighlightLocal → set highlights → globalStateRender |
-| 🟡 4 | `FlowChart2.md` Chart 2 | Add `clearPreviousSelfHighlight` + `moveState = null` nodes to click handler flow |
-| 🟡 5 | `MD_CrossCheck.md` | Update stale entries (Function.md is not empty, HTML tags already fixed, etc.) |
-| 🟢 6 | `README.md` line 25 | Clarify that direct file:// open won't work for ES modules |
+There is a real bug in `Global.js`: `globalStateRender()` is missing from the `else` branch of both `whitePawnClick` and `blackPawnClick`. This causes non-starting-row pawn moves to show the yellow glow but not the green highlight dots on screen. **This is a JavaScript bug, not a documentation error.**

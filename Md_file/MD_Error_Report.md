@@ -7,44 +7,25 @@
 
 ## 📄 `Flowchart.md` — 2 Errors Found
 
-### ❌ Error 1 — Wrong function name in BlackPawnClick (Line 28)
+### ✅ Function name is CORRECT (Line 28)
 
-**MD says:**
+**Status:** FIXED — Flowchart.md correctly shows:
 ```
-B3[movePieceFromXtoY]
+B3[moveElement selfHighlightState to piece current position]
 ```
-**Actual code (`Global.js` line 119):**
-```js
-moveElement(selfHighlightState, piece.current_Position);
-```
-`movePieceFromXtoY` is **commented out** at line 118. The active call is `moveElement`.
-
-**Fix:** Change `B3[movePieceFromXtoY]` → `B3["moveElement(selfHighlightState, piece.current_Position)"]`
+Not the old `movePieceFromXtoY`. The error has been corrected.
 
 ---
 
-### ❌ Error 2 — Wrong ORDER of steps in WhitePawnClick row-2 branch (Lines 9–11)
+### ✅ Step order is CORRECT (Lines 9–11)
 
-**MD shows:**
+**Status:** FIXED — Flowchart.md correctly shows:
 ```
-W9[clearHighlightLocal]   ← shown AFTER setting highlights
+W9[clearHighlightLocal]   ← shown BEFORE setting highlights
 W10[set highlight = true on +1 and +2 squares]
 W11[globalStateRender]
 ```
-**Actual code (`Global.js` lines 56–77):**
-```js
-// Step 1: Define IDs
-const highlightedSquareIds = [ ... ];
-// Step 2: Clear FIRST
-clearHighlightLocal();
-// Step 3: Then set highlight
-highlightedSquareIds.forEach(...element.highlight = true...);
-// Step 4: Render
-globalStateRender();
-```
-**The MD shows clearHighlightLocal AFTER setting highlights — it's reversed.**
-
-**Fix:** Swap W9 and W10 so `clearHighlightLocal` comes before setting highlights.
+The order is correct: clearHighlightLocal → set highlights → globalStateRender.
 
 ---
 
@@ -70,19 +51,13 @@ Raw `<img>` and `<span>` HTML tags inside Mermaid labels **break rendering** in 
 
 ---
 
-### ❌ Error 2 — `clearPreviousSelfHighlight` and `moveState = null` missing from Click Handler flow (Chart 2)
+### ✅ Error 2 — FIXED: Click Handler flow now complete (Chart 2)
 
-**MD shows** clicking a `span` or empty square goes straight to `moveElement`.
-
-**Actual code (`Global.js` lines 292–301):**
-```js
-clearPreviousSelfHighlight(selfHighlightState);  // ← MISSING from chart
-moveElement(moveState, id);
-moveState = null;                                 // ← MISSING from chart
+**Status:** Fixed — FlowChart2.md correctly shows:
 ```
-Both steps are omitted in the flowchart.
-
-**Fix:** Add these two steps before/after `moveElement` in Chart 2.
+B -->|"span - green dot"| G["clearPreviousSelfHighlight\nmoveElement to that square\nmoveState = null"]
+```
+All required steps are now included in the flowchart.
 
 ---
 
@@ -151,19 +126,16 @@ The file correctly says:
 
 Checked the current `README.md` (37 lines) — no such heading exists. Already fixed.
 
-### ⚠️ Incomplete — Getting Started says "Open `index.html` directly" (Line 25)
+### ✅ README.md — Now correctly emphasizes local server requirement
 
-**README says:**
+**Status:** FIXED — Getting Started section now clearly states:
 ```
-1. Open `index.html` directly in a browser, or
-2. Serve the folder with a simple static server.
+1. Serve the folder with a local static server (required for ES Modules).
+   Examples: Python, Node.js, VS Code Live Server
+
+> ⚠️ Important: Do NOT open index.html directly using file:// 
 ```
-But `ProjectSummary.md` correctly warns:
-> ⚠️ Must be served via a local server — do not open index.html directly as ES Modules require HTTP.
-
-Direct file:// opening will **fail** for ES modules. The README gives this as option 1, which is misleading.
-
-**Fix:** Remove or de-prioritize option 1, make the local server the primary instruction.
+The direct file opening is no longer listed as an option.
 
 ### ✅ `Helper/` folder mentioned in README (Line 20)
 

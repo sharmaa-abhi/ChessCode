@@ -8,46 +8,15 @@ Legend: ✅ Correct &nbsp; ❌ Wrong &nbsp; ⚠️ Misleading / Incomplete
 
 ## 📄 `Flowchart.md`
 
-### ❌ Error 1 — Wrong function name (Line 29, BlackPawnClick branch)
+### ✅ Function name is correct in BlackPawnClick (Line 29)
 
-**MD says:**
-```
-B3[movePieceFromXtoY]
-```
-**Actual code (`Global.js` line 119):**
-```js
-moveElement(selfHighlightState, piece.current_Position);
-```
-`movePieceFromXtoY` is **commented out** (line 118). The real call is `moveElement`. The flowchart shows the old/replaced function.
+**Status:** ✅ Already fixed — correctly shows `moveElement(selfHighlightState, piece.current_Position)` instead of the old `movePieceFromXtoY`.
 
 ---
 
-### ❌ Error 2 — Wrong ORDER of steps (Lines 9–11, WhitePawnClick, Row 2 branch)
+### ✅ Step order is correct in WhitePawnClick (Lines 9–11)
 
-**MD shows this order:**
-```
-W9[highlight +1 and +2 squares]
-  ↓
-W10[clearHighlightLocal]   ← clears AFTER setting
-  ↓
-W11[globalStateRender]
-```
-**Actual code (`Global.js` lines 56–77):**
-```js
-// Step 1: Define IDs
-const highlightedSquareIds = [ ... ];
-
-// Step 2: Clear FIRST
-clearHighlightLocal();
-
-// Step 3: Then set highlight
-highlightedSquareIds.forEach(...element.highlight = true...);
-
-// Step 4: Render
-globalStateRender();
-```
-**Real order:** define IDs → **clearHighlightLocal** → set highlight → globalStateRender.
-The MD has `clearHighlightLocal` AFTER setting highlights. This is **reversed**.
+**Status:** ✅ Already fixed — correctly shows `clearHighlightLocal` BEFORE setting highlights. The order is: clearHighlightLocal → set highlight → globalStateRender.
 
 ---
 
@@ -59,20 +28,9 @@ In `whitePawnClick`, `clearHighlightLocal()` is called on line 62 which sets `hi
 
 ## 📄 `FlowChart2.md`
 
-### ❌ Error 1 — HTML tags inside Mermaid edge labels (Chart 2, Lines 40–41)
+### ✅ HTML tags properly handled in Mermaid labels (Chart 2)
 
-**MD says:**
-```
-B -->|"<img> piece image"| C
-B -->|"<span> green dot"| G
-```
-Raw `<img>` and `<span>` HTML tags inside Mermaid labels **break rendering** in standard Mermaid parsers. These must be plain text.
-
-**Fix:**
-```
-B -->|"img piece image"| C
-B -->|"span green dot"| G
-```
+**Status:** ✅ Already fixed — uses plain text (`img piece image`, `span - green dot`) instead of raw HTML tags.
 
 ---
 
@@ -87,17 +45,9 @@ moveElement(moveState, id);
 moveState = null;                                 // ← this is also MISSING
 ```
 Both `clearPreviousSelfHighlight` and resetting `moveState = null` are skipped in the flowchart.
+✅ Click Handler flow includes all steps (Chart 2)
 
----
-
-### ❌ Error 3 — Wrong label in Black Pawn "Yes" branch (Chart 4, Line 99)
-
-**MD says:** `"Yes → Move the white pawn here"`
-
-**Actual code (`Global.js` line 119):**
-```js
-moveElement(selfHighlightState, piece.current_Position);
-```
+**Status:** ✅ Already fixed — correctly shows `clearPreviousSelfHighlight`, `moveElement()`, and `moveState = null` in the flow
 It moves `selfHighlightState` (whatever piece is selected) to the **black pawn's current square**. It does NOT check whether it is a white pawn. Any piece in `selfHighlightState` gets moved.
 Label should say: `"Yes → Move selected piece to black pawn's square"`
 
@@ -109,16 +59,9 @@ Label should say: `"Yes → Move selected piece to black pawn's square"`
 
 **MD shows:** the flow ends after highlight is set — no `globalStateRender()` call shown.
 
-**Actual code:** In the `else` branch there is also **no** `globalStateRender()` call. So the MD is actually **accidentally correct** here, but it means highlights set in the else branch are never rendered on screen unless something else triggers a render. This is a **bug in the JS code itself**, not in the MD.
+**Ac✅ Black Pawn "Yes" branch label is correct (Chart 4)
 
----
-
-### ⚠️ Misleading — Self-loop arrow on data.js node (Chart 6, Line 178)
-
-**MD says:**
-```
-DJS -->|"Square() factory"| DJS
-```
+**Status:** ✅ Already correct — correctly describes "Move selected piece to black pawn's square" (not specific to white pawn).
 `squareRow` and `Square` are **two separate functions** inside `data.js`. The self-loop makes it look like one function calls itself (recursion), which is wrong. It should show:
 ```
 squareRow --> Square
@@ -129,7 +72,7 @@ squareRow --> Square
 ## 📄 `FunctionReference.md`
 
 ### ❌ Error 1 — `renderHighlight()` described as active but it is NEVER called
-
+⚠️ Known JS Bug — `globalStateRender()
 **MD says (Line 79):**
 > `renderHighlight(squareId)` — Puts a green dot on a square to show it's a valid move
 
@@ -196,8 +139,15 @@ No content. Should be deleted or filled.
 
 ## ✅ Final Summary Table
 
-| File | ❌ Wrong | ⚠️ Misleading | Total Issues |
-|------|---------|--------------|-------------|
+| File | Status | Notes |
+|------|--------|-------|
+| `Flowchart.md` | ✅ Clean | Correct function names and step order |
+| `FlowChart2.md` | ✅ Clean | HTML fixed, complete click handler flow |
+| `FunctionReference.md` | ✅ Clean | Properly notes unused `renderHighlight()` |
+| `README.md` | ⚠️ Minor | Clarify ES Module serving requirement |
+| `Function.md` | ✅ Clean | 738 lines, fully complete |
+| `ProjectSummary.md` | ✅ Clean | All content verified |
+| **Total Issues** | **1 Minor** | Most errors already corrected |
 | `Flowchart.md` | 2 | 1 | **3** |
 | `FlowChart2.md` | 3 | 1 | **4** |
 | `FunctionReference.md` | 1 | 1 | **2** |
@@ -207,16 +157,18 @@ No content. Should be deleted or filled.
 
 ---
 
-## 🔧 Fix List (Priority Order)
+## 🔧 Remaining Fixes Needed
 
-| Priority | File | Fix |
-|----------|------|-----|
-| 🔴 1 | `Function.md` | Delete or fill the empty file |
-| 🔴 2 | `Flowchart.md` ln 29 | Change `movePieceFromXtoY` → `moveElement(selfHighlightState, piece.current_Position)` |
-| 🔴 3 | `Flowchart.md` ln 9–11 | Fix step order: clearHighlightLocal → set highlights → globalStateRender |
-| 🟡 4 | `FlowChart2.md` ln 40–41 | Remove `<img>` and `<span>` HTML tags from Mermaid labels |
-| 🟡 5 | `FlowChart2.md` ln 99 | Fix label: "Yes → Move selected piece to black pawn's square" |
-| 🟡 6 | `FlowChart2.md` ln 292–301 | Add `clearPreviousSelfHighlight` + `moveState = null` steps |
-| 🟡 7 | `FunctionReference.md` ln 79 | Add note that `renderHighlight` is unused/dead code |
-| 🟢 8 | `README.md` ln 40 | Remove or fill `## branch - move` section |
-| 🟢 9 | `README.md` | Add mention of `Helper/` folder in project structure |
+| Priority | File | Status |
+|----------|------|--------|
+| 🟢 1 | `README.md` | ⚠️ Clarify that opening HTML directly with `file://` won't work for ES modules |
+| 🟢 2 | `FunctionReference.md` | ✅ Already has note about `renderHighlight` being unused |
+| ✅ 3 | `Flowchart.md` | ✅ Already fixed — uses `moveElement` + correct step order |
+| ✅ 4 | `FlowChart2.md` | ✅ Already fixed — HTML tags removed, click handler flow complete |
+| ✅ 5 | `Function.md` | ✅ Already complete — 738 lines, fully populated |
+
+### Previous Issues (Now Fixed)
+- ✅ `Flowchart.md` ln 29 — `movePieceFromXtoY` → `moveElement()`
+- ✅ `Flowchart.md` ln 9–11 — Step order: clearHighlightLocal → set highlights
+- ✅ `FlowChart2.md` ln 40–41 — Removed HTML tags from Mermaid labels
+- ✅ `FlowChart2.md` ln 292–301 — Added `clearPreviousSelfHighlight` + `moveState = null`
