@@ -106,6 +106,8 @@ function whitePawnClick({ piece }) {
         });
       });
     });
+
+    globalStateRender();
   }
 
   // console.log(globalData);
@@ -191,6 +193,8 @@ function blackPawnClick({ piece }) {
         });
       });
     });
+
+    globalStateRender();
   }
 
   // console.log(globalData);
