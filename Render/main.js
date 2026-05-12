@@ -47,25 +47,7 @@ function globalStateRender() {
 
 // move element with square id
 function moveElement(piece, id) {
-  const flatData = globalData.flat();
-  // const from = flatData.find((el) => {
-  //   if (el.id === piece.current_Position) return el;
-  // });
-
-  // const to = flatData.find((el) => {
-  //   if (el.id === id) return el;
-  // });
-
-
-  // to.piece = from.piece;
-  // to.piece.change = true;
-  // to.piece.current_Position = to.id;
-  // from.piece.change = true;
-  // from.piece = null;
-  // from.change = true;
-
-  // console.log(from, to);
-  // movePieceFromXtoY(from, to);
+  const flatData = globalData.flat();  
  
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
@@ -87,14 +69,7 @@ function moveElement(piece, id) {
   piece.current_Position = id;
 }
 
-function clearPreviousSelfHighlight(piece) {
-  // console.log(piece);
-  if (piece) {
-    document
-      .getElementById(piece.current_Position)
-      .classList.remove("highlightYellow");
-  }
-}
+
 
 function selfHighlight(piece) {
   document
@@ -238,7 +213,6 @@ export {
   renderHighlight,
   clearHighlight,
   selfHighlight,
-  clearPreviousSelfHighlight,
   moveElement,
   globalStateRender,
 };
