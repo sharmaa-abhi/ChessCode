@@ -1,12 +1,14 @@
 import { ROOT_DIV } from "../Helper/constant.js";
-import { globalData } from "../index.js";
-import { renderHighlight } from "../Render/main.js";
+import { globalData, keySquareMapper } from "../index.js";
+// import { renderHighlight } from "../Render/main.js";
 import { clearHighlight } from "../Render/main.js";
 import { selfHighlight } from "../Render/main.js";
 import { moveElement } from "../Render/main.js";
-import { checkPieceOfOpponentOnElement } from "../Helper/commonHelper.js";
+import {
+  checkPieceOfOpponentOnElement,
+  checkSquareCaptureId,
+} from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
-
 
 // Whether highlight mode is active.
 let highlightState = false;
@@ -34,23 +36,24 @@ function movePieceFromXtoY(from, to) {
 function whitePawnClick(square) {
   const piece = square.piece;
 
-  clearPreviousSelfHighlight(selfHighlightState);
-
   // If clicked on same element twice.
   if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
   }
 
-  if (piece.captureHighlight) {
+  if (square.captureHighlight) {
     // movePieceFromXtoY(selfHighlightState, piece);
     moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
     return;
   }
 
   // clear previous self highlight
   clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
 
   // If clicked on same element twice.
   if (piece == selfHighlightState) {
@@ -68,89 +71,80 @@ function whitePawnClick(square) {
   moveState = piece;
 
   const current_pos = piece.current_Position;
+
+  let highlightedSquareIds = null;
+
   // On initial position.
   if (piece.current_Position[1] == "2") {
-    const highlightedSquareIds = [
+    highlightedSquareIds = [
       `${current_pos[0]}${Number(current_pos[1]) + 1}`,
       `${current_pos[0]}${Number(current_pos[1]) + 2}`,
     ];
-
-    // Clear board for any previous highlights.
-    clearHighlightLocal();
-    // clearHighlight();
-
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            // element.highlight = true;
-            element.highlight = true;
-            // console.log(element);
-          }
-        });
-      });
-    });
-
-    globalStateRender();
   } else {
-    const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
-    const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
-
-    // console.log(checkPieceOfOpponentOnElement(col1, "WHITE"));
-    // console.log(checkPieceOfOpponentOnElement(col2, "WHITE"));
-
-    const captureIds = [col1, col2];
-
-    const highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) + 1}`,
-    ];
-
-    clearHighlight();
-
-    captureIds.forEach((element) => {
-      checkPieceOfOpponentOnElement(element, "white");
-    });
-
-    // console.log(current_pos);
-    // console.log(highlightedSquareIds);
-
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            element.highlight = true;
-          }
-        });
-      });
-    });
-
-    globalStateRender();
+    highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) + 1}`];
   }
 
-  // console.log(globalData);
+  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  console.log("AFTER FUNCTION:", highlightedSquareIds);
+
+  console.log("highlightedSquareIds:", highlightedSquareIds);
+  
+  
+  highlightedSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    if (element) {
+      element.highlight = true;
+    }
+  });
+
+  // capture logic id
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
+
+  let captureIds = [col1, col2];
+
+  captureIds = checkSquareCaptureId(captureIds);
+  console.log("captureIds:", captureIds);
+
+  captureIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "white");
+  });
+
+  globalStateRender();
 }
 
 // black pawn function
 function blackPawnClick(square) {
-  const piece = square.piece;
+  // Clear board for any previous highlights.
+  // clearHighlightLocal();
 
-  clearPreviousSelfHighlight(selfHighlightState);
+  const piece = square.piece;
 
   // If clicked on same element twice.
   if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
   }
 
-  if (piece.captureHighlight) {
+  if (square.captureHighlight) {
     // movePieceFromXtoY(selfHighlightState, piece);
     moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
     return;
   }
 
   // clear previous self highlight
   clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // If clicked on same element twice.
+  if (piece == selfHighlightState) {
+    clearHighlightLocal();
+    selfHighlightState = null;
+    return;
+  }
 
   // highlight clicked element / highlighting logic
   selfHighlight(piece);
@@ -161,63 +155,41 @@ function blackPawnClick(square) {
   moveState = piece;
 
   const current_pos = piece.current_Position;
+  const flatArray = globalState.flat();
+
+  let highlightedSquareIds = null;
+
   // On initial position.
   if (piece.current_Position[1] == "7") {
-    const highlightedSquareIds = [
+    highlightedSquareIds = [
       `${current_pos[0]}${Number(current_pos[1]) - 1}`,
       `${current_pos[0]}${Number(current_pos[1]) - 2}`,
     ];
-
-    // Clear board for any previous highlights.
-    clearHighlightLocal();
-    // clearHighlight();
-
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            // element.highlight = true;
-            element.highlight = true;
-            // console.log(element);
-          }
-        });
-      });
-    });
-
-    globalStateRender();
   } else {
-    const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
-    const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
-
-    const captureIds = [col1, col2];
-
-    const highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) - 1}`,
-    ];
-
-    clearHighlight();
-
-    captureIds.forEach((element) => {
-      checkPieceOfOpponentOnElement(element, "black");
-    });
-
-    // console.log(current_pos);
-    // console.log(highlightedSquareIds);
-
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            element.highlight = true;
-          }
-        });
-      });
-    });
-
-    globalStateRender();
+    highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) - 1}`];
   }
+  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    if (element) {
+      element.highlight = true;
+    }
+  });
 
-  // console.log(globalData);
+  // capture logic id
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
+
+  let captureIds = [col1, col2];
+
+  captureIds = checkSquareCaptureId(captureIds);
+
+  captureIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "black");
+  });
+
+  globalStateRender();
 }
 
 function clearPreviousSelfHighlight(piece) {
@@ -234,8 +206,9 @@ function globalEvent() {
   ROOT_DIV.addEventListener("click", function (event) {
     if (event.target.localName === "img") {
       const clickId = event.target.parentNode.id;
-      const flatArray = globalData.flat();
-      const square = flatArray.find((el) => el.id === clickId);
+      // const flatArray = globalData.flat();
+      // const square = flatArray.find((el) => el.id === clickId);
+      const square = keySquareMapper[clickId];
       const pieceName =
         square && square.piece && typeof square.piece === "object"
           ? square.piece.piece_name

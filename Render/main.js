@@ -1,6 +1,6 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
-import { globalData } from "../index.js";
+import { globalData ,keySquareMapper } from "../index.js";
 import { movePieceFromXtoY } from "../Events/Global.js";
 
 // function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
