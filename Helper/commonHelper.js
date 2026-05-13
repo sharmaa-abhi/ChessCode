@@ -25,6 +25,7 @@ function checkPieceOfOpponentOnElement(id, color) {
 
 // function checksqaure id for capture and return array of capture ids
 function checkSquareCaptureId(array) {
+
   let returnArray = [];
 
   for (let index = 0; index < array.length; index++) {
@@ -35,7 +36,10 @@ function checkSquareCaptureId(array) {
       break;
     }
     returnArray.push(sqaureId);
-  }};
+  }
+
+  return returnArray;
+}
   
 
   export { checkPieceOfOpponentOnElement, checkSquareCaptureId };

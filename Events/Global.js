@@ -84,10 +84,11 @@ function whitePawnClick(square) {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) + 1}`];
   }
 
-  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
-  console.log("AFTER FUNCTION:", highlightedSquareIds);
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
-  console.log("highlightedSquareIds:", highlightedSquareIds);
+  // console.log("AFTER FUNCTION:", highlightedSquareIds);
+
+  // console.log("highlightedSquareIds:", highlightedSquareIds);
   
   
   highlightedSquareIds.forEach((highlight) => {
@@ -104,7 +105,7 @@ function whitePawnClick(square) {
   let captureIds = [col1, col2];
 
   captureIds = checkSquareCaptureId(captureIds);
-  console.log("captureIds:", captureIds);
+  // console.log("captureIds:", captureIds);
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "white");
@@ -155,7 +156,6 @@ function blackPawnClick(square) {
   moveState = piece;
 
   const current_pos = piece.current_Position;
-  const flatArray = globalState.flat();
 
   let highlightedSquareIds = null;
 
@@ -168,13 +168,11 @@ function blackPawnClick(square) {
   } else {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) - 1}`];
   }
-  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
-  
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+
   highlightedSquareIds.forEach((highlighted) => {
     const element = keySquareMapper[highlighted];
-    if (element) {
-      element.highlight = true;
-    }
+    element.highlight = true;
   });
 
   // capture logic id
@@ -183,7 +181,7 @@ function blackPawnClick(square) {
 
   let captureIds = [col1, col2];
 
-  captureIds = checkSquareCaptureId(captureIds);
+  // captureIds = checkSquareCaptureId(captureIds);
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "black");
