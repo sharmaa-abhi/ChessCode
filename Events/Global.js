@@ -77,8 +77,8 @@ function whitePawnClick(square) {
   // on initial position movement
   if (piece.current_Position[1] == "2") {
     highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) - 1}`,
-      `${current_pos[0]}${Number(current_pos[1]) - 2}`,
+      `${current_pos[0]}${Number(current_pos[1]) + 1}`,
+      `${current_pos[0]}${Number(current_pos[1]) + 2}`,
     ];
   } else {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) + 1}`];
@@ -100,7 +100,9 @@ function whitePawnClick(square) {
   }`;
 
   let captureIds = [col1, col2];
-  captureIds = checkSquareCaptureId(captureIds);
+  // Note: Do NOT use checkSquareCaptureId for captureIds. 
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement, 
+  // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "white");
@@ -177,7 +179,9 @@ function blackPawnClick(square) {
 
   let captureIds = [col1, col2];
 
-  captureIds = checkSquareCaptureId(captureIds);
+  // Note: Do NOT use checkSquareCaptureId for captureIds. 
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement, 
+  // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "black");

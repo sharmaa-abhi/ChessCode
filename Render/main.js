@@ -205,8 +205,8 @@ function clearHighlight() {
     if (el.highlight) {
       el.highlight = null;
     }
-    globalStateRender();
   });
+  globalStateRender();
 }
 export {
   initGameRender,

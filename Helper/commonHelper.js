@@ -32,6 +32,8 @@ function checkSquareCaptureId(array) {
     const sqaureId = array[index];
     const square = keySquareMapper[sqaureId];
 
+    if (!square) break;
+
     if (square.piece) {
       break;
     }

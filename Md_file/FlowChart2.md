@@ -62,28 +62,34 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([Click on White Pawn]) --> B["clearPreviousSelfHighlight()\nRemove yellow glow from old piece"]
-    B --> C{Same pawn\nclicked again?}
+    A([Click on White Pawn]) --> B{Same pawn\nclicked again?}
 
-    C -->|Yes| D["clearHighlightLocal()\nRemove all green dots"]
-    D --> E([Done - deselected])
+    B -->|Yes| C["clearHighlightLocal()\nclearPreviousSelfHighlight()"]
+    C --> D([Done - deselected])
 
-    C -->|No| F["selfHighlight()\nGlow this pawn yellow ✨"]
-    F --> G[Set moveState = this pawn]
-    G --> H{Is pawn on\nstarting row 2?}
+    B -->|No| E{Is square a capture target?}
+    
+    E -->|Yes| F["moveElement()\nMove piece to square"]
+    F --> G([Done - piece captured])
+    
+    E -->|No| H["selfHighlight()\nGlow this pawn yellow ✨"]
+    H --> I[Set moveState = this pawn]
+    I --> J{Is pawn on\nstarting row 2?}
 
-    H -->|Yes| I[Show 2 squares ahead\nas valid moves 🟢🟢]
-    H -->|No| J[Show 1 square ahead\nas valid move 🟢]
-    J --> K["checkPieceOfOpponentOnElement()\nCheck diagonals for enemy pieces"]
-    K --> L[Show diagonal captures\nin red 🔴]
-
-    I --> M["globalStateRender()\nUpdate screen with dots"]
+    J -->|Yes| K[Show 2 squares ahead\nas valid moves 🟢🟢]
+    J -->|No| L[Show 1 square ahead\nas valid move 🟢]
+    
+    K --> M["checkPieceOfOpponentOnElement()\nCheck diagonals for enemy pieces"]
     L --> M
-    M --> N([Waiting for next click...])
+    M --> N[Show diagonal captures\nin red 🔴]
+
+    N --> O["globalStateRender()\nUpdate screen with dots"]
+    O --> P([Waiting for next click...])
 
     style A fill:#023e8a,color:#fff
-    style E fill:#555,color:#fff
-    style N fill:#2d6a4f,color:#fff
+    style D fill:#555,color:#fff
+    style G fill:#2d6a4f,color:#fff
+    style P fill:#2d6a4f,color:#fff
 ```
 
 ---
@@ -94,32 +100,34 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([Click on Black Pawn]) --> B{Is a white pawn\nalready selected?\nhighlightState = true?}
+    A([Click on Black Pawn]) --> B{Same pawn\nclicked again?}
 
-    B -->|Yes - Move selected piece to black pawns square| C["moveElement(selfHighlightState, piece.current_Position)\nMove selected piece to black pawn's square"]
-    C --> D([✅ White Pawn Moved!])
+    B -->|Yes| C["clearHighlightLocal()\nclearPreviousSelfHighlight()"]
+    C --> D([Done - deselected])
 
-    B -->|No → Select this black pawn| E["clearPreviousSelfHighlight()\nRemove previous yellow glow"]
-    E --> F{Same pawn\nclicked again?}
+    B -->|No| E{Is square a capture target?}
+    
+    E -->|Yes| F["moveElement()\nMove piece to square"]
+    F --> G([Done - piece captured])
+    
+    E -->|No| H["selfHighlight()\nGlow this pawn yellow ✨"]
+    H --> I[Set moveState = this pawn]
+    I --> J{Is pawn on\nstarting row 7?}
 
-    F -->|Yes| G["clearHighlightLocal()"]
-    G --> H([Done - deselected])
+    J -->|Yes| K[Show 2 squares ahead\nas valid moves 🟢🟢]
+    J -->|No| L[Show 1 square ahead\nas valid move 🟢]
+    
+    K --> M["checkPieceOfOpponentOnElement()\nCheck diagonals for enemy pieces"]
+    L --> M
+    M --> N[Show diagonal captures\nin red 🔴]
 
-    F -->|No| I["selfHighlight()\nGlow black pawn yellow ✨"]
-    I --> J[Set moveState = this pawn]
-    J --> K{Is pawn on\nstarting row 7?}
-
-    K -->|Yes| L[Show 2 squares below\nas valid moves 🟢🟢]
-    K -->|No| M[Show 1 square below 🟢\nCheck diagonals for white pieces 🔴]
-
-    L --> N["globalStateRender()\nUpdate screen"]
-    M --> N
-    N --> O([Waiting for next click...])
+    N --> O["globalStateRender()\nUpdate screen with dots"]
+    O --> P([Waiting for next click...])
 
     style A fill:#1a1a2e,color:#fff
-    style D fill:#2d6a4f,color:#fff
-    style H fill:#555,color:#fff
-    style O fill:#2d6a4f,color:#fff
+    style D fill:#555,color:#fff
+    style G fill:#2d6a4f,color:#fff
+    style P fill:#2d6a4f,color:#fff
 ```
 
 ---
@@ -201,5 +209,5 @@ flowchart LR
 | **Click piece img** | User clicks pawn image | `whitePawnClick` or `blackPawnClick` |
 | **Click green dot** | User clicks valid move square | `moveElement` → `clearHighlight` → `globalStateRender` |
 | **White Pawn selected** | `whitePawnClick` runs | `clearPreviousSelfHighlight` → `selfHighlight` → `globalStateRender` |
-| **Black Pawn selected** | `blackPawnClick` runs | Same as white OR `moveElement` if white was already selected |
+| **Black Pawn selected** | `blackPawnClick` runs | Same as white OR `moveElement` if capture target |
 | **Piece moves** | `moveElement` runs | `clearHighlight` → DOM swap → update `current_Position` |
