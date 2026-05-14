@@ -36,7 +36,6 @@ function movePieceFromXtoY(from, to) {
 function whitePawnClick(square) {
   const piece = square.piece;
 
-  // If clicked on same element twice.
   if (piece == selfHighlightState) {
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
@@ -44,68 +43,64 @@ function whitePawnClick(square) {
   }
 
   if (square.captureHighlight) {
-    // movePieceFromXtoY(selfHighlightState, piece);
+    // movePieceFromXToY();
     moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
   }
 
-  // clear previous self highlight
+  // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
 
   // If clicked on same element twice.
   if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
-    selfHighlightState = null;
     return;
   }
 
-  // highlight clicked element / highlighting logic
+  // highlighting logic
   selfHighlight(piece);
   highlightState = true;
   selfHighlightState = piece;
 
-  // Add piece as move state.
+  // add piece as move state
   moveState = piece;
 
   const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
 
   let highlightedSquareIds = null;
 
-  // On initial position.
+  // on initial position movement
   if (piece.current_Position[1] == "2") {
     highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) + 1}`,
-      `${current_pos[0]}${Number(current_pos[1]) + 2}`,
+      `${current_pos[0]}${Number(current_pos[1]) - 1}`,
+      `${current_pos[0]}${Number(current_pos[1]) - 2}`,
     ];
   } else {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) + 1}`];
   }
 
-  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
-  // console.log("AFTER FUNCTION:", highlightedSquareIds);
-
-  // console.log("highlightedSquareIds:", highlightedSquareIds);
-  
-  
-  highlightedSquareIds.forEach((highlight) => {
-    const element = keySquareMapper[highlight];
-    if (element) {
-      element.highlight = true;
-    }
+  highlightedSquareIds.forEach((hightlighted) => {
+    const element = keySquareMapper[hightlighted];
+    element.highlight = true;
   });
 
-  // capture logic id
-  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
-  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
+  // capture id logic
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${
+    Number(current_pos[1]) + 1
+  }`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${
+    Number(current_pos[1]) + 1
+  }`;
 
   let captureIds = [col1, col2];
-
   captureIds = checkSquareCaptureId(captureIds);
-  // console.log("captureIds:", captureIds);
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "white");
@@ -156,6 +151,7 @@ function blackPawnClick(square) {
   moveState = piece;
 
   const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
 
   let highlightedSquareIds = null;
 
@@ -168,7 +164,7 @@ function blackPawnClick(square) {
   } else {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) - 1}`];
   }
-  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
   highlightedSquareIds.forEach((highlighted) => {
     const element = keySquareMapper[highlighted];
@@ -181,7 +177,7 @@ function blackPawnClick(square) {
 
   let captureIds = [col1, col2];
 
-  // captureIds = checkSquareCaptureId(captureIds);
+  captureIds = checkSquareCaptureId(captureIds);
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "black");
