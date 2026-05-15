@@ -84,7 +84,7 @@ function whitePawnClick(square) {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) + 1}`];
   }
 
-  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
   highlightedSquareIds.forEach((hightlighted) => {
     const element = keySquareMapper[hightlighted];
@@ -166,7 +166,7 @@ function blackPawnClick(square) {
   } else {
     highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) - 1}`];
   }
-  highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
   highlightedSquareIds.forEach((highlighted) => {
     const element = keySquareMapper[highlighted];
