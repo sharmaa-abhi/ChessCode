@@ -129,18 +129,11 @@ function whiteBishopClick(square) {
     clearHighlightLocal();
     return;
   }
-
+  
   // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
-  clearHighlightLocal();
-
-  // If clicked on same element twice.
-  if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
+  clearHighlightLocal();  
+ 
   // highlighting logic
   selfHighlight(piece);
   highlightState = true;
@@ -156,17 +149,20 @@ function whiteBishopClick(square) {
   // console.log(highlightedSquareIds);
 
   // on initial position movement
-  const { topLeft, topRight, bottomLeft, bottomRight } = highlightedSquareIds;
+  const { bottomLeft,topLeft, bottomRight , topRight} = highlightedSquareIds;
 
   let result = [];
-  result.push(...checkSquareCaptureId(topLeft));
-  result.push(...checkSquareCaptureId(topRight));
-  result.push(...checkSquareCaptureId(bottomLeft));
-  result.push(...checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
 
   // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
   highlightedSquareIds = result.flat();
-  console.log(highlightedSquareIds);
+
+  // console.log(highlightedSquareIds);
+  console.log(result);
+  
 
   highlightedSquareIds.forEach((highlighted) => {
     const element = keySquareMapper[highlighted];
@@ -174,21 +170,16 @@ function whiteBishopClick(square) {
   });
 
   // capture id logic
-  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${
-    Number(current_pos[1]) + 1
-  }`;
-  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${
-    Number(current_pos[1]) + 1
-  }`;
+  
+  // let captureIds = [col1, col2];
 
-  let captureIds = [col1, col2];
   // Note: Do NOT use checkSquareCaptureId for captureIds.
   // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
-  captureIds.forEach((element) => {
-    checkPieceOfOpponentOnElement(element, "white");
-  });
+  // captureIds.forEach((element) => {
+  //   checkPieceOfOpponentOnElement(element, "white");
+  // });
 
   globalStateRender();
 }
@@ -241,10 +232,10 @@ function blackBishopClick(square) {
   const { topLeft, topRight, bottomLeft, bottomRight } = highlightedSquareIds;
 
   let result = [];
-  result.push(...checkSquareCaptureId(topLeft));
-  result.push(...checkSquareCaptureId(topRight));
-  result.push(...checkSquareCaptureId(bottomLeft));
-  result.push(...checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(bottomRight));
 
   // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
   highlightedSquareIds = result.flat();
