@@ -7,6 +7,7 @@ import { moveElement } from "../Render/main.js";
 import {
   checkPieceOfOpponentOnElement,
   checkSquareCaptureId,
+  giveBishopHighlightedIds,
 } from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
 
@@ -86,8 +87,8 @@ function whitePawnClick(square) {
 
   // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
-  highlightedSquareIds.forEach((hightlighted) => {
-    const element = keySquareMapper[hightlighted];
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
     element.highlight = true;
   });
 
@@ -100,8 +101,8 @@ function whitePawnClick(square) {
   }`;
 
   let captureIds = [col1, col2];
-  // Note: Do NOT use checkSquareCaptureId for captureIds. 
-  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement, 
+  // Note: Do NOT use checkSquareCaptureId for captureIds.
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
   captureIds.forEach((element) => {
@@ -110,6 +111,170 @@ function whitePawnClick(square) {
 
   globalStateRender();
 }
+
+// white bishop click event handler
+function whiteBishopClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // If clicked on same element twice.
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveBishopHighlightedIds(current_pos);
+  // console.log(highlightedSquareIds);
+
+  // on initial position movement
+  const { topLeft, topRight, bottomLeft, bottomRight } = highlightedSquareIds;
+
+  let result = [];
+  result.push(...checkSquareCaptureId(topLeft));
+  result.push(...checkSquareCaptureId(topRight));
+  result.push(...checkSquareCaptureId(bottomLeft));
+  result.push(...checkSquareCaptureId(bottomRight));
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+  console.log(highlightedSquareIds);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  // capture id logic
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${
+    Number(current_pos[1]) + 1
+  }`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${
+    Number(current_pos[1]) + 1
+  }`;
+
+  let captureIds = [col1, col2];
+  // Note: Do NOT use checkSquareCaptureId for captureIds.
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
+  // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
+
+  captureIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "white");
+  });
+
+  globalStateRender();
+}
+
+
+// black bishop click event handler
+function blackBishopClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // If clicked on same element twice.
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveBishopHighlightedIds(current_pos);
+  // console.log(highlightedSquareIds);
+
+  // on initial position movement
+  const { topLeft, topRight, bottomLeft, bottomRight } = highlightedSquareIds;
+
+  let result = [];
+  result.push(...checkSquareCaptureId(topLeft));
+  result.push(...checkSquareCaptureId(topRight));
+  result.push(...checkSquareCaptureId(bottomLeft));
+  result.push(...checkSquareCaptureId(bottomRight));
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+  console.log(highlightedSquareIds);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  // capture id logic
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${
+    Number(current_pos[1]) + 1
+  }`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${
+    Number(current_pos[1]) + 1
+  }`;
+
+  let captureIds = [col1, col2];
+  // Note: Do NOT use checkSquareCaptureId for captureIds.
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
+  // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
+
+  captureIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "white");
+  });
+
+  globalStateRender();
+}
+
 
 // black pawn function
 function blackPawnClick(square) {
@@ -179,8 +344,8 @@ function blackPawnClick(square) {
 
   let captureIds = [col1, col2];
 
-  // Note: Do NOT use checkSquareCaptureId for captureIds. 
-  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement, 
+  // Note: Do NOT use checkSquareCaptureId for captureIds.
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
   captureIds.forEach((element) => {
@@ -227,6 +392,10 @@ function globalEvent() {
         whitePawnClick(square);
       } else if (pieceName === "BLACK_PAWN") {
         blackPawnClick(square);
+      } else if (pieceName === "WHITE_BISHOP") {
+        whiteBishopClick(square);
+      } else if (pieceName === "BLACK_BISHOP") {
+        blackBishopClick(square);
       }
     } else {
       // selfHighlightState = null;
