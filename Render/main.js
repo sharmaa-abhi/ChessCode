@@ -1,6 +1,7 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
-import { globalData } from "../index.js";
+import { globalData ,keySquareMapper } from "../index.js";
+import { movePieceFromXtoY } from "../Events/Global.js";
 
 // function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
 function globalStateRender() {
@@ -17,48 +18,58 @@ function globalStateRender() {
         highlights.forEach((element) => {
           el.removeChild(element);
         });
-      }
+      } 
 
       // Implementation for rendering pieces
-      if (element.piece != "null") {
-      }
+      // if (element.piece?.change != "null" && element.piece != null) {
+       
+      //   const square = element;
+      //   const squareElement = document.getElementById(square.id);
+      //   squareElement.innerHTML = ""; // Clear existing content
+      //   // Create piece element
+      //   const piece = document.createElement("img");
+
+      //   piece.src = square.piece.img;
+      //   piece.classList.add("piece");
+
+      //   // insert into square element
+      //   squareElement.appendChild(piece);
+      // } else if (element.change != "null" && element.piece != null) {
+      //   const el = document.getElementById(element.id);
+      //   const piece = Array.from(el.getElementsByClassName("piece"));
+      //   piece.forEach((element) => {
+      //     el.removeChild(element);
+      //   });
+      // }
     });
   });
 }
 
 // move element with square id
 function moveElement(piece, id) {
-  const flatData = globalData.flat();
-
+  const flatData = globalData.flat();  
+ 
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
       delete el.piece;
     }
-
+    
     if (el.id === id) {
       el.piece = piece;
     }
   });
-
+  
+  
   clearHighlight();
-
   const previousPiece = document.getElementById(piece.current_Position);
   previousPiece.classList.remove("highlightYellow");
   const currentPiece = document.getElementById(id);
   currentPiece.innerHTML = previousPiece.innerHTML;
   previousPiece.innerHTML = "";
-
   piece.current_Position = id;
 }
 
-function clearPreviousSelfHighlight(piece) {
-  // console.log(piece);
-  if (piece) {
-    document
-      .getElementById(piece.current_Position)
-      .classList.remove("highlightYellow");
-  }
-}
+
 
 function selfHighlight(piece) {
   document
@@ -186,22 +197,22 @@ function clearHighlight() {
   const flatArray = globalData.flat();
 
   flatArray.forEach((el) => {
-    // if (el.captureHighlight) {
-    //   document.getElementById(el.id).classList.remove("captureColor");
-    // }
+    if (el.captureHighlight) {
+      document.getElementById(el.id).classList.remove("captureColor");
+      el.captureHighlight = false;
+    }
 
     if (el.highlight) {
       el.highlight = null;
     }
-    globalStateRender();
   });
+  globalStateRender();
 }
 export {
   initGameRender,
   renderHighlight,
   clearHighlight,
   selfHighlight,
-  clearPreviousSelfHighlight,
   moveElement,
   globalStateRender,
 };
