@@ -1,52 +1,150 @@
-# ChessCode
+# ♟️ ChessCode — Browser-Based Chess Game
 
-ChessCode is a browser-based chess project built with vanilla HTML, CSS, and JavaScript. It renders a full 8x8 board, places pieces, and wires up click-driven interactions for moves and highlights.
+A vanilla JavaScript chess game with ES Modules. Full 8×8 board, all pieces rendered, and complete pawn movement logic (white & black).
 
-## Features
+## ✨ Features
 
-- 8x8 chessboard rendering with alternating square colors
-- Piece rendering using image assets
-- Move highlighting and selection styling
-- Global state used to track board and piece positions
+- ✅ **8×8 chessboard** with piece placement
+- ✅ **Pawn movement** (white up, black down)
+- ✅ **Move highlighting** (green dots for valid moves)
+- ✅ **Capture detection** (red highlights on enemy diagonals)
+- ✅ **Selection glow** (yellow highlight for selected piece)
+- ✅ **Efficient lookups** using `keySquareMapper`
 
-## Key Technologies
+## 🚀 Tech Stack
 
-- Vanilla HTML, CSS, and JavaScript
-- ES modules for imports/exports
-- No build tooling required (static files)
+- Vanilla HTML, CSS, JavaScript
+- ES Modules (no build tools)
+- No external dependencies
 
-## Runtime Flow
+## 📂 Structure
 
-- `index.html` loads `index.js` and provides the `#root` mount point.
-- `index.js` initializes board data, renders the board/pieces, and wires global events.
-- Rendering and interaction state are held in memory (`globalData`).
+```
+chessCode/
+├── index.html                 → Entry point
+├── index.js                   → Bootstrap (3 steps: init, render, events)
+├── style/style.css           → Styling
+├── Data/
+│   ├── data.js              → Board builder
+│   └── pieces.js            → Piece factories
+├── Helper/
+│   ├── constant.js          → ROOT_DIV
+│   └── commonHelper.js      → Utilities
+├── Render/main.js           → DOM rendering
+├── Events/Global.js         → Event handlers & logic
+├── Assets/Pieces/           → Piece images
+└── Md_file/                 → Documentation
+```
 
-## Project Structure
+## ⚙️ How It Works
 
-- `index.html`: App entry point
-- `index.js`: Bootstraps data, rendering, and event wiring
-- `style/style.css`: Board, squares, and piece styling
-- `Render/main.js`: Board and piece rendering utilities
-- `Data/`: Game data, piece factories, and initial state
-- `Events/`: Event handlers for interactions
-- `Assets/Pieces/`: Piece image assets
+```
+initGame()  →  initGameRender()  →  globalEvent()
+  (data)         (display)          (clicks)
+```
 
-## Getting Started
+1. **Data:** Build 8×8 board array (`globalData`)
+2. **Render:** Draw squares and place pieces on screen
+3. **Events:** Listen for clicks and handle pawn logic
 
-1. **Serve the folder with a local static server** (required for ES Modules).
+## 🎮 Gameplay
 
-   Examples:
-   - **Python:** `python -m http.server 8000`
-   - **Node.js:** `npx http-server`
-   - **VS Code:** Use the Live Server extension
+- **Click pawn** → Shows valid moves (green dots) + captures (red)
+- **Click valid move** → Pawn moves to that square
+- **Click empty square** → Clears highlights
+- **White pawns:** Move UP, **Black pawns:** Move DOWN
 
-> **⚠️ Important:** Do **NOT** open `index.html` directly using `file://` — this will fail because the code uses ES Modules which require HTTP/HTTPS. You must serve the folder via a local server.
+## � Key Data
 
-## Notes
+**`globalData`** — 8×8 array of square objects  
+**`keySquareMapper`** — ID → square lookup (O(1) instead of O(64))
 
-- The project uses ES modules, so serving via a local server is required. Do not open `index.html` directly using a `file://` URL, as it will fail to load modules.
-- Game logic and legal move validation can be extended inside `Data/` and `Events/`.
+## 🚀 Getting Started
 
-## License
+**⚠️ Must use a local server (ES Modules require HTTP, not `file://`)**
 
-No license has been specified yet.
+**Python:**
+```bash
+python -m http.server 8000
+# Open http://localhost:8000
+```
+
+**Node.js:**
+```bash
+npx http-server
+# Open http://localhost:8080
+```
+
+**VS Code:**
+- Install **Live Server** extension
+- Right-click `index.html` → "Open with Live Server"
+
+## ✅ Code Quality (May 22, 2026)
+
+- ✅ No syntax errors
+- ✅ No runtime crashes  
+- ✅ Game fully playable
+- ⚠️ 7 code quality issues (see detailed reports)
+
+📖 **Full Audit:** [Code_Audit_Report.md](./Md_file/Code_Audit_Report.md)
+
+---
+
+## � Documentation
+
+| File | Purpose |
+|------|---------|
+| [ProjectSummary.md](./ProjectSummary.md) | Overview & architecture |
+| [Md_file/Function.md](./Md_file/Function.md) | All functions (line-by-line) |
+| [Md_file/FunctionReference.md](./Md_file/FunctionReference.md) | Quick function reference |
+| [Md_file/Flowchart.md](./Md_file/Flowchart.md) | Visual flowcharts |
+| [Md_file/Code_Audit_Report.md](./Md_file/Code_Audit_Report.md) | Code audit (7 issues) |
+| [Md_file/All_Bugs_Report.md](./Md_file/All_Bugs_Report.md) | Bug history & fixes |
+
+## 🚧 Not Yet Implemented
+
+| Feature | Status |
+|---------|--------|
+| Other pieces (rook, bishop, knight, queen, king) movement | ❌ |
+| Turn management (white/black alternation) | ❌ |
+| Check & checkmate detection | ❌ |
+| Pawn promotion at end of board | ❌ |
+| En passant capture | ❌ |
+| Castling | ❌ |
+| Move history / undo | ❌ |
+| AI opponent | ❌ |
+| Game state persistence | ❌ |
+
+## 📋 Key Export Points
+
+| File | Exports |
+|------|---------|
+| `index.js` | `globalData`, `keySquareMapper` |
+| `Data/data.js` | `initGame` |
+| `Render/main.js` | `initGameRender`, `renderHighlight`, `clearHighlight`, `selfHighlight`, `moveElement`, `globalStateRender` |
+| `Events/Global.js` | `globalEvent`, `movePieceFromXtoY` |
+| `Helper/constant.js` | `ROOT_DIV` |
+| `Helper/commonHelper.js` | `checkPieceOfOpponentOnElement`, `checkSquareCaptureId` |
+
+## 🎨 Styling
+
+- Board: 8×8 CSS grid
+- Pieces: PNG images
+- **Highlights:** Yellow glow (selected) | Green dot (valid move) | Red (capture)
+
+## 📝 Code Conventions
+
+- Use `globalData`, not `gobalData`
+- Use `highlight`, not `highLight`
+- Use `square`, not `sqaure`
+
+## 🔧 Extending the Project
+
+1. Add piece logic in `Events/Global.js`
+2. Update rendering in `Render/main.js`
+3. Add game rules in `Helper/commonHelper.js`
+4. Update styles in `style/style.css`
+
+## 📄 License
+
+Unlicensed (open for learning and extension).

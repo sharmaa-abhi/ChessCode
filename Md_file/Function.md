@@ -503,173 +503,146 @@ function movePieceFromXtoY(from, to) {
 
 ---
 
-### 29. `whitePawnClick({ piece })`
+### 29. `whitePawnClick(square)`
 > Full logic when a white pawn is clicked. Most complex function in the game.
 
 ```js
-function whitePawnClick({ piece }) {
+function whitePawnClick(square) {
+  const piece = square.piece;
 
-  // --- STEP 1: Clear old selection ---
-  clearPreviousSelfHighlight(selfHighlightState);     // Line 1: Remove yellow from last selected piece
-
-  // --- STEP 2: Toggle off if same piece clicked again ---
-  if (piece == selfHighlightState) {                  // Line 2: Same piece clicked twice?
-    selfHighlightState = null;                        // Line 3: Forget selected piece
-    clearHighlightLocal();                            // Line 4: Remove all dots + reset flag
-    return;                                           // Line 5: Stop here — deselect done
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
   }
+
+  if (square.captureHighlight) {
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
 
   // --- STEP 3: Select this piece ---
-  selfHighlight(piece);                               // Line 6: Glow this pawn yellow
-  highlightState = true;                              // Line 7: Flag: "a piece is now selected"
-  selfHighlightState = piece;                         // Line 8: Remember this piece as selected
-  moveState = piece;                                  // Line 9: This piece is ready to move
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+  moveState = piece;
 
-  const current_pos = piece.current_Position;         // Line 10: Get current square e.g. "a2"
+  const current_pos = piece.current_Position;
 
-  // --- STEP 4a: Starting position (row 2) → 2 moves possible ---
-  if (piece.current_Position[1] == "2") {             // Line 11: Is pawn on row 2 (starting row)?
-    const highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) + 1}`, // Line 12: Square 1 ahead e.g. "a3"
-      `${current_pos[0]}${Number(current_pos[1]) + 2}`, // Line 13: Square 2 ahead e.g. "a4"
+  let highlightedSquareIds = null;
+
+  if (piece.current_Position[1] == "2") {
+    highlightedSquareIds = [
+      `${current_pos[0]}${Number(current_pos[1]) + 1}`,
+      `${current_pos[0]}${Number(current_pos[1]) + 2}`,
     ];
-    clearHighlightLocal();                            // Line 14: Clear any old dots FIRST
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            element.highlight = true;                 // Line 15: Mark those squares for green dot
-          }
-        });
-      });
-    });
-    globalStateRender();                              // Line 16: Draw the green dots on screen
-
-  // --- STEP 4b: Not starting position → 1 move + diagonal captures ---
   } else {
-    const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`; // Line 17: Diagonal left-up
-    const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`; // Line 18: Diagonal right-up
-    const captureIds = [col1, col2];                  // Line 19: Both capture squares
-    const highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) + 1}`, // Line 20: 1 square ahead
-    ];
-    captureIds.forEach((element) => {
-      checkPieceOfOpponentOnElement(element, "white"); // Line 21: Check each diagonal for enemy
-    });
-    clearHighlight();                                 // Line 22: Clear old dots
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            element.highlight = true;                 // Line 23: Mark 1 square ahead for green dot
-          }
-        });
-      });
-    });
-    globalStateRender();                              // Line 24: Render the green dot
+    highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) + 1}`];
   }
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1}`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1}`;
+
+  let captureIds = [col1, col2];
+
+  captureIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "white");
+  });
+
+  globalStateRender();
 }
 ```
 
 | Line | Code | What it does |
 |------|------|-------------|
-| 1 | `clearPreviousSelfHighlight` | Remove yellow glow from whatever was selected before |
-| 2–5 | `if (piece == selfHighlightState)` | Clicking same pawn twice = deselect it |
-| 6 | `selfHighlight(piece)` | Make this pawn glow yellow |
-| 7–9 | `highlightState/selfHighlightState/moveState` | Set all 3 tracking variables |
-| 11 | `current_Position[1] == "2"` | Row 2 = first move → pawn can go 1 OR 2 squares |
-| 12–13 | Template literals | Calculate square IDs 1 and 2 steps ahead |
-| 14 | `clearHighlightLocal()` | MUST clear before adding new highlights |
-| 15 | `element.highlight = true` | Flag in data: "put a green dot here" |
-| 16 | `globalStateRender()` | Actually draw the green dots |
-| 17–18 | `charCodeAt(0) ± 1` | Get letter before/after current column (for diagonal) |
-| 21 | `checkPieceOfOpponentOnElement` | If enemy piece found diagonally, show red capture |
-| 22 | `clearHighlight()` | Clear leftovers |
-| 24 | `globalStateRender()` | Actually draw the green dot |
+| 1–4 | `selfHighlight(piece)` + state setup | Select piece and set state flags |
+| 8 | `current_Position[1] == "2"` | White starts at row 2 |
+| 9–10 | `+ 1`, `+ 2` | White pawns move UP (increasing row numbers) |
+| 16 | `keySquareMapper[highlighted]` | O(1) lookup instead of nested loops |
+| 22–23 | `charCodeAt(0) ± 1` | Calculate diagonal squares (left and right) |
+| 28 | `checkPieceOfOpponentOnElement` | Check for enemy pieces on diagonals |
+| 31 | `globalStateRender()` | Update display with highlights
 
 ---
 
-### 30. `blackPawnClick({ piece })`
-> Mirror of `whitePawnClick` but moves downward (decreasing rank). Also handles executing a white pawn move.
+### 30. `blackPawnClick(square)`
+> Mirror of `whitePawnClick` but moves downward (decreasing rank).
 
 ```js
-function blackPawnClick({ piece }) {
+function blackPawnClick(square) {
+  const piece = square.piece;
 
-  // --- STEP 1: If white pawn already selected, execute the move ---
-  if (highlightState) {                               // Line 1: Is any piece currently selected?
-    moveElement(selfHighlightState, piece.current_Position); // Line 2: Move selected piece HERE
-    return;                                           // Line 3: Done — don't treat as a selection
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
   }
 
-  // --- STEP 2: Clear old selection ---
-  clearPreviousSelfHighlight(selfHighlightState);     // Line 4: Remove yellow from old piece
-
-  // --- STEP 3: Toggle off if same pawn clicked twice ---
-  if (piece == selfHighlightState) {                  // Line 5: Clicked same pawn again?
-    selfHighlightState = null;                        // Line 6: Forget it
-    clearHighlightLocal();                            // Line 7: Remove all dots
-    return;                                           // Line 8: Deselect done
+  if (square.captureHighlight) {
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
   }
 
-  // --- STEP 4: Select this pawn ---
-  selfHighlight(piece);                               // Line 9: Glow this pawn yellow
-  highlightState = true;                              // Line 10: Flag: piece selected
-  selfHighlightState = piece;                         // Line 11: Remember this piece
-  moveState = piece;                                  // Line 12: Ready to move
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
 
-  const current_pos = piece.current_Position;         // Line 13: Current square e.g. "a7"
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+  moveState = piece;
 
-  // --- STEP 5a: Starting row (row 7) → 2 moves ---
-  if (piece.current_Position[1] == "7") {             // Line 14: Black starts at row 7
-    const highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) - 1}`, // Line 15: 1 square down e.g. "a6"
-      `${current_pos[0]}${Number(current_pos[1]) - 2}`, // Line 16: 2 squares down e.g. "a5"
+  const current_pos = piece.current_Position;
+
+  let highlightedSquareIds = null;
+
+  if (piece.current_Position[1] == "7") {
+    highlightedSquareIds = [
+      `${current_pos[0]}${Number(current_pos[1]) - 1}`,
+      `${current_pos[0]}${Number(current_pos[1]) - 2}`,
     ];
-    clearHighlightLocal();                            // Line 17: Clear first
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            element.highlight = true;                 // Line 18: Mark for green dot
-          }
-        });
-      });
-    });
-    globalStateRender();                              // Line 19: Draw green dots
-
-  // --- STEP 5b: Not starting row → 1 move + diagonal captures ---
   } else {
-    const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`; // Line 20: Diagonal left-down
-    const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`; // Line 21: Diagonal right-down
-    const captureIds = [col1, col2];                  // Line 22: Both diagonal squares
-    const highlightedSquareIds = [
-      `${current_pos[0]}${Number(current_pos[1]) - 1}`, // Line 23: 1 square below
-    ];
-    captureIds.forEach((element) => {
-      checkPieceOfOpponentOnElement(element, "black"); // Line 24: Check diagonals for white enemy
-    });
-    clearHighlight();                                 // Line 25: Clear old dots
-    highlightedSquareIds.forEach((highlightId) => {
-      globalData.forEach((row) => {
-        row.forEach((element) => {
-          if (element.id === highlightId) {
-            element.highlight = true;                 // Line 26: Mark 1 square below for green dot
-          }
-        });
-      });
-    });
-    globalStateRender();                              // Line 27: Render the green dot
+    highlightedSquareIds = [`${current_pos[0]}${Number(current_pos[1]) - 1}`];
   }
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) - 1}`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) - 1}`;
+
+  let captureIds = [col1, col2];
+
+  captureIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "black");
+  });
+
+  globalStateRender();
 }
 ```
 
 | Line | Code | What it does |
 |------|------|-------------|
-| 1–3 | `if (highlightState)` | If something was already selected → move it to black pawn's square |
-| 2 | `moveElement(selfHighlightState, piece.current_Position)` | Execute the move — selected piece goes to this square |
-| 14 | `current_Position[1] == "7"` | Row 7 = black starting row |
-| 15–16 | `- 1`, `- 2` | Black moves DOWN the board (decreasing row numbers) |
-| 20–21 | `charCodeAt(0) ± 1` then `- 1` | Diagonal captures go down-left and down-right |
+| 1–4 | `selfHighlight(piece)` + state setup | Select piece and set state flags |
+| 8 | `current_Position[1] == "7"` | Black starts at row 7 |
+| 9–10 | `- 1`, `- 2` | Black pawns move DOWN (decreasing row numbers) |
+| 16 | `keySquareMapper[highlighted]` | O(1) lookup instead of nested loops |
+| 22–23 | `charCodeAt(0) ± 1` | Calculate diagonal squares (left and right) |
+| 28 | `checkPieceOfOpponentOnElement` | Check for enemy pieces on diagonals |
+| 31 | `globalStateRender()` | Update display with highlights
 | 24 | `"black"` | Checks for WHITE pieces on diagonals (from black's perspective) |
 | 27 | `globalStateRender()` | Actually draw the green dot |
 
@@ -680,45 +653,49 @@ function blackPawnClick({ piece }) {
 
 ```js
 function globalEvent() {
-  ROOT_DIV.addEventListener("click", function (event) { // Line 1: Listen for ALL clicks on board
+  ROOT_DIV.addEventListener("click", function (event) {
+    if (event.target.localName === "img") {
+      const clickId = event.target.parentNode.id;
+      const square = keySquareMapper[clickId];
+      const pieceName =
+        square && square.piece && typeof square.piece === "object"
+          ? square.piece.piece_name
+          : null;
 
-    if (event.target.localName === "img") {              // Line 2: Was a piece image clicked?
-      const clickId = event.target.parentNode.id;        // Line 3: Get the square's id (parent of img)
-      const flatArray = globalData.flat();               // Line 4: Flatten board data
-      const square = flatArray.find((el) => el.id === clickId); // Line 5: Find clicked square in data
-      const pieceName = square && square.piece && typeof square.piece === "object"
-        ? square.piece.piece_name                        // Line 6: Get piece name if it exists
-        : null;                                          // Line 7: Or null if no piece
-
-      if (pieceName === "WHITE_PAWN") {
-        whitePawnClick(square);                          // Line 8: Route to white pawn handler
-      } else if (pieceName === "BLACK_PAWN") {
-        blackPawnClick(square);                          // Line 9: Route to black pawn handler
+      if (square.captureHighlight && moveState) {
+        moveElement(moveState, clickId);
+        moveState = null;
+        clearPreviousSelfHighlight(selfHighlightState);
+        clearHighlightLocal();
+        return;
       }
 
-    } else {                                             // Line 10: Something other than a piece was clicked
-      selfHighlightState = null;                         // Line 11: Clear the selection tracker
-      const childElementOfClickedElement = Array.from(event.target.childNodes); // Line 12: Get children
+      if (pieceName === "WHITE_PAWN") {
+        whitePawnClick(square);
+      } else if (pieceName === "BLACK_PAWN") {
+        blackPawnClick(square);
+      }
+    } else {
+      const childElementOfClickedElement = Array.from(event.target.childNodes);
 
-      if (childElementOfClickedElement.length == 1 ||
-          event.target.localName === "span") {           // Line 13: Square with one child OR span clicked
-
-        if (event.target.localName === "span") {        // Line 14: Clicked the green dot span
-          clearPreviousSelfHighlight(selfHighlightState); // Line 15: Remove yellow glow
-          const id = event.target.parentNode.id;         // Line 16: Get square id from span's parent
-          moveElement(moveState, id);                    // Line 17: Move piece to that square
-          moveState = null;                              // Line 18: Clear move state
-
-        } else {                                         // Line 19: Clicked an empty square directly
-          clearPreviousSelfHighlight(selfHighlightState); // Line 20: Remove yellow glow
-          const id = event.target.id;                   // Line 21: Get square id directly
-          moveElement(moveState, id);                    // Line 22: Move piece to that square
-          moveState = null;                              // Line 23: Clear move state
+      if (
+        childElementOfClickedElement.length == 1 ||
+        event.target.localName === "span"
+      ) {
+        if (event.target.localName === "span") {
+          clearPreviousSelfHighlight(selfHighlightState);
+          const id = event.target.parentNode.id;
+          moveElement(moveState, id);
+          moveState = null;
+        } else {
+          clearPreviousSelfHighlight(selfHighlightState);
+          const id = event.target.id;
+          moveElement(moveState, id);
+          moveState = null;
         }
-
-      } else {                                           // Line 24: Clicked somewhere with no valid move
-        clearHighlightLocal();                           // Line 25: Remove all green dots
-        clearPreviousSelfHighlight(selfHighlightState);  // Line 26: Remove yellow glow
+      } else {
+        clearHighlightLocal();
+        clearPreviousSelfHighlight(selfHighlightState);
       }
     }
   });
@@ -727,16 +704,11 @@ function globalEvent() {
 
 | Line | Code | What it does |
 |------|------|-------------|
-| 1 | `ROOT_DIV.addEventListener("click", ...)` | One listener on root handles ALL clicks (event delegation) |
-| 2 | `event.target.localName === "img"` | Was the click on a piece image? |
-| 3 | `event.target.parentNode.id` | The img's parent div IS the square — get its id |
-| 5 | `flatArray.find(...)` | Search all 64 squares for the one that was clicked |
-| 6–7 | `square.piece.piece_name` | Read the piece's name to decide which handler to call |
-| 8–9 | `whitePawnClick` / `blackPawnClick` | Route click to correct piece handler |
-| 11 | `selfHighlightState = null` | Clear selected piece when non-piece area clicked |
-| 13 | `childElementOfClickedElement.length == 1` | A square with 1 child = has a green dot span = valid move target |
-| 14 | `event.target.localName === "span"` | The green dot itself was clicked |
-| 16 | `event.target.parentNode.id` | Span's parent is the square — get that ID |
-| 17 | `moveElement(moveState, id)` | Execute the move |
-| 18 | `moveState = null` | Forget the piece now that move is done |
-| 25–26 | `clearHighlightLocal` + `clearPreviousSelfHighlight` | Clicked nowhere useful — clean everything up |
+| 2 | `addEventListener("click"...)` | Attach listener to root — catches ALL clicks |
+| 3 | `event.target.localName === "img"` | Check if a piece image was clicked |
+| 4–5 | `keySquareMapper[clickId]` | O(1) lookup — get square object directly |
+| 6–8 | Extract `piece_name` if piece exists | Get piece type for routing |
+| 10–14 | `if (square.captureHighlight && moveState)` | Move selected piece to capture square |
+| 16–18 | Route to pawn handlers | Call `whitePawnClick` or `blackPawnClick` |
+| 20+ | Empty square/span clicks | Handle move execution and deselection |
+

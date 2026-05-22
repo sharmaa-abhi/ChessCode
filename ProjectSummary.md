@@ -99,23 +99,61 @@ globalData[0][0]    // Square a8 → { id: "a8", color: "black", piece: {...} }
 
 ---
 
-## 🔄 Pawn Click Flow (Summary)
+## 🔄 Pawn Click Flow (Detailed)
 
+### White Pawn Click
 ```
-Click White Pawn
+whitePawnClick(square)
     │
-    ├─ Same pawn? → Deselect (remove glow + dots)
+    ├─ Same pawn clicked again? 
+    │   └─ YES → Deselect (remove glow + dots), return
+    │
+    ├─ Capture square clicked (red highlight)?
+    │   └─ YES → Execute moveElement(), clear all highlights, return
+    │
+    ├─ Clear previous highlights
     │
     └─ New pawn selected
-           ├─ Glow yellow ✨
-           └─ On row 2? → Show 2 squares ahead 🟢🟢
-              Not row 2? → Show 1 square ahead 🟢 + check diagonals for captures 🔴
+           ├─ Add yellow glow via selfHighlight()
+           ├─ Set highlightState = true
+           ├─ Store as selfHighlightState & moveState
+           │
+           └─ Check row to determine move count:
+               ├─ On row "2" (starting row)?
+               │   └─ Show 2 squares ahead: [a3, a4] 🟢🟢
+               │
+               └─ NOT on row "2"?
+                   └─ Show 1 square ahead: [a3] 🟢
+               
+           └─ Check diagonals for captures:
+               ├─ Column -1, row +1: check for opponent pieces → 🔴
+               └─ Column +1, row +1: check for opponent pieces → 🔴
+           
+           └─ Call globalStateRender() to show all highlights
+```
 
-Click Green Dot / Highlighted Square
-    └─ moveElement() → Piece moves, all highlights clear ♟️
+### Black Pawn Click (Reverse Logic)
+```
+blackPawnClick(square)
+    └─ SAME as whitePawnClick, but:
+        ├─ Check row "7" (starting row) for 2-square move
+        └─ Move DOWN the board (row - 1 instead of row + 1)
+        └─ Check diagonals with row -1 instead of row +1
+```
 
-Click Black Pawn (when white is selected)
-    └─ Move white pawn to that square immediately
+### Click Valid Move Dot / Empty Square
+```
+globalEvent() → click listener
+    │
+    ├─ Click green dot (span element with highlight)
+    │   └─ moveElement(moveState, id) 
+    │       ├─ Update globalData to reflect new piece position
+    │       ├─ Move DOM element (innerHTML)
+    │       ├─ Update piece.current_Position
+    │       └─ Clear all highlights
+    │
+    └─ Click empty square
+        └─ Clear all highlights & reset state
 ```
 
 ---
