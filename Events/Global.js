@@ -8,6 +8,7 @@ import {
   checkPieceOfOpponentOnElement,
   checkSquareCaptureId,
   giveBishopHighlightedIds,
+  checkWhetherPieceExistOrNot
 } from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
 
@@ -129,11 +130,11 @@ function whiteBishopClick(square) {
     clearHighlightLocal();
     return;
   }
-  
+
   // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
-  clearHighlightLocal();  
- 
+  clearHighlightLocal();
+
   // highlighting logic
   selfHighlight(piece);
   highlightState = true;
@@ -146,10 +147,11 @@ function whiteBishopClick(square) {
   const flatArray = globalData.flat();
 
   let highlightedSquareIds = giveBishopHighlightedIds(current_pos);
-  // console.log(highlightedSquareIds);
+
+  let temp = [];
 
   // on initial position movement
-  const { bottomLeft,topLeft, bottomRight , topRight} = highlightedSquareIds;
+  const { bottomLeft, topLeft, bottomRight, topRight } = highlightedSquareIds;
 
   let result = [];
   result.push(checkSquareCaptureId(bottomLeft));
@@ -157,33 +159,41 @@ function whiteBishopClick(square) {
   result.push(checkSquareCaptureId(bottomRight));
   result.push(checkSquareCaptureId(topRight));
 
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+
   // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
   highlightedSquareIds = result.flat();
 
   // console.log(highlightedSquareIds);
-  console.log(result);
-  
+  // console.log(result);
 
   highlightedSquareIds.forEach((highlighted) => {
     const element = keySquareMapper[highlighted];
     element.highlight = true;
   });
 
-  // capture id logic
-  
-  // let captureIds = [col1, col2];
+  let captureIds = [];
 
-  // Note: Do NOT use checkSquareCaptureId for captureIds.
-  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
-  // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
 
-  // captureIds.forEach((element) => {
-  //   checkPieceOfOpponentOnElement(element, "white");
-  // });
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkResult = checkWhetherPieceExistOrNot();
+
+      if (checkPieceOfOpponentOnElement(element, "white")) {
+        break;
+      }
+    }
+  }
 
   globalStateRender();
 }
-
 
 // black bishop click event handler
 function blackBishopClick(square) {
@@ -265,7 +275,6 @@ function blackBishopClick(square) {
 
   globalStateRender();
 }
-
 
 // black pawn function
 function blackPawnClick(square) {

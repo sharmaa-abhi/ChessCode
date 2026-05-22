@@ -1,7 +1,6 @@
 import { globalData, keySquareMapper } from "../index.js";
 
 // function to check if exists of opponent.
-
 function checkPieceOfOpponentOnElement(id, color) {
   // const flatData = globalData.flat();
   const opponentColor = color === "white" ? "BLACK" : "WHITE";
@@ -21,6 +20,17 @@ function checkPieceOfOpponentOnElement(id, color) {
     return true;
   }
   return false;
+}
+
+// function to check whether piece exists or not by sqaureId
+function checkWhetherPieceExistOrNot(squareId) {
+  const square = keySquareMapper[squareId];
+
+  if (square.piece) {
+    return square;
+  } else {
+    return false;
+  }
 }
 
 // function checkSquare id for capture and return array of capture ids
@@ -46,7 +56,6 @@ function checkSquareCaptureId(array) {
 function giveBishopHighlightedIds(id) {
   // find top left ids
   function topLeft(id) {
-
     let alpha = id[0];
     let num = Number(id[1]);
     let resultArray = [];
@@ -61,7 +70,6 @@ function giveBishopHighlightedIds(id) {
 
   // find bottom left ids
   function bottomLeft(id) {
-
     let alpha = id[0];
     let num = Number(id[1]);
     let resultArray = [];
@@ -72,12 +80,10 @@ function giveBishopHighlightedIds(id) {
       resultArray.push(`${alpha}${num}`);
     }
     return resultArray;
-
   }
 
   // find top right ids
   function topRight(id) {
-
     let alpha = id[0];
     let num = Number(id[1]);
     let resultArray = [];
@@ -92,7 +98,6 @@ function giveBishopHighlightedIds(id) {
 
   // find bottom right ids
   function bottomRight(id) {
-
     let alpha = id[0];
     let num = Number(id[1]);
     let resultArray = [];
@@ -104,22 +109,23 @@ function giveBishopHighlightedIds(id) {
     }
     return resultArray;
   }
-     
+
   // console.log(topLeft(id));
   // console.log(topRight(id));
   // console.log(bottomLeft(id));
   // console.log(bottomRight(id));
-  
+
   return {
     topLeft: topLeft(id),
     topRight: topRight(id),
     bottomLeft: bottomLeft(id),
     bottomRight: bottomRight(id),
-  }; 
+  };
 }
 
 export {
   checkPieceOfOpponentOnElement,
   checkSquareCaptureId,
   giveBishopHighlightedIds,
+  checkWhetherPieceExistOrNot,
 };
