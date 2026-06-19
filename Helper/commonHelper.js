@@ -123,9 +123,190 @@ function giveBishopHighlightedIds(id) {
   };
 }
 
+// function to give highlight ids for rook
+function giveRookHighlightedIds(id) {
+  // find top left ids
+  function top(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (num != 8) {
+      // alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+    return resultArray;
+  }
+
+  // find bottom left ids
+  function bottom(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (num != 1) {
+      // alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      num = num - 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+    return resultArray;
+  }
+
+  // find top right ids
+  function right(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (alpha != "h") {
+      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      // num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+    return resultArray;
+  }
+
+  // find bottom right ids
+  function left(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (alpha != "a") {
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      // num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+    return resultArray;
+  }
+  // console.log("top", top("a1"));
+
+  return {
+    top: top(id),
+    bottom: bottom(id),
+    right: right(id),
+    left: left(id),
+  };
+}
+
+// function to give highlight ids for knight
+function giveKnightHighlightedIds(id) {
+
+  function left() {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+    let temp = 0;
+
+    while (alpha != "a") {
+      if (temp == 2) {
+        break;
+      }
+
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      // num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+      temp += 1;
+    }
+
+    if (resultArray.length == 2) {
+      let finalReturnArray = [];
+
+      const lastElement = resultArray[resultArray.length - 1];
+      let alpha = lastElement[0];
+      let number = Number(lastElement[1]);
+
+      if (number < 8) {
+        finalReturnArray.push(`${alpha}${number + 1}`);
+      }
+      if (number > 1) {
+        finalReturnArray.push(`${alpha}${number - 1}`);
+      }
+    } else return [];
+
+    return resultArray;
+  }
+
+  function bottom() {
+
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+    let temp = 0;
+
+    while (num != "1") {
+      if (temp == 2) {
+        break;
+      }
+
+      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      // num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+      temp += 1;
+    }
+
+    if (resultArray.length == 2) {
+      let finalReturnArray = [];
+
+      const lastElement = resultArray[resultArray.length - 1];
+      let alpha = lastElement[0];
+      let number = Number(lastElement[1]);
+
+      if (number < 8) {
+        finalReturnArray.push(`${alpha}${number + 1}`);
+      }
+      if (number > 1) {
+        finalReturnArray.push(`${alpha}${number - 1}`);
+      }
+    } else return [];
+
+    return resultArray;
+  }
+
+  function right() {}
+
+  function right() {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+    let temp = 0;
+
+    while (alpha != "h") {
+      if (temp == 2) {
+        break;
+      }
+
+      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      // num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+      temp += 1;
+    }
+
+    if (resultArray.length == 2) {
+      let finalReturnArray = [];
+
+      const lastElement = resultArray[resultArray.length - 1];
+      let alpha = lastElement[0];
+      let number = Number(lastElement[1]);
+
+      if (number < 8) {
+        finalReturnArray.push(`${alpha}${number + 1}`);
+      }
+      if (number > 1) {
+        finalReturnArray.push(`${alpha}${number - 1}`);
+      }
+    } else return [];
+
+    return resultArray;
+  }
+}
+
 export {
   checkPieceOfOpponentOnElement,
   checkSquareCaptureId,
   giveBishopHighlightedIds,
+  giveRookHighlightedIds,
+  giveKnightHighlightedIds,
   checkWhetherPieceExistOrNot,
 };
