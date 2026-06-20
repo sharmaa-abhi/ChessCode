@@ -75,7 +75,16 @@ function whiteKingClick(square) {
   let temp = [];
 
   // on initial position movement
-  const { bottomLeft, topLeft, bottomRight, topRight, bottom, top, right, left } = highlightedSquareIds;
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
 
   let result = [];
   result.push(checkSquareCaptureId(bottomLeft));
@@ -174,7 +183,16 @@ function blackKingClick(square) {
   let temp = [];
 
   // on initial position movement
-  const { bottomLeft, topLeft, bottomRight, topRight, bottom, top, right, left } = highlightedSquareIds;
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
 
   let result = [];
   result.push(checkSquareCaptureId(bottomLeft));
@@ -273,7 +291,16 @@ function whiteQueenClick(square) {
   let temp = [];
 
   // on initial position movement
-  const { bottomLeft, topLeft, bottomRight, topRight, bottom, top, right, left } = highlightedSquareIds;
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
 
   let result = [];
   result.push(checkSquareCaptureId(bottomLeft));
@@ -372,7 +399,16 @@ function blackQueenClick(square) {
   let temp = [];
 
   // on initial position movement
-  const { bottomLeft, topLeft, bottomRight, topRight, bottom, top, right, left } = highlightedSquareIds;
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
 
   let result = [];
   result.push(checkSquareCaptureId(bottomLeft));
@@ -424,7 +460,7 @@ function blackQueenClick(square) {
         break;
       }
 
-      if (checkPieceOfOpponentOnElement(element,"black")) {
+      if (checkPieceOfOpponentOnElement(element, "black")) {
         break;
       }
     }
@@ -1173,13 +1209,10 @@ function globalEvent() {
     if (event.target.localName === "img") {
       const clickId = event.target.parentNode.id;
       const square = keySquareMapper[clickId];
-      // const flatArray = globalData.flat();
-      // const square = flatArray.find((el) => el.id === clickId);
       const pieceName =
         square && square.piece && typeof square.piece === "object"
           ? square.piece.piece_name
-          : null;
-      // console.log(square.piece.piece_name);
+          : null;      
 
       // Check if clicking on a capture square with opponent's piece
       // by help of haikyu 4.5
@@ -1191,35 +1224,48 @@ function globalEvent() {
         return;
       }
 
-      // const square = keySquareMapper[clickId];
-
-      if (square.piece.piece_name === "WHITE_PAWN") {
-        whitePawnClick(square);
-      } else if (square.piece.piece_name === "BLACK_PAWN") {
-        blackPawnClick(square);
-      } else if (square.piece.piece_name === "WHITE_BISHOP") {
-        whiteBishopClick(square);
-      } else if (square.piece.piece_name === "BLACK_BISHOP") {
-        blackBishopClick(square);
-      } else if (square.piece.piece_name === "WHITE_ROOK") {
-        whiteRookClick(square);
-      } else if (square.piece.piece_name === "BLACK_ROOK") {
-        blackRookClick(square);
-      } else if (square.piece.piece_name === "WHITE_KNIGHT") {
-        whiteKnightClick(square);
-      } else if (square.piece.piece_name === "BLACK_KNIGHT") {
-        blackKnightClick(square);
-      } else if (square.piece.piece_name === "WHITE_QUEEN") {
-        whiteQueenClick(square);
-      } else if (square.piece.piece_name === "BLACK_QUEEN") {
-        blackQueenClick(square);
-      } else if (square.piece.piece_name === "WHITE_KING") {
-        whiteKingClick(square);
-      } else if (square.piece.piece_name === "BLACK_KING") {
-        blackKingClick(square);
+      // If the square has a piece, handle the click based on the piece type
+      switch (square.piece.piece_name) {
+        case "WHITE_PAWN":
+          whitePawnClick(square);
+          break;
+        case "BLACK_PAWN":
+          blackPawnClick(square);
+          break;
+        case "WHITE_BISHOP":
+          whiteBishopClick(square);
+          break;
+        case "BLACK_BISHOP":
+          blackBishopClick(square);
+          break;
+        case "WHITE_ROOK":
+          whiteRookClick(square);
+          break;
+        case "BLACK_ROOK":
+          blackRookClick(square);
+          break;
+        case "WHITE_KNIGHT":
+          whiteKnightClick(square);
+          break;
+        case "BLACK_KNIGHT":
+          blackKnightClick(square);
+          break;
+        case "WHITE_QUEEN":
+          whiteQueenClick(square);
+          break;
+        case "BLACK_QUEEN":
+          blackQueenClick(square);
+          break;
+        case "WHITE_KING":
+          whiteKingClick(square);
+          break;
+        case "BLACK_KING":
+          blackKingClick(square);
+          break;
+        default:
+          break;
       }
-    } else {
-      // selfHighlightState = null;
+    } else {      
       const childElementOfClickedElement = Array.from(event.target.childNodes);
 
       if (
