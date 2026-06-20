@@ -192,6 +192,7 @@ function giveRookHighlightedIds(id) {
 
 // function to give highlight ids for knight
 function giveKnightHighlightedIds(id) {
+  if (!id) return;
 
   function left() {
     let alpha = id[0];
@@ -223,13 +224,14 @@ function giveKnightHighlightedIds(id) {
       if (number > 1) {
         finalReturnArray.push(`${alpha}${number - 1}`);
       }
-    } else return [];
 
-    return resultArray;
+      return finalReturnArray;
+    } else {
+      return [];
+    }
   }
 
   function bottom() {
-
     let alpha = id[0];
     let num = Number(id[1]);
     let resultArray = [];
@@ -240,8 +242,8 @@ function giveKnightHighlightedIds(id) {
         break;
       }
 
-      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
-      // num = num + 1;
+      // alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      num = num - 1;
       resultArray.push(`${alpha}${num}`);
       temp += 1;
     }
@@ -253,18 +255,59 @@ function giveKnightHighlightedIds(id) {
       let alpha = lastElement[0];
       let number = Number(lastElement[1]);
 
-      if (number < 8) {
-        finalReturnArray.push(`${alpha}${number + 1}`);
+      if (alpha != "h") {
+        let alpha2 = String.fromCharCode(alpha.charCodeAt(0) + 1);
+        finalReturnArray.push(`${alpha2}${number}`);
       }
-      if (number > 1) {
-        finalReturnArray.push(`${alpha}${number - 1}`);
+      if (alpha != "a") {
+        let alpha2 = String.fromCharCode(alpha.charCodeAt(0) - 1);
+        finalReturnArray.push(`${alpha2}${number}`);
       }
-    } else return [];
 
-    return resultArray;
+      return finalReturnArray;
+    } else {
+      return [];
+    }
   }
 
-  function right() {}
+  function top() {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+    let temp = 0;
+
+    while (num != "8") {
+      if (temp == 2) {
+        break;
+      }
+
+      // alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+      temp += 1;
+    }
+
+    if (resultArray.length == 2) {
+      let finalReturnArray = [];
+
+      const lastElement = resultArray[resultArray.length - 1];
+      let alpha = lastElement[0];
+      let number = Number(lastElement[1]);
+
+      if (alpha != "h") {
+        let alpha2 = String.fromCharCode(alpha.charCodeAt(0) + 1);
+        finalReturnArray.push(`${alpha2}${number}`);
+      }
+      if (alpha != "a") {
+        let alpha2 = String.fromCharCode(alpha.charCodeAt(0) - 1);
+        finalReturnArray.push(`${alpha2}${number}`);
+      }
+
+      return finalReturnArray;
+    } else {
+      return [];
+    }
+  }
 
   function right() {
     let alpha = id[0];
@@ -296,10 +339,60 @@ function giveKnightHighlightedIds(id) {
       if (number > 1) {
         finalReturnArray.push(`${alpha}${number - 1}`);
       }
-    } else return [];
 
-    return resultArray;
+      return finalReturnArray;
+    } else {
+      return [];
+    }
   }
+
+  return [...top(), ...bottom(), ...left(), ...right()];
+}
+
+// function to give highlight ids for queen
+function giveQueenHighlightedIds(id) {
+  const rookMoves = giveRookHighlightedIds(id);
+  const bishopMoves = giveBishopHighlightedIds(id);
+
+  return {
+    top: rookMoves.top,
+    bottom: rookMoves.bottom,
+    right: rookMoves.right,
+    left: rookMoves.left,
+    topLeft: bishopMoves.topLeft,
+    topRight: bishopMoves.topRight,
+    bottomLeft: bishopMoves.bottomLeft,
+    bottomRight: bishopMoves.bottomRight,
+  };
+}
+
+// function to give highlight ids for king
+function giveKingHighlightedIds(id) {
+  const rookMoves = giveRookHighlightedIds(id);
+  const bishopMoves = giveBishopHighlightedIds(id);
+
+  let returnResult = {
+    top: rookMoves.top,
+    bottom: rookMoves.bottom,
+    right: rookMoves.right,
+    left: rookMoves.left,
+    topLeft: bishopMoves.topLeft,
+    topRight: bishopMoves.topRight,
+    bottomLeft: bishopMoves.bottomLeft,
+    bottomRight: bishopMoves.bottomRight,
+  };
+
+  for (const key in returnResult) {
+    if (Object.hasOwnProperty.call(returnResult, key)) {
+      const element = returnResult[key];
+
+      if (element.length != 0) {
+        returnResult[key] = new Array([element[0]]);
+      }
+    }
+  }
+
+  return returnResult;
 }
 
 export {
@@ -308,5 +401,7 @@ export {
   giveBishopHighlightedIds,
   giveRookHighlightedIds,
   giveKnightHighlightedIds,
+  giveQueenHighlightedIds,
+  giveKingHighlightedIds,
   checkWhetherPieceExistOrNot,
 };
