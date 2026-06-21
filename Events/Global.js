@@ -1,12 +1,17 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import { globalData, keySquareMapper } from "../index.js";
-// import { renderHighlight } from "../Render/main.js";
 import { clearHighlight } from "../Render/main.js";
 import { selfHighlight } from "../Render/main.js";
 import { moveElement } from "../Render/main.js";
 import {
   checkPieceOfOpponentOnElement,
   checkSquareCaptureId,
+  giveBishopHighlightedIds,
+  giveRookHighlightedIds,
+  giveKnightHighlightedIds,
+  giveQueenHighlightedIds,
+  giveKingHighlightedIds,
+  checkWhetherPieceExistOrNot,
 } from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
 
@@ -29,6 +34,823 @@ function clearHighlightLocal() {
 function movePieceFromXtoY(from, to) {
   to.piece = from.piece;
   from.piece = null;
+  globalStateRender();
+}
+
+// white king click event handler
+function whiteKingClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveKingHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "white"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "white")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// black king click event handler
+function blackKingClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveKingHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "black"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "black")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// white queen click event handler
+function whiteQueenClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveQueenHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "white"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "white")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// black queen click event handler
+function blackQueenClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveQueenHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const {
+    bottomLeft,
+    topLeft,
+    bottomRight,
+    topRight,
+    bottom,
+    top,
+    right,
+    left,
+  } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "black"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "black")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// white knight click event handler
+function whiteKnightClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveKnightHighlightedIds(current_pos);
+
+  // let temp = [];
+
+  // // on initial position movement
+  // const { bottom, top, right, left } = highlightedSquareIds;
+
+  // let result = [];
+  // result.push(checkSquareCaptureId(bottom));
+  // result.push(checkSquareCaptureId(top));
+  // result.push(checkSquareCaptureId(right));
+  // result.push(checkSquareCaptureId(left));
+
+  // // insert into temp
+  // temp.push(bottom);
+  // temp.push(top);
+  // temp.push(right);
+  // temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  // highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  // highlightedSquareIds.forEach((highlighted) => {
+  //   const element = keySquareMapper[highlighted];
+  //   element.highlight = true;
+  // });
+
+  // let captureIds = [];
+  // console.log(temp);
+
+  // for (let index = 0; index < temp.length; index++) {
+  //   const arr = temp[index];
+
+  //   for (let j = 0; j < arr.length; j++) {
+  //     const element = arr[j];
+
+  //     let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+  //     if (
+  //       checkPieceResult &&
+  //       checkPieceResult.piece &&
+  //       checkPieceResult.piece.piece_name == "white"
+  //     ) {
+  //       break;
+  //     }
+
+  //     if (checkPieceOfOpponentOnElement(element, "white")) {
+  //       break;
+  //     }
+  //   }
+  // }
+
+  highlightSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+
+  highlightSquareIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "black");
+  });
+
+  globalStateRender();
+}
+
+// black knight click event handler
+function blackKnightClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveKnightHighlightedIds(current_pos);
+
+  // let temp = [];
+
+  // // on initial position movement
+  // const { bottom, top, right, left } = highlightedSquareIds;
+
+  // let result = [];
+  // result.push(checkSquareCaptureId(bottom));
+  // result.push(checkSquareCaptureId(top));
+  // result.push(checkSquareCaptureId(right));
+  // result.push(checkSquareCaptureId(left));
+
+  // // insert into temp
+  // temp.push(bottom);
+  // temp.push(top);
+  // temp.push(right);
+  // temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  // highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  // highlightedSquareIds.forEach((highlighted) => {
+  //   const element = keySquareMapper[highlighted];
+  //   element.highlight = true;
+  // });
+
+  // let captureIds = [];
+  // console.log(temp);
+
+  // for (let index = 0; index < temp.length; index++) {
+  //   const arr = temp[index];
+
+  //   for (let j = 0; j < arr.length; j++) {
+  //     const element = arr[j];
+
+  //     let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+  //     if (
+  //       checkPieceResult &&
+  //       checkPieceResult.piece &&
+  //       checkPieceResult.piece.piece_name == "black"
+  //     ) {
+  //       break;
+  //     }
+
+  //     if (checkPieceOfOpponentOnElement(element, "black")) {
+  //       break;
+  //     }
+  //   }
+  // }
+
+  highlightSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+
+  highlightSquareIds.forEach((element) => {
+    checkPieceOfOpponentOnElement(element, "black");
+  });
+
+  globalStateRender();
+}
+
+// black rook click event handler
+function blackRookClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveRookHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const { bottom, top, right, left } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
+
+  // insert into temp
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "black"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "black")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// white rook click event handler
+function whiteRookClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveRookHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const { bottom, top, right, left } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
+
+  // insert into temp
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "white"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "white")) {
+        break;
+      }
+    }
+  }
+
   globalStateRender();
 }
 
@@ -86,8 +908,8 @@ function whitePawnClick(square) {
 
   // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
 
-  highlightedSquareIds.forEach((hightlighted) => {
-    const element = keySquareMapper[hightlighted];
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
     element.highlight = true;
   });
 
@@ -100,8 +922,8 @@ function whitePawnClick(square) {
   }`;
 
   let captureIds = [col1, col2];
-  // Note: Do NOT use checkSquareCaptureId for captureIds. 
-  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement, 
+  // Note: Do NOT use checkSquareCaptureId for captureIds.
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
   captureIds.forEach((element) => {
@@ -111,7 +933,189 @@ function whitePawnClick(square) {
   globalStateRender();
 }
 
-// black pawn function
+// white bishop click event handler
+function whiteBishopClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveBishopHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const { bottomLeft, topLeft, bottomRight, topRight } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  // console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "white"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "white")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// black bishop click event handler
+function blackBishopClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_Position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  // clear all highlights
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlightState = true;
+  selfHighlightState = piece;
+
+  // add piece as move state
+  moveState = piece;
+
+  const current_pos = piece.current_Position;
+  const flatArray = globalData.flat();
+
+  let highlightedSquareIds = giveBishopHighlightedIds(current_pos);
+
+  let temp = [];
+
+  // on initial position movement
+  const { bottomLeft, topLeft, bottomRight, topRight } = highlightedSquareIds;
+
+  let result = [];
+  result.push(checkSquareCaptureId(bottomLeft));
+  result.push(checkSquareCaptureId(topLeft));
+  result.push(checkSquareCaptureId(bottomRight));
+  result.push(checkSquareCaptureId(topRight));
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+
+  // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
+  highlightedSquareIds = result.flat();
+
+  console.log(highlightedSquareIds);
+  // console.log(result);
+
+  highlightedSquareIds.forEach((highlighted) => {
+    const element = keySquareMapper[highlighted];
+    element.highlight = true;
+  });
+
+  // let captureIds = [];
+  // console.log(temp);
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistOrNot(element);
+
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name == "black"
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "black")) {
+        break;
+      }
+    }
+  }
+
+  globalStateRender();
+}
+
+// black pawn click event handler
 function blackPawnClick(square) {
   // Clear board for any previous highlights.
   // clearHighlightLocal();
@@ -179,8 +1183,8 @@ function blackPawnClick(square) {
 
   let captureIds = [col1, col2];
 
-  // Note: Do NOT use checkSquareCaptureId for captureIds. 
-  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement, 
+  // Note: Do NOT use checkSquareCaptureId for captureIds.
+  // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
   captureIds.forEach((element) => {
@@ -204,14 +1208,11 @@ function globalEvent() {
   ROOT_DIV.addEventListener("click", function (event) {
     if (event.target.localName === "img") {
       const clickId = event.target.parentNode.id;
-      // const flatArray = globalData.flat();
-      // const square = flatArray.find((el) => el.id === clickId);
       const square = keySquareMapper[clickId];
       const pieceName =
         square && square.piece && typeof square.piece === "object"
           ? square.piece.piece_name
-          : null;
-      // console.log(square.piece.piece_name);
+          : null;      
 
       // Check if clicking on a capture square with opponent's piece
       // by help of haikyu 4.5
@@ -223,13 +1224,48 @@ function globalEvent() {
         return;
       }
 
-      if (pieceName === "WHITE_PAWN") {
-        whitePawnClick(square);
-      } else if (pieceName === "BLACK_PAWN") {
-        blackPawnClick(square);
+      // If the square has a piece, handle the click based on the piece type
+      switch (square.piece.piece_name) {
+        case "WHITE_PAWN":
+          whitePawnClick(square);
+          break;
+        case "BLACK_PAWN":
+          blackPawnClick(square);
+          break;
+        case "WHITE_BISHOP":
+          whiteBishopClick(square);
+          break;
+        case "BLACK_BISHOP":
+          blackBishopClick(square);
+          break;
+        case "WHITE_ROOK":
+          whiteRookClick(square);
+          break;
+        case "BLACK_ROOK":
+          blackRookClick(square);
+          break;
+        case "WHITE_KNIGHT":
+          whiteKnightClick(square);
+          break;
+        case "BLACK_KNIGHT":
+          blackKnightClick(square);
+          break;
+        case "WHITE_QUEEN":
+          whiteQueenClick(square);
+          break;
+        case "BLACK_QUEEN":
+          blackQueenClick(square);
+          break;
+        case "WHITE_KING":
+          whiteKingClick(square);
+          break;
+        case "BLACK_KING":
+          blackKingClick(square);
+          break;
+        default:
+          break;
       }
-    } else {
-      // selfHighlightState = null;
+    } else {      
       const childElementOfClickedElement = Array.from(event.target.childNodes);
 
       if (
