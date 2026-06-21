@@ -200,6 +200,23 @@ function clearPreviousSelfHighlight(piece) {
   }
 }
 
+function nonPawnPieceClick(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    moveState = null;
+    return;
+  }
+
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+  selfHighlight(piece);
+  selfHighlightState = piece;
+  moveState = null;
+}
+
 function globalEvent() {
   ROOT_DIV.addEventListener("click", function (event) {
     if (event.target.localName === "img") {
@@ -227,6 +244,8 @@ function globalEvent() {
         whitePawnClick(square);
       } else if (pieceName === "BLACK_PAWN") {
         blackPawnClick(square);
+      } else if (pieceName) {
+        nonPawnPieceClick(square);
       }
     } else {
       // selfHighlightState = null;
@@ -236,6 +255,12 @@ function globalEvent() {
         childElementOfClickedElement.length == 1 ||
         event.target.localName === "span"
       ) {
+        if (!moveState) {
+          clearPreviousSelfHighlight(selfHighlightState);
+          clearHighlightLocal();
+          return;
+        }
+
         if (event.target.localName === "span") {
           clearPreviousSelfHighlight(selfHighlightState);
           const id = event.target.parentNode.id;
