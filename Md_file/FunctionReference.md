@@ -3,6 +3,8 @@
 Think of the app like this:
 > **When you open the game → board is built → pieces are placed → you can click to play.**
 
+**Updated June 22, 2026:** All piece handlers (pawns, rooks, bishops, knights, queens, kings) are already implemented in `Events/Global.js`. See the list below!
+
 ---
 
 ## 🟢 STEP 1 — App Starts (`index.js`)
@@ -92,9 +94,26 @@ They are called when drawing pieces on the board.
 |---|----------|----------------|
 | 27 | `clearHighlightLocal()` | Removes all green dots + sets highlightState to false |
 | 28 | `movePieceFromXtoY(from, to)` | Old way to move a piece in data. Replaced by `moveElement` now. |
-| 29 | `whitePawnClick(piece)` | When you click a white pawn → glow it yellow → show valid move squares with green dots |
-| 30 | `blackPawnClick(piece)` | When you click a black pawn → if `highlightState` is true (any piece already selected), moves that selected piece to this square using `moveElement`. Otherwise glows this pawn yellow and shows its valid moves. |
-| 31 | `globalEvent()` | The **big listener** — watches all clicks on the board and decides what to do |
+| **Pawn Handlers** | | |
+| 29 | `whitePawnClick(piece)` | White pawn clicked → glow yellow → show valid moves with green dots |
+| 30 | `blackPawnClick(piece)` | Black pawn clicked → glow yellow → show valid moves downward |
+| **Bishop Handlers** | | |
+| 31 | `whiteBishopClick(piece)` | White bishop clicked → calculate diagonal moves → show highlights |
+| 32 | `blackBishopClick(piece)` | Black bishop clicked → calculate diagonal moves → show highlights |
+| **Rook Handlers** | | |
+| 33 | `whiteRookClick(piece)` | White rook clicked → calculate straight-line moves → show highlights |
+| 34 | `blackRookClick(piece)` | Black rook clicked → calculate straight-line moves → show highlights |
+| **Knight Handlers** | | |
+| 35 | `whiteKnightClick(piece)` | White knight clicked → calculate L-shaped moves → show highlights |
+| 36 | `blackKnightClick(piece)` | Black knight clicked → calculate L-shaped moves → show highlights |
+| **Queen Handlers** | | |
+| 37 | `whiteQueenClick(piece)` | White queen clicked → combine rook + bishop moves → show highlights |
+| 38 | `blackQueenClick(piece)` | Black queen clicked → combine rook + bishop moves → show highlights |
+| **King Handlers** | | |
+| 39 | `whiteKingClick(piece)` | White king clicked → 1-square in all directions → show highlights |
+| 40 | `blackKingClick(piece)` | Black king clicked → 1-square in all directions → show highlights |
+| **Main Listener** | | |
+| 41 | `globalEvent()` | The **big listener** — watches all clicks and dispatches to correct handler via switch statement |
 
 ---
 
@@ -109,16 +128,14 @@ You open the game
   │
   └── Click listener starts watching...
 
-You click a White Pawn
+You click ANY piece (pawn, rook, bishop, knight, queen, or king)
   ├── It glows yellow  ✨
   └── Valid squares get green dots  🟢
 
-You click a green dot
-  └── Pawn moves there, highlights clear  ♟️
+You click a green dot or red capture square
+  └── Piece moves there, highlights clear  ♟️
 
-You click a Black Pawn
-  ├── If white pawn was selected → black pawn's square is the destination → move happens
-  └── Otherwise → black pawn glows yellow, its valid moves shown
+⏳ Current limitation: Turn validation not implemented — both colors can move any piece
 ```
 
 ---

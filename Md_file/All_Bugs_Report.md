@@ -1,6 +1,33 @@
 # 🪲 Complete Bug History & Resolutions
 
-This document catalogs all the bugs—both old and new—that were discovered and resolved across the ChessCode project during the audits.
+**Last Updated:** June 22, 2026  
+**Status:** Critical blockers identified; ready for implementation phase
+
+This document catalogs all the bugs—both old and new—that were discovered and resolved across the ChessCode project during audits.
+
+---
+
+## 🔴 CRITICAL BLOCKER (June 22, 2026)
+
+### No Turn Validation
+**Type:** Game Logic Missing  
+**Severity:** Critical (blocks multiplayer gameplay)  
+**Location:** `Events/Global.js` (`globalEvent` and all piece handlers)
+
+**The Problem:**
+There is no turn validation system. Both white and black pieces can be moved by either player at any time. This makes the game unplayable for two-player mode.
+
+**The Impact:**
+- Either color can move any piece
+- Game state has no concept of whose turn it is
+- Cannot implement check/checkmate detection without turn management
+
+**The Fix (Phase 1):**
+1. Add `let currentTurn = "white"` state variable
+2. Validate piece color matches `currentTurn` in each piece handler
+3. Toggle `currentTurn` after successful move in `moveElement()`
+
+**Timeline:** ~30 minutes to implement
 
 ---
 

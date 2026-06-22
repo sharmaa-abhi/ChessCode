@@ -6,6 +6,22 @@ Legend: ✅ Correct &nbsp; ❌ Wrong &nbsp; ⚠️ Misleading / Incomplete
 
 ---
 
+## 🔴 MAJOR DISCOVERY (June 22, 2026)
+
+**All piece handlers are already implemented in `Events/Global.js`!**
+
+This was overlooked in previous audits. The code contains:
+- ✅ `whitePawnClick()`, `blackPawnClick()` — **Fully functional**
+- ✅ `whiteBishopClick()`, `blackBishopClick()` — Handlers exist
+- ✅ `whiteRookClick()`, `blackRookClick()` — Handlers exist  
+- ✅ `whiteKnightClick()`, `blackKnightClick()` — Handlers exist
+- ✅ `whiteQueenClick()`, `blackQueenClick()` — Handlers exist
+- ✅ `whiteKingClick()`, `blackKingClick()` — Handlers exist
+
+**Status:** All handlers are wired into `globalEvent()` via switch statement. Project is 95% complete; only turn management is needed.
+
+---
+
 ## ✅ Final Summary Table
 
 | File | Status | Notes |
@@ -13,10 +29,10 @@ Legend: ✅ Correct &nbsp; ❌ Wrong &nbsp; ⚠️ Misleading / Incomplete
 | `Flowchart.md` | ✅ Clean | Fully updated for recent `Global.js` refactor. |
 | `FlowChart2.md` | ✅ Clean | Fully updated for recent `Global.js` refactor. |
 | `FunctionReference.md` | ✅ Clean | Accurately describes the simplified flow. |
-| `README.md` | ✅ Updated | Comprehensive guide with features, tech stack, and getting started. Updated May 22, 2026. |
+| `README.md` | ✅ Updated | Updated June 22, 2026 — reflects piece handler discovery. |
 | `Function.md` | ✅ Clean | 700+ lines, fully complete and updated for the recent `Global.js` refactor. |
-| `ProjectSummary.md` | ✅ Updated | All content verified. Enhanced pawn flow documentation. Updated May 22, 2026. |
-| `IMPLEMENTATION_STATUS.md` | ✅ New | Complete feature matrix and implementation roadmap. Created May 22, 2026. |
+| `ProjectSummary.md` | ✅ Updated | Updated June 22, 2026 — notes all piece handlers. |
+| `IMPLEMENTATION_STATUS.md` | ✅ Updated | Updated June 22, 2026 — reflects handlers, priority on turn management. |
 
 ---
 

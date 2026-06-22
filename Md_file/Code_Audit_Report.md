@@ -1,21 +1,31 @@
 # 🔍 ChessCode — Complete Code Audit Report
 
-**Date:** May 22, 2026  
+**Last Update:** June 22, 2026  
+**Previous Audit:** May 22, 2026  
 **Status:** ✅ Code compiles and runs — errors found are logic/style issues, not syntax errors  
 **Severity Levels:** 🔴 Critical | 🟠 High | 🟡 Medium | 🟢 Low
 
 ---
 
+## 🔴 MAJOR DISCOVERY (June 22, 2026)
+
+All piece handlers are already implemented in `Events/Global.js`. Previous audit incorrectly listed "No piece movement beyond pawns" as a critical issue. In fact:
+
+- ✅ All 12 piece handlers exist and are wired into `globalEvent()` switch statement
+- ✅ Move calculation helpers exist for all piece types
+- ⏳ **Blocker:** No turn validation (both colors can move any piece)
+
+**Revised Priority:** Turn management (blocking full gameplay) > Code cleanup issues
+
+---
+
 ## 📋 Executive Summary
 
-**Total Issues Found:** 7
-- 🔴 Critical: 1
-- 🟠 High: 2
-- 🟡 Medium: 2
-- 🟢 Low: 2
-
-**All Lint Errors:** None (no syntax errors)  
-**Runtime Errors:** None (code executes without crashing)
+**Total Issues Found:** 7 (see breakdown below)
+- 🔴 Critical: 1 (unreachable code — non-breaking but illogical)
+- 🟠 High: 2 (unused import, no turn validation)
+- 🟡 Medium: 2 (move validation gaps, no capture rules)
+- 🟢 Low: 2 (unused functions, dead code comments)
 
 ---
 

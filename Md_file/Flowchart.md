@@ -1,6 +1,10 @@
 # Pawn Click Flowchart - Line by Line Sequential Flow
 
-## White Pawn Click - Top to Bottom Flow
+**Updated June 22, 2026:** All piece handlers implemented. These flowcharts show the pawn logic pattern that all other pieces follow (rooks, bishops, knights, queens, kings). 
+
+⏳ **Blocker:** Turn validation not implemented — both colors can move any piece.
+
+---
 
 ```mermaid
 flowchart TD

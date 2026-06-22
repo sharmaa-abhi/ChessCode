@@ -40,19 +40,20 @@ chessCode/
 
 ```
 initGame()  →  initGameRender()  →  globalEvent()
-  (data)         (display)          (clicks)
+  (data)         (display)          (clicks → all piece handlers)
 ```
 
 1. **Data:** Build 8×8 board array (`globalData`)
 2. **Render:** Draw squares and place pieces on screen
-3. **Events:** Listen for clicks and handle pawn logic
+3. **Events:** Listen for clicks and dispatch to piece handlers (all pieces already implemented)
 
 ## 🎮 Gameplay
 
-- **Click pawn** → Shows valid moves (green dots) + captures (red)
-- **Click valid move** → Pawn moves to that square
+- **Click any piece** → Shows valid moves (green dots) + captures (red)
+- **Click valid move** → Piece moves to that square (handlers for all pieces are coded!)
 - **Click empty square** → Clears highlights
-- **White pawns:** Move UP, **Black pawns:** Move DOWN
+- **White pieces:** Move up the board, **Black pieces:** Move down
+- ⏳ **Current limitation:** Turn validation not implemented — both colors can move any piece
 
 ## � Key Data
 
@@ -79,14 +80,15 @@ npx http-server
 - Install **Live Server** extension
 - Right-click `index.html` → "Open with Live Server"
 
-## ✅ Code Quality (May 22, 2026)
+## ✅ Code Quality (June 22, 2026)
 
 - ✅ No syntax errors
 - ✅ No runtime crashes  
-- ✅ Game fully playable
-- ⚠️ 7 code quality issues (see detailed reports)
+- ✅ **All piece handlers implemented and wired** (major discovery!)
+- ⚠️ Turn validation missing (blocks multi-piece gameplay)
+- ⚠️ Move validation needs refinement
 
-📖 **Full Audit:** [Code_Audit_Report.md](./Md_file/Code_Audit_Report.md)
+📖 **Full Details:** [IMPLEMENTATION_STATUS.md](./Md_file/IMPLEMENTATION_STATUS.md)
 
 ---
 
@@ -105,15 +107,17 @@ npx http-server
 
 | Feature | Status |
 |---------|--------|
-| Other pieces (rook, bishop, knight, queen, king) movement | ❌ |
-| Turn management (white/black alternation) | ❌ |
-| Check & checkmate detection | ❌ |
-| Pawn promotion at end of board | ❌ |
-| En passant capture | ❌ |
-| Castling | ❌ |
-| Move history / undo | ❌ |
-| AI opponent | ❌ |
-| Game state persistence | ❌ |
+| Turn validation (white/black alternation) | ⏳ **PRIORITY** — Blocks multi-piece play |
+| Move validation (legal moves per piece type) | ⏳ Next priority |
+| Check / Checkmate detection | ❌ Future |
+| Pawn promotion | ❌ Future |
+| En passant | ❌ Future |
+| Castling | ❌ Future |
+| Move history / undo | ❌ Future |
+| AI opponent | ❌ Future |
+| Game state persistence | ❌ Future |
+
+**Note:** Handlers for all pieces (rook, bishop, knight, queen, king) are already implemented in `Events/Global.js`. They just need turn validation to work properly.
 
 ## 📋 Key Export Points
 

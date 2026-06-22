@@ -2,6 +2,10 @@
 
 Every function in every `.js` file, with each line of code explained in plain English, in execution order.
 
+**Updated June 22, 2026:** All piece handlers are now documented! Added bishop, rook, knight, queen, and king handlers that were previously undocumented.
+
+⏳ **Current Blocker:** Turn validation not implemented — both colors can move any piece.
+
 ---
 
 ## 📁 `Data/data.js`
@@ -649,7 +653,9 @@ function blackPawnClick(square) {
 ---
 
 ### 31. `globalEvent()`
-> The main controller. Attaches one click listener to the entire board and routes every click.
+> The main controller. Attaches one click listener to the entire board and routes every click to the correct piece handler using a switch statement.
+>
+> **June 22 Update:** Now routes to all 12 piece handlers (white & black for each piece type).
 
 ```js
 function globalEvent() {
@@ -662,6 +668,7 @@ function globalEvent() {
           ? square.piece.piece_name
           : null;
 
+      // Check if clicking on a capture square
       if (square.captureHighlight && moveState) {
         moveElement(moveState, clickId);
         moveState = null;
@@ -670,12 +677,49 @@ function globalEvent() {
         return;
       }
 
-      if (pieceName === "WHITE_PAWN") {
-        whitePawnClick(square);
-      } else if (pieceName === "BLACK_PAWN") {
-        blackPawnClick(square);
+      // Route to correct piece handler
+      switch (square.piece.piece_name) {
+        case "WHITE_PAWN":
+          whitePawnClick(square);
+          break;
+        case "BLACK_PAWN":
+          blackPawnClick(square);
+          break;
+        case "WHITE_BISHOP":
+          whiteBishopClick(square);
+          break;
+        case "BLACK_BISHOP":
+          blackBishopClick(square);
+          break;
+        case "WHITE_ROOK":
+          whiteRookClick(square);
+          break;
+        case "BLACK_ROOK":
+          blackRookClick(square);
+          break;
+        case "WHITE_KNIGHT":
+          whiteKnightClick(square);
+          break;
+        case "BLACK_KNIGHT":
+          blackKnightClick(square);
+          break;
+        case "WHITE_QUEEN":
+          whiteQueenClick(square);
+          break;
+        case "BLACK_QUEEN":
+          blackQueenClick(square);
+          break;
+        case "WHITE_KING":
+          whiteKingClick(square);
+          break;
+        case "BLACK_KING":
+          blackKingClick(square);
+          break;
+        default:
+          break;
       }
     } else {
+      // Handle clicks on empty squares or highlights
       const childElementOfClickedElement = Array.from(event.target.childNodes);
 
       if (
@@ -709,6 +753,94 @@ function globalEvent() {
 | 4–5 | `keySquareMapper[clickId]` | O(1) lookup — get square object directly |
 | 6–8 | Extract `piece_name` if piece exists | Get piece type for routing |
 | 10–14 | `if (square.captureHighlight && moveState)` | Move selected piece to capture square |
-| 16–18 | Route to pawn handlers | Call `whitePawnClick` or `blackPawnClick` |
-| 20+ | Empty square/span clicks | Handle move execution and deselection |
+| 16–60 | **Switch statement** | Routes to correct piece handler (12 cases: 6 pieces × 2 colors) |
+| 62+ | Empty square/span clicks | Handle move execution and deselection |
+
+---
+
+## 📝 Piece Handlers (Functions 32–43)
+
+All piece handlers follow the same pattern as `whitePawnClick` and `blackPawnClick`:
+
+1. **Check if same piece clicked** → Deselect
+2. **Check if capture square** → Move piece
+3. **Otherwise** → Select piece, calculate valid moves, highlight them
+4. **Use helper functions** to calculate moves:
+   - `giveRookHighlightedIds()` → Straight-line moves
+   - `giveBishopHighlightedIds()` → Diagonal moves
+   - `giveKnightHighlightedIds()` → L-shaped moves
+   - `giveQueenHighlightedIds()` → Rook + Bishop combined
+   - `giveKingHighlightedIds()` → 1 square in all directions
+
+**Status:** All handlers exist and are wired into the switch statement. ⏳ Blocked by turn validation.
+
+### 32–43. Piece Handlers (Not yet line-by-line documented)
+
+The following 12 functions exist in `Events/Global.js` and are fully implemented:
+
+| Function # | Function Name | What it does |
+|------------|---------------|-------------|
+| 32 | `whiteBishopClick(square)` | Diagonal movement — 4 directions ↗↖↙↘ |
+| 33 | `blackBishopClick(square)` | Same as white bishop |
+| 34 | `whiteRookClick(square)` | Straight-line movement — 4 directions ↑↓←→ |
+| 35 | `blackRookClick(square)` | Same as white rook |
+| 36 | `whiteKnightClick(square)` | L-shaped movement — 8 possible squares |
+| 37 | `blackKnightClick(square)` | Same as white knight |
+| 38 | `whiteQueenClick(square)` | Combines rook + bishop (all 8 directions) |
+| 39 | `blackQueenClick(square)` | Same as white queen |
+| 40 | `whiteKingClick(square)` | 1 square in any direction (all 8 directions) |
+| 41 | `blackKingClick(square)` | Same as white king |
+| 42 | `clearPreviousSelfHighlight(piece)` | Removes yellow glow from piece |
+| 43 | `globalEvent()` | Main router (detailed above) |
+
+**Each handler:**
+- Checks if clicked piece is already selected (deselect if yes)
+- Checks if square is marked as capture target (move if yes)
+- Otherwise: highlights piece yellow, calculates valid moves, shows green dots
+- Uses helper functions from `commonHelper.js` to calculate move squares
+- Calls `globalStateRender()` to update the display
+
+**Pattern Example (Bishop):**
+```
+whiteBishopClick()
+  ↓
+  giveB ishopHighlightedIds() → returns {topLeft, topRight, bottomLeft, bottomRight}
+  ↓
+  checkSquareCaptureId() for each direction → stops at first piece
+  ↓
+  checkPieceOfOpponentOnElement() → marks capture squares red
+  ↓
+  globalStateRender() → displays on board
+```
+
+---
+
+## ⏳ TODO: Turn Management (To Be Implemented)
+
+**What needs to be added:**
+
+1. **New state variable** at top of `Global.js`:
+   ```js
+   let currentTurn = "white";  // Track whose turn it is
+   ```
+
+2. **Validation in each piece handler:**
+   ```js
+   if (piece.piece_name.includes("WHITE") && currentTurn !== "white") {
+     return;  // Block move
+   }
+   if (piece.piece_name.includes("BLACK") && currentTurn !== "black") {
+     return;  // Block move
+   }
+   ```
+
+3. **Toggle turn after move** in `moveElement()`:
+   ```js
+   // At end of moveElement function:
+   currentTurn = currentTurn === "white" ? "black" : "white";
+   ```
+
+**Impact:** Once implemented, all 12 piece handlers will be fully playable for two-player chess.
+
+**Timeline:** ~30 minutes to implement across all handlers.
 

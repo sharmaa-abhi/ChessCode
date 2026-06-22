@@ -1,5 +1,9 @@
 # ♟️ ChessCode — Visual Flowcharts
 
+**Updated June 22, 2026:** All piece handlers are now implemented! See updated Click Handler Flow below.
+
+⏳ **Current Status:** Handlers exist for all pieces but turn validation blocks full gameplay.
+
 ---
 
 ## 🟢 1. App Startup Flow
@@ -42,17 +46,43 @@ flowchart TD
     B -->|Empty square with one child| G
     B -->|Anything else| H[clearHighlightLocal\nclearPreviousSelfHighlight]
 
-    C -->|WHITE_PAWN| D[whitePawnClick]
-    C -->|BLACK_PAWN| E[blackPawnClick]
-    C -->|Other pieces| F[Nothing yet - not implemented]
+    C -->|WHITE_PAWN| D["whitePawnClick ✅"]
+    C -->|BLACK_PAWN| E["blackPawnClick ✅"]
+    C -->|WHITE_BISHOP| D2["whiteBishopClick ✅"]
+    C -->|BLACK_BISHOP| E2["blackBishopClick ✅"]
+    C -->|WHITE_ROOK| D3["whiteRookClick ✅"]
+    C -->|BLACK_ROOK| E3["blackRookClick ✅"]
+    C -->|WHITE_KNIGHT| D4["whiteKnightClick ✅"]
+    C -->|BLACK_KNIGHT| E4["blackKnightClick ✅"]
+    C -->|WHITE_QUEEN| D5["whiteQueenClick ✅"]
+    C -->|BLACK_QUEEN| E5["blackQueenClick ✅"]
+    C -->|WHITE_KING| D6["whiteKingClick ✅"]
+    C -->|BLACK_KING| E6["blackKingClick ✅"]
+
+    D --> I["All handlers calculate valid moves\nand highlight them 🟢🔴"]
+    E --> I
+    D2 --> I
+    E2 --> I
+    D3 --> I
+    E3 --> I
+    D4 --> I
+    E4 --> I
+    D5 --> I
+    E5 --> I
+    D6 --> I
+    E6 --> I
 
     G --> Z([🔄 Piece Moves!])
     H --> Z2([🔄 Highlights Cleared])
+    I --> Z3(["⏳ BLOCKED: Turn not validated\nBoth colors can move"])
 
     style A fill:#023e8a,color:#fff
     style Z fill:#2d6a4f,color:#fff
     style Z2 fill:#555,color:#fff
+    style Z3 fill:#d62828,color:#fff
 ```
+
+**June 22 Update:** All piece handlers now exist and are wired into the switch statement. The blocker is turn validation—without it, both white and black can move any piece.
 
 ---
 
@@ -155,7 +185,7 @@ flowchart TD
 
 ## 🗺️ 6. Complete Big Picture
 
-> All files and how they connect.
+> All files and how they connect. Updated June 22, 2026 to show all piece handlers.
 
 ```mermaid
 flowchart LR
@@ -163,32 +193,31 @@ flowchart LR
 
     subgraph DATA ["📦 Data Layer"]
         DJS["data.js\ninitGame\nsquareRow\nSquare"]
-        PJS["pieces.js\nblackPawn whitePawn\nblackRook whiteRook\n...etc"]
+        PJS["pieces.js\n12 piece factories\n(white & black)"]
     end
 
     subgraph HELPER ["🔧 Helper Layer"]
         CONST["constant.js\nROOT_DIV"]
-        COMMON["commonHelper.js\ncheckPieceOfOpponent\nOnElement"]
+        COMMON["commonHelper.js\nMove calculation\nfunctions"]
     end
 
     subgraph RENDER ["🖥️ Render Layer"]
-        MAIN["main.js\ninitGameRender\npieceRender\nglobalStateRender\nmoveElement\nselfHighlight\nclearHighlight\nclearPreviousSelfHighlight\nrenderHighlight"]
+        MAIN["main.js\ninitGameRender\npieceRender\nglobalStateRender\nmoveElement\nselfHighlight\nclearHighlight"]
     end
 
-    subgraph EVENTS ["🖱️ Event Layer"]
-        GLOB["Global.js\nglobalEvent\nwhitePawnClick\nblackPawnClick\nclearHighlightLocal\nmovePieceFromXtoY"]
+    subgraph EVENTS ["🖱️ Event Layer - ALL HANDLERS ✅"]
+        GLOB["Global.js\n12 piece handlers\n(white & black)\nAll wired to globalEvent"]
     end
 
     IDX -->|"calls initGame()"| DJS
     IDX -->|"calls initGameRender()"| MAIN
     IDX -->|"calls globalEvent()"| GLOB
 
-    DJS -->|"squareRow calls Square()"| DJS2["Square() factory"]
     MAIN -->|"uses piece factories"| PJS
     MAIN -->|"uses ROOT_DIV"| CONST
     GLOB -->|"uses ROOT_DIV"| CONST
     GLOB -->|"calls render functions"| MAIN
-    GLOB -->|"calls checkOpponent"| COMMON
+    GLOB -->|"calls move calculators"| COMMON
     COMMON -->|"reads globalData"| IDX
     MAIN -->|"reads globalData"| IDX
 
@@ -196,18 +225,56 @@ flowchart LR
     style DATA fill:#1b263b,color:#fff
     style HELPER fill:#2d3a1e,color:#fff
     style RENDER fill:#3a1e2d,color:#fff
-    style EVENTS fill:#1e2d3a,color:#fff
+    style EVENTS fill:#0d472d,color:#fff
 ```
+
+**June 22 Update:** Event Layer now shows all piece handlers are implemented! ⏳ Blocker: Turn validation needed.
 
 ---
 
-## 📋 Quick Summary Table
+## ⏳ 7. Turn Management Flow (To Be Implemented)
+
+> What SHOULD happen when turn validation is implemented.
+
+```mermaid
+flowchart TD
+    A([User clicks piece]) --> B{Is it piece's\ncolor turn?}
+    
+    B -->|❌ Wrong color| C["Show error message\nor highlight red"]
+    C --> D([❌ Move blocked])
+    
+    B -->|✅ Correct color| E["Calculate valid moves\nShow green dots 🟢"]
+    E --> F([Waiting for move...])
+    
+    F --> G{User clicks\nvalid square?}
+    
+    G -->|Yes| H["moveElement()\nMove piece\nclearHighlight()"]
+    H --> I["Toggle currentTurn\n'white' ↔ 'black'"]
+    I --> J([✅ Move Complete!\nNext turn...])
+    
+    G -->|No| K([Deselect])
+    
+    style A fill:#023e8a,color:#fff
+    style C fill:#d62828,color:#fff
+    style D fill:#d62828,color:#fff
+    style J fill:#2d6a4f,color:#fff
+```
+
+**What needs to happen:**
+1. Add `let currentTurn = "white"` state in Global.js
+2. In each piece handler: check if `piece.piece_name` color matches `currentTurn`
+3. In `moveElement()`: toggle `currentTurn` after successful move
+
+**Timeline:** ~30 minutes to implement
+
+---
 
 | Flow | Triggered By | Key Functions Called |
 |------|-------------|---------------------|
-| **App Start** | Browser loads page | `initGame` → `squareRow` → `Square` → `initGameRender` → `pieceRender` → `globalEvent` |
-| **Click piece img** | User clicks pawn image | `whitePawnClick` or `blackPawnClick` |
+| **App Start** | Browser loads page | `initGame` → `initGameRender` → `globalEvent` |
+| **Click ANY piece img** | User clicks pawn, rook, bishop, knight, queen, or king | Dispatches to appropriate handler (whitePawnClick, whiteRookClick, etc.) |
 | **Click green dot** | User clicks valid move square | `moveElement` → `clearHighlight` → `globalStateRender` |
-| **White Pawn selected** | `whitePawnClick` runs | `clearPreviousSelfHighlight` → `selfHighlight` → `globalStateRender` |
-| **Black Pawn selected** | `blackPawnClick` runs | Same as white OR `moveElement` if capture target |
+| **Any piece selected** | Any click handler runs | `clearPreviousSelfHighlight` → `selfHighlight` → `globalStateRender` |
 | **Piece moves** | `moveElement` runs | `clearHighlight` → DOM swap → update `current_Position` |
+
+**June 22 Update:** All 12 piece handlers now have click handlers in the system. ⏳ **Blocker:** No turn validation — both colors can move any piece.

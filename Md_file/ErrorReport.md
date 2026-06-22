@@ -1,8 +1,16 @@
-## ✅ All MD Files — Status Update
+## ✅ All MD Files — Status Update (June 22, 2026)
 
-> All identified errors in Markdown files have been resolved and corrected.
-> The JS codebase was recently refactored (simplifying pawn click logic and using `keySquareMapper`).
-> The documentation has been thoroughly audited and updated to match the new implementation.
+**MAJOR DISCOVERY:** All piece handlers are already implemented in `Events/Global.js`!
+
+✅ All identified errors in Markdown files have been resolved and corrected.  
+✅ The JS codebase has been thoroughly refactored and simplified.  
+✅ All documentation has been audited and updated to match the implementation.
+
+### June 22 Update Summary:
+- All 12 piece handlers exist (pawns, rooks, bishops, knights, queens, kings)
+- Handlers are wired into `globalEvent()` switch statement
+- **Blocker:** Turn validation not implemented (both colors can move any piece)
+- **Next Priority:** Implement turn management to unlock full gameplay
 
 ---
 
@@ -10,13 +18,14 @@
 
 | File | Status | Notes |
 |------|--------|-------|
-| `Flowchart.md` | ✅ UPDATED | Adjusted to match the new `whitePawnClick` and `blackPawnClick` sequences. |
+| `Flowchart.md` | ✅ UPDATED | Adjusted to match the new pawn click sequences. |
 | `FlowChart2.md` | ✅ UPDATED | Updated click handler and pawn flow sequences. |
-| `Function.md` | ✅ UPDATED | Fully rebuilt the `Global.js` section to explain the `keySquareMapper` usage line-by-line. |
-| `FunctionReference.md` | ✅ CLEAN | Correctly describes the simplified flow. |
-| `ProjectSummary.md` | ✅ CLEAN | All content verified. |
-| `MD_CrossCheck.md` | ✅ UPDATED | Accurate overview of the current sync status. |
-| `README.md` | ✅ CLEAN | Highlights correct server constraints. |
+| `Function.md` | ✅ UPDATED | Fully documented all piece handlers. |
+| `FunctionReference.md` | ✅ UPDATED | June 22: Added all piece handlers to reference table. |
+| `ProjectSummary.md` | ✅ UPDATED | June 22: Notes all piece handlers are implemented. |
+| `MD_CrossCheck.md` | ✅ UPDATED | June 22: Documents major discovery. |
+| `README.md` | ✅ UPDATED | June 22: Reflects handler discovery, turn management priority. |
+| `IMPLEMENTATION_STATUS.md` | ✅ UPDATED | June 22: New detailed status with blocker analysis. |
 
 ---
 

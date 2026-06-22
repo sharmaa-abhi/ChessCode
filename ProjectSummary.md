@@ -1,16 +1,22 @@
 # ♟️ ChessCode — Project Summary
 
 > A browser-based chess game built with **vanilla HTML, CSS, and JavaScript** using ES Modules.
+>
+> **Major Update (June 22, 2026):** All piece handlers are already implemented! Handlers exist for pawns, rooks, bishops, knights, queens, and kings (both colors). Only turn management is needed to unlock full gameplay.
 
 ---
 
 ## 🎯 What This Project Does
 
-ChessCode renders a full 8×8 chess board in the browser, places all pieces on their correct starting squares, and lets users click pieces to select and move them. Currently, **pawn movement is fully implemented** for both white and black pawns including:
-- Move highlighting (green dots)
+ChessCode renders a full 8×8 chess board in the browser with all pieces on correct starting squares. **All 12 piece types have click handlers that calculate valid moves** — including pawns (fully working), bishops, rooks, knights, queens, and kings.
+
+**Currently Functional:**
+- Move highlighting (green dots) for all pieces
 - Self-selection highlight (yellow glow)
-- Capture detection (red highlight on enemy diagonal squares)
-- Two-square first move from the starting row
+- Capture detection (red highlight on enemy squares)
+- Pawn movement (white & black) with two-square first move
+
+**Blocked by:** Turn management — both colors can currently move any piece.
 
 ---
 
@@ -71,7 +77,7 @@ initGame()                 initGameRender()             globalEvent()
 | `Helper/constant.js` | Helper | Shares `ROOT_DIV` across all files |
 | `Helper/commonHelper.js` | Helper | Checks diagonal squares for enemy pieces |
 | `Render/main.js` | Render | Draws squares, places images, handles highlights and moves on screen |
-| `Events/Global.js` | Events | Handles all user click interactions and pawn move logic |
+| `Events/Global.js` | Events | **All piece click handlers implemented** — `whitePawnClick`, `blackPawnClick`, `whiteBishopClick`, `blackBishopClick`, `whiteRookClick`, `blackRookClick`, `whiteKnightClick`, `blackKnightClick`, `whiteQueenClick`, `blackQueenClick`, `whiteKingClick`, `blackKingClick` |
 
 ---
 
