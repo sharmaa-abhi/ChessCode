@@ -11,19 +11,19 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: max-content;
-  margin: 20px auto;
+  margin: auto;
 }
 
 .squareRow {
   display: flex;
-  width: 560px;
-  height: 70px;
+  width: 480px;
+  height: 60px;
   background-color: aqua;
 }
+
 .square {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   margin: auto;
   position: relative;
 }
@@ -39,16 +39,12 @@ body {
   background-color:#f7f769;
 }
 .piece {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   margin: auto;
   /* background-color: transparent; */
   display: block;
   cursor: pointer;
-}
-
-.captureColor{
-  background-color: #EE4b2b;
 }
 
 .highlight {
@@ -59,5 +55,5 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
 }
