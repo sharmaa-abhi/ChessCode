@@ -151,4 +151,8 @@ npx http-server
 
 ## 📄 License
 
+
 Unlicensed (open for learning and extension).
+
+## error batch
+
