@@ -35,16 +35,17 @@ function checkWhetherPieceExistOrNot(squareId) {
 
 // function checkSquare id for capture and return array of capture ids
 function checkSquareCaptureId(array) {
+
   let returnArray = [];
 
   for (let index = 0; index < array.length; index++) {
     const squareId = array[index];
     const square = keySquareMapper[squareId];
-
+  
     if (!square) break;
 
     if (square.piece) {
-      break;
+      break; 
     }
     returnArray.push(squareId);
   }
