@@ -1,7 +1,9 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
-import { globalData ,keySquareMapper } from "../index.js";
+import { globalData, keySquareMapper } from "../html/index.js";
 import { movePieceFromXtoY } from "../Events/Global.js";
+
+
 
 // function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
 function globalStateRender() {
@@ -18,11 +20,11 @@ function globalStateRender() {
         highlights.forEach((element) => {
           el.removeChild(element);
         });
-      } 
+      }
 
       // Implementation for rendering pieces
       // if (element.piece?.change != "null" && element.piece != null) {
-       
+
       //   const square = element;
       //   const squareElement = document.getElementById(square.id);
       //   squareElement.innerHTML = ""; // Clear existing content
@@ -47,19 +49,19 @@ function globalStateRender() {
 
 // move element with square id
 function moveElement(piece, id) {
-  const flatData = globalData.flat();  
- 
+  const flatData = globalData.flat();
+
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
       delete el.piece;
     }
-    
+
     if (el.id === id) {
       el.piece = piece;
     }
   });
-  
-  
+
+
   clearHighlight();
   const previousPiece = document.getElementById(piece.current_Position);
   previousPiece.classList.remove("highlightYellow");
@@ -85,7 +87,7 @@ function pieceRender(data) {
       // console.log(square);
 
       // if square has a piece, render it
-      if (square.piece != "null") {
+      if (square.piece != null) {
         // console.log(square.piece);
 
         const squareElement = document.getElementById(square.id);
@@ -210,7 +212,6 @@ function clearHighlight() {
 }
 export {
   initGameRender,
-  renderHighlight,
   clearHighlight,
   selfHighlight,
   moveElement,

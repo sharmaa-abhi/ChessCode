@@ -1,6 +1,3 @@
-import { renderHighlight } from "../Render/main.js";
-import { globalData } from "../index.js";
-
 function Greet() {
   alert("Hello");
 }
@@ -23,9 +20,9 @@ function squareRow(rowId) {
   if (rowId % 2 == 0) {
     abcd.forEach((element, index) => {
       if (index % 2 == 0) {
-        squareRow.push(Square("white", "null", element + rowId));
+        squareRow.push(Square("white", null, element + rowId));
       } else {
-        squareRow.push(Square("black", "null", element + rowId));
+        squareRow.push(Square("black", null, element + rowId));
       }
 
       // console.log(index);
@@ -33,9 +30,9 @@ function squareRow(rowId) {
   } else {
     abcd.forEach((element, index) => {
       if (index % 2 == 0) {
-        squareRow.push(Square("black", "null", element + rowId));
+        squareRow.push(Square("black", null, element + rowId));
       } else {
-        squareRow.push(Square("white", "null", element + rowId));
+        squareRow.push(Square("white", null, element + rowId));
       }
 
       // console.log(index);
