@@ -2,7 +2,7 @@
 
 Every function in every `.js` file, with each line of code explained in plain English, in execution order.
 
-**Updated June 22, 2026:** All piece handlers are now documented! Added bishop, rook, knight, queen, and king handlers that were previously undocumented.
+**Last Updated:** June 30, 2026 — 08:25 PM IST (All piece handlers are now documented! Added bishop, rook, knight, queen, and king handlers.)
 
 ⏳ **Current Blocker:** Turn validation not implemented — both colors can move any piece.
 

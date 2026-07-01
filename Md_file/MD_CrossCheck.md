@@ -1,5 +1,6 @@
 # 🔬 Deep Cross-Check — MD Files vs Actual JS Code
 
+**Last Updated:** June 30, 2026 — 08:25 PM IST  
 Every claim in every MD file verified line-by-line against the real JavaScript.
 
 Legend: ✅ Correct &nbsp; ❌ Wrong &nbsp; ⚠️ Misleading / Incomplete

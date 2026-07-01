@@ -1,6 +1,7 @@
 # 🗃️ ChessCode — Data Design
 
-**Covers:** All data structures, object schemas, and lookup systems used in ChessCode.
+**Covers:** All data structures, object schemas, and lookup systems used in ChessCode.  
+**Last Updated:** June 30, 2026 — 08:25 PM IST
 
 ---
 

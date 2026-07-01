@@ -1,5 +1,7 @@
 # ♟️ ChessCode — Browser-Based Chess Game
 
+**Last Updated:** June 30, 2026 — 08:25 PM IST  
+
 A vanilla JavaScript chess game with ES Modules. Full 8×8 board, all pieces rendered, and complete pawn movement logic (white & black).
 
 ## ✨ Features

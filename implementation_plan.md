@@ -1,5 +1,7 @@
 # Implementation Plan — ChessCode Bug Fixes
 
+**Last Updated:** June 30, 2026 — 08:25 PM IST  
+
 This plan outlines the fixes for all identified logic, highlighting, and capture bugs across the ChessCode project files.
 
 ## Proposed Changes

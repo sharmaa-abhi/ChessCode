@@ -1,6 +1,6 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
-import { globalData, keySquareMapper } from "../html/index.js";
+import { globalData, keySquareMapper } from "../index.js";
 import { movePieceFromXtoY } from "../Events/Global.js";
 
 
@@ -53,7 +53,7 @@ function moveElement(piece, id) {
 
   flatData.forEach((el) => {
     if (el.id === piece.current_Position) {
-      delete el.piece;
+      el.piece = null;
     }
 
     if (el.id === id) {

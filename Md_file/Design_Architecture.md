@@ -1,8 +1,9 @@
-# 🏛️ ChessCode — System Architecture Design
+# 🏗️ ChessCode — System Architecture Design
 
 **Project:** ChessCode  
 **Stack:** Vanilla HTML + CSS + JavaScript (ES Modules)  
-**Pattern:** MVC-style layered architecture, event delegation, centralized state
+**Pattern:** MVC-style layered architecture, event delegation, centralized state  
+**Last Updated:** June 30, 2026 — 08:25 PM IST
 
 ---
 

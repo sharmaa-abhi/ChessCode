@@ -1,6 +1,7 @@
 # ♟️ ChessCode — Piece Movement Design
 
-**Covers:** Movement rules, highlight calculation, capture detection, and ray-blocking logic for all 6 piece types.
+**Covers:** Movement rules, highlight calculation, capture detection, and ray-blocking logic for all 6 piece types.  
+**Last Updated:** June 30, 2026 — 08:25 PM IST
 
 ---
 

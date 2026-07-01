@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Visual Flowcharts
 
-**Updated June 22, 2026:** All piece handlers are now implemented! See updated Click Handler Flow below.
+**Last Updated:** June 30, 2026 — 08:25 PM IST (All piece handlers are now implemented! See updated Click Handler Flow below.)
 
 ⏳ **Current Status:** Handlers exist for all pieces but turn validation blocks full gameplay.
 

@@ -1,5 +1,5 @@
 import { ROOT_DIV } from "../Helper/constant.js";
-import { globalData, keySquareMapper } from "../html/index.js";
+import { globalData, keySquareMapper } from "../index.js";
 import { clearHighlight } from "../Render/main.js";
 import { selfHighlight } from "../Render/main.js";
 import { moveElement } from "../Render/main.js";

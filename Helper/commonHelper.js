@@ -1,4 +1,4 @@
-import { globalData, keySquareMapper } from "../html/index.js";
+import { globalData, keySquareMapper } from "../index.js";
 
 // function to check if exists of opponent.
 function checkPieceOfOpponentOnElement(id, color) {

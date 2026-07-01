@@ -1,6 +1,7 @@
 # 🎨 ChessCode — UI/UX Design
 
-**Covers:** Visual design system, color palette, CSS class system, board layout, and the highlighting state model.
+**Covers:** Visual design system, color palette, CSS class system, board layout, and the highlighting state model.  
+**Last Updated:** June 30, 2026 — 08:25 PM IST
 
 ---
 
