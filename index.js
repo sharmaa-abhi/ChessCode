@@ -15,4 +15,9 @@ globalData.flat().forEach((square) => {
 initGameRender(globalData);
 globalEvent();
 
+// Expose state globally so test.html can access it via iframe
+window.globalData = globalData;
+window.keySquareMapper = keySquareMapper;
+window.__chess = { globalData, keySquareMapper };
+
 export { globalData , keySquareMapper };

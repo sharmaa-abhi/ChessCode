@@ -17,6 +17,7 @@ function checkPieceOfOpponentOnElement(id, color) {
     const el = document.getElementById(id);
     el.classList.add("captureColor");
     element.captureHighlight = true;
+    element.highlight = null; // remove green dot — red capture takes priority
     return true;
   }
   return false;
@@ -25,6 +26,8 @@ function checkPieceOfOpponentOnElement(id, color) {
 // function to check whether piece exists or not by sqaureId
 function checkWhetherPieceExistOrNot(squareId) {
   const square = keySquareMapper[squareId];
+
+  if (!square) return false;
 
   if (square.piece) {
     return square;
@@ -388,7 +391,7 @@ function giveKingHighlightedIds(id) {
       const element = returnResult[key];
 
       if (element.length != 0) {
-        returnResult[key] = new Array([element[0]]);
+        returnResult[key] = [element[0]];
       }
     }
   }

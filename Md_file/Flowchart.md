@@ -1,6 +1,6 @@
 # Pawn Click Flowchart - Line by Line Sequential Flow
 
-**Updated June 22, 2026:** All piece handlers implemented. These flowcharts show the pawn logic pattern that all other pieces follow (rooks, bishops, knights, queens, kings). 
+**Last Updated:** June 30, 2026 — 08:25 PM IST (Handlers for all pieces implemented. These flowcharts show the pawn logic pattern that all other pieces follow.)
 
 ⏳ **Blocker:** Turn validation not implemented — both colors can move any piece.
 

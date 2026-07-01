@@ -15,6 +15,7 @@ import {
 } from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
 
+
 // Whether highlight mode is active.
 let highlightState = false;
 
@@ -131,7 +132,7 @@ function whiteKingClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "white"
+        checkPieceResult.piece.piece_name.startsWith("WHITE_")
       ) {
         break;
       }
@@ -150,14 +151,6 @@ function blackKingClick(square) {
   const piece = square.piece;
 
   if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
@@ -239,7 +232,7 @@ function blackKingClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "black"
+        checkPieceResult.piece.piece_name.startsWith("BLACK_")
       ) {
         break;
       }
@@ -263,14 +256,6 @@ function whiteQueenClick(square) {
     return;
   }
 
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
   // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
@@ -347,7 +332,7 @@ function whiteQueenClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "white"
+        checkPieceResult.piece.piece_name.startsWith("WHITE_")
       ) {
         break;
       }
@@ -371,14 +356,6 @@ function blackQueenClick(square) {
     return;
   }
 
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
   // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
@@ -455,7 +432,7 @@ function blackQueenClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "black"
+        checkPieceResult.piece.piece_name.startsWith("BLACK_")
       ) {
         break;
       }
@@ -474,14 +451,6 @@ function whiteKnightClick(square) {
   const piece = square.piece;
 
   if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
@@ -557,15 +526,15 @@ function whiteKnightClick(square) {
   //   }
   // }
 
-  highlightSquareIds.forEach((highlight) => {
+  highlightedSquareIds.forEach((highlight) => {
     const element = keySquareMapper[highlight];
-    element.highlight = true;
-  });
-
-  let captureIds = [];
-
-  highlightSquareIds.forEach((element) => {
-    checkPieceOfOpponentOnElement(element, "black");
+    if (element) {
+      if (element.piece === null || element.piece === undefined) {
+        element.highlight = true;
+      } else {
+        checkPieceOfOpponentOnElement(highlight, "white");
+      }
+    }
   });
 
   globalStateRender();
@@ -576,14 +545,6 @@ function blackKnightClick(square) {
   const piece = square.piece;
 
   if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
@@ -659,15 +620,15 @@ function blackKnightClick(square) {
   //   }
   // }
 
-  highlightSquareIds.forEach((highlight) => {
+  highlightedSquareIds.forEach((highlight) => {
     const element = keySquareMapper[highlight];
-    element.highlight = true;
-  });
-
-  let captureIds = [];
-
-  highlightSquareIds.forEach((element) => {
-    checkPieceOfOpponentOnElement(element, "black");
+    if (element) {
+      if (element.piece === null || element.piece === undefined) {
+        element.highlight = true;
+      } else {
+        checkPieceOfOpponentOnElement(highlight, "black");
+      }
+    }
   });
 
   globalStateRender();
@@ -678,14 +639,6 @@ function blackRookClick(square) {
   const piece = square.piece;
 
   if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
@@ -750,7 +703,7 @@ function blackRookClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "black"
+        checkPieceResult.piece.piece_name.startsWith("BLACK_")
       ) {
         break;
       }
@@ -774,14 +727,6 @@ function whiteRookClick(square) {
     return;
   }
 
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
   // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
@@ -840,7 +785,7 @@ function whiteRookClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "white"
+        checkPieceResult.piece.piece_name.startsWith("WHITE_")
       ) {
         break;
       }
@@ -864,24 +809,11 @@ function whitePawnClick(square) {
     return;
   }
 
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
   // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
 
-  // If clicked on same element twice.
-  if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
+
 
   // highlighting logic
   selfHighlight(piece);
@@ -914,19 +846,17 @@ function whitePawnClick(square) {
   });
 
   // capture id logic
-  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${
-    Number(current_pos[1]) + 1
-  }`;
-  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${
-    Number(current_pos[1]) + 1
-  }`;
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1
+    }`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1
+    }`;
 
   let captureIds = [col1, col2];
   // Note: Do NOT use checkSquareCaptureId for captureIds.
   // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
-  captureIds = checkSquareCaptureId(captureIds);
+
 
 
   captureIds.forEach((element) => {
@@ -941,14 +871,6 @@ function whiteBishopClick(square) {
   const piece = square.piece;
 
   if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
@@ -1013,7 +935,7 @@ function whiteBishopClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "white"
+        checkPieceResult.piece.piece_name.startsWith("WHITE_")
       ) {
         break;
       }
@@ -1032,14 +954,6 @@ function blackBishopClick(square) {
   const piece = square.piece;
 
   if (piece == selfHighlightState) {
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
-  if (square.captureHighlight) {
-    // movePieceFromXToY();
-    moveElement(selfHighlightState, piece.current_Position);
     clearPreviousSelfHighlight(selfHighlightState);
     clearHighlightLocal();
     return;
@@ -1082,8 +996,6 @@ function blackBishopClick(square) {
   // highlightedSquareIds = checkSquareCaptureId(highlightedSquareIds);
   highlightedSquareIds = result.flat();
 
-  console.log(highlightedSquareIds);
-  // console.log(result);
 
   highlightedSquareIds.forEach((highlighted) => {
     const element = keySquareMapper[highlighted];
@@ -1104,7 +1016,7 @@ function blackBishopClick(square) {
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name == "black"
+        checkPieceResult.piece.piece_name.startsWith("BLACK_")
       ) {
         break;
       }
@@ -1132,24 +1044,9 @@ function blackPawnClick(square) {
     return;
   }
 
-  if (square.captureHighlight) {
-    // movePieceFromXtoY(selfHighlightState, piece);
-    moveElement(selfHighlightState, piece.current_Position);
-    clearPreviousSelfHighlight(selfHighlightState);
-    clearHighlightLocal();
-    return;
-  }
-
   // clear previous self highlight
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
-
-  // If clicked on same element twice.
-  if (piece == selfHighlightState) {
-    clearHighlightLocal();
-    selfHighlightState = null;
-    return;
-  }
 
   // highlight clicked element / highlighting logic
   selfHighlight(piece);
@@ -1190,7 +1087,7 @@ function blackPawnClick(square) {
   // checkSquareCaptureId uses 'break' if it finds a piece, which is correct for forward movement,
   // but wrong for captures (where we WANT to find pieces, and diagonals are independent).
 
-   captureIds = checkSquareCaptureId(captureIds);
+
 
   captureIds.forEach((element) => {
     checkPieceOfOpponentOnElement(element, "black");
@@ -1217,7 +1114,7 @@ function globalEvent() {
       const pieceName =
         square && square.piece && typeof square.piece === "object"
           ? square.piece.piece_name
-          : null;      
+          : null;
 
       // Check if clicking on a capture square with opponent's piece
       // by help of haikyu 4.5
@@ -1270,25 +1167,30 @@ function globalEvent() {
         default:
           break;
       }
-    } else {      
+    } else {
       const childElementOfClickedElement = Array.from(event.target.childNodes);
 
       if (
         childElementOfClickedElement.length == 1 ||
         event.target.localName === "span"
       ) {
-        if (event.target.localName === "span") {
+        if (event.target.localName === "span" && moveState) {
           clearPreviousSelfHighlight(selfHighlightState);
           const id = event.target.parentNode.id;
           moveElement(moveState, id);
           moveState = null;
         } else {
-          clearPreviousSelfHighlight(selfHighlightState);
           const id = event.target.id;
-          moveElement(moveState, id);
-          moveState = null;
+          const square = keySquareMapper[id];
+          if (square && square.highlight && moveState) {
+            clearPreviousSelfHighlight(selfHighlightState);
+            moveElement(moveState, id);
+            moveState = null;
+          } else {
+            clearHighlightLocal();
+            clearPreviousSelfHighlight(selfHighlightState);
+          }
         }
-        // globalStateRender();
       } else {
         //clear highlights
         clearHighlightLocal();

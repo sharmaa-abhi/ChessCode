@@ -3,7 +3,7 @@
 Think of the app like this:
 > **When you open the game → board is built → pieces are placed → you can click to play.**
 
-**Updated June 22, 2026:** All piece handlers (pawns, rooks, bishops, knights, queens, kings) are already implemented in `Events/Global.js`. See the list below!
+**Last Updated:** June 30, 2026 — 08:25 PM IST (All piece handlers — pawns, rooks, bishops, knights, queens, kings — are implemented in `Events/Global.js`.)
 
 ---
 

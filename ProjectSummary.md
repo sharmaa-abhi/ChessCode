@@ -1,5 +1,7 @@
 # ♟️ ChessCode — Project Summary
 
+**Last Updated:** June 30, 2026 — 08:25 PM IST  
+
 > A browser-based chess game built with **vanilla HTML, CSS, and JavaScript** using ES Modules.
 >
 > **Major Update (June 22, 2026):** All piece handlers are already implemented! Handlers exist for pawns, rooks, bishops, knights, queens, and kings (both colors). Only turn management is needed to unlock full gameplay.
