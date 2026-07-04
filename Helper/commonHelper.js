@@ -38,17 +38,16 @@ function checkWhetherPieceExistOrNot(squareId) {
 
 // function checkSquare id for capture and return array of capture ids
 function checkSquareCaptureId(array) {
-
   let returnArray = [];
 
   for (let index = 0; index < array.length; index++) {
     const squareId = array[index];
     const square = keySquareMapper[squareId];
-  
+
     if (!square) break;
 
     if (square.piece) {
-      break; 
+      break;
     }
     returnArray.push(squareId);
   }
@@ -399,13 +398,106 @@ function giveKingHighlightedIds(id) {
   return returnResult;
 }
 
+function giveKnightCaptureIds(id) {
+  if (!id) return;
+
+  let returnArr = giveKnightHighlightedIds(id);
+
+  returnArr = returnArr.filter((element) => {
+    if (checkPieceOfOpponentOnElementNoDom(element, "black")) {
+      return true;
+    }
+  });
+
+  return returnArr;
+}
+
+function giveKingCaptureIds(id) {  
+  if (!id) return;
+
+  let result = giveKingHighlightedIds(id);
+  result = Object.values(result).flat();
+  result = result.filter((element) => {
+    if(checkPieceOfOpponentOnElementNoDom(element, "black")) {
+      return true;
+    }
+  });
+  return result;
+}
+
+function giveBishopCaptureIds(id) {
+  if (!id) return;
+
+  let result = giveBishopHighlightedIds(id);
+  result = Object.values(result).flat();
+  result = result.filter((element) => {
+    if(checkPieceOfOpponentOnElementNoDom(element, "black")) {
+      return true;
+    }
+  });
+  return result;  
+}
+
+function giveRookCaptureIds(id) {
+
+  if (!id) return;
+
+  let result = giveRookHighlightedIds(id);
+  result = Object.values(result).flat();
+  result = result.filter((element) => {
+    if(checkPieceOfOpponentOnElementNoDom(element, "black")) {
+      return true;
+    }
+  });
+  return result; 
+}
+
+function giveQueenCaptureIds(id) {
+   if (!id) return;
+
+  let result = giveQueenHighlightedIds(id);
+  result = Object.values(result).flat();
+  result = result.filter((element) => {
+    if(checkPieceOfOpponentOnElementNoDom(element, "black")) {
+      return true;
+    }
+  });
+  return result; 
+  
+}
+
+function checkPieceOfOpponentOnElementNoDom(id, color) {
+  // const flatData = globalData.flat();
+  const opponentColor = color === "white" ? "BLACK" : "WHITE";
+
+  const element = keySquareMapper[id];
+
+  if (!element) return false;
+
+  if (
+    element.piece &&
+    element.piece.piece_name &&
+    element.piece.piece_name.includes(opponentColor)
+  ) {
+    const el = document.getElementById(id);
+
+    return true;
+  }
+  return false;
+}
+
 export {
   checkPieceOfOpponentOnElement,
   checkSquareCaptureId,
   giveBishopHighlightedIds,
+  giveBishopCaptureIds,
   giveRookHighlightedIds,
+  giveRookCaptureIds,
   giveKnightHighlightedIds,
+  giveKnightCaptureIds,
   giveQueenHighlightedIds,
+  giveQueenCaptureIds,
   giveKingHighlightedIds,
+  giveKingCaptureIds,
   checkWhetherPieceExistOrNot,
 };
