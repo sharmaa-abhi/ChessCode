@@ -86,18 +86,38 @@ function captureInTurn(square) {
 
 function checkForPawnPromotion(piece, id) {
   if (inTurn === "white") {
-    if (piece.piece_name.toLowerCase().includes("pawn") && id.includes("8")) {
+    if (
+      piece?.piece_name?.toLowerCase()?.includes("pawn") &&
+      id?.includes("8")
+    ) {
       return true;
     } else {
       return false;
     }
   } else {
-    if (piece.piece_name.toLowerCase().includes("pawn") && id.includes("1")) {
+    if (
+      piece?.piece_name?.toLowerCase()?.includes("pawn") &&
+      id?.includes("1")
+    ) {
       return true;
     } else {
       return false;
     }
   }
+}
+
+function callBackPawnPromotion(piece, id) {
+  const realPiece = piece(id);
+  const currentSquare = keySquareMapper[id];
+  piece.current_Position = id;
+  currentSquare.piece = realPiece;
+  const image = document.createElement("img");
+  image.src = realPiece.img;
+  image.classList.add("piece");
+
+  const currentSquareElement = document.getElementById(id);
+  currentSquareElement.innerHTML = "";
+  currentSquareElement.append(image);
 }
 
 // move element with square id
@@ -132,13 +152,14 @@ function moveElement(piece, id) {
   });
   clearHighlight();
   const previousPiece = document.getElementById(piece.current_Position);
-  previousPiece.classList.remove("highlightYellow");
+  previousPiece?.classList.remove("highlightYellow");
   const currentPiece = document.getElementById(id);
-  currentPiece.innerHTML += previousPiece.querySelector("img").outerHTML;
-  previousPiece.querySelector("img")?.remove();
+  currentPiece.innerHTML += previousPiece?.querySelector("img")?.outerHTML;
+  previousPiece?.querySelector("img")?.remove();
+  if (previousPiece) previousPiece.innerHTML = "";
   piece.current_Position = id;
   if (pawnIsPromoted) {
-    pawnPromotion(inTurn);
+    pawnPromotion(inTurn, callBackPawnPromotion, id);
   }
   checkForCheck();
   changeTurn();
