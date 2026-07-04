@@ -1,9 +1,8 @@
 import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
 import { globalData, keySquareMapper } from "../index.js";
-import { movePieceFromXtoY } from "../Events/Global.js";
 
-
+const globalPiece = new Object(); // global object to store piece data
 
 // function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
 function globalStateRender() {
@@ -16,7 +15,7 @@ function globalStateRender() {
         document.getElementById(element.id).appendChild(highlightSpan);
       } else if (element.highlight === null) {
         const el = document.getElementById(element.id);
-        const highlights = Array.from(el.getElementsByTagName("span"));
+        const highlights = Array.from(el.getElementsByClassName("highlight"));
         highlights.forEach((element) => {
           el.removeChild(element);
         });
@@ -46,32 +45,6 @@ function globalStateRender() {
     });
   });
 }
-
-// move element with square id
-function moveElement(piece, id) {
-  const flatData = globalData.flat();
-
-  flatData.forEach((el) => {
-    if (el.id === piece.current_Position) {
-      el.piece = null;
-    }
-
-    if (el.id === id) {
-      el.piece = piece;
-    }
-  });
-
-
-  clearHighlight();
-  const previousPiece = document.getElementById(piece.current_Position);
-  previousPiece.classList.remove("highlightYellow");
-  const currentPiece = document.getElementById(id);
-  currentPiece.innerHTML = previousPiece.innerHTML;
-  previousPiece.innerHTML = "";
-  piece.current_Position = id;
-}
-
-
 
 function selfHighlight(piece) {
   document
@@ -118,61 +91,102 @@ function initGameRender(data) {
       squareDiv.id = square.id;
       squareDiv.classList.add(square.color, "square");
 
+      const labelId = document.createElement("span");
+      labelId.textContent = square.id;
+      labelId.classList.add("labelId", `${square.color}-label-id`);
+      squareDiv.appendChild(labelId);
+
       // Render blackPawn
       if (square.id[1] == 7) {
         square.piece = pieces.blackPawn(square.id);
+        globalPiece.black_Pawn = square.piece; // store black pawn piece in global object
       }
 
       // Render blackKnight
       if (square.id == "b8" || square.id == "g8") {
         square.piece = pieces.blackKnight(square.id);
+        if (globalPiece.black_Knight_1) {
+          globalPiece.black_Knight_2 = square.piece;
+        } else {
+          globalPiece.black_Knight_1 = square.piece;
+        }
       }
       // Render blackRook
       if (square.id == "h8" || square.id == "a8") {
         square.piece = pieces.blackRook(square.id);
+        if (globalPiece.black_Rook_1) {
+          globalPiece.black_Rook_2 = square.piece;
+        } else {
+          globalPiece.black_Rook_1 = square.piece;
+        }
       }
 
       // Render blackBishop
       if (square.id == "c8" || square.id == "f8") {
         square.piece = pieces.blackBishop(square.id);
+        if (globalPiece.black_Bishop_1) {
+          globalPiece.black_Bishop_2 = square.piece;
+        } else {
+          globalPiece.black_Bishop_1 = square.piece;
+        }
       }
       // Render blackQueen
       if (square.id == "d8") {
         square.piece = pieces.blackQueen(square.id);
+        globalPiece.black_Queen = square.piece;
       }
       // Render blackKing
       if (square.id == "e8") {
         square.piece = pieces.blackKing(square.id);
+        globalPiece.black_King = square.piece; // store black king piece in global object
       }
 
       // Render whitePawn
       if (square.id[1] == 2) {
         square.piece = pieces.whitePawn(square.id);
+        globalPiece.white_Pawn = square.piece; // store white pawn piece in global object
       }
 
       // Render whiteKnight
       if (square.id == "b1" || square.id == "g1") {
         square.piece = pieces.whiteKnight(square.id);
+        if (globalPiece.white_Knight_1) {
+          globalPiece.white_Knight_2 = square.piece;
+        } else {
+          globalPiece.white_Knight_1 = square.piece;
+        }
       }
 
       // Render whiteRook
       if (square.id == "h1" || square.id == "a1") {
         square.piece = pieces.whiteRook(square.id);
+        if (globalPiece.white_Rook_1) {
+          globalPiece.white_Rook_2 = square.piece;
+        } else {
+          globalPiece.white_Rook_1 = square.piece;
+        }
       }
 
       // Render whiteBishop
       if (square.id == "c1" || square.id == "f1") {
         square.piece = pieces.whiteBishop(square.id);
+        if (globalPiece.white_Bishop_1) {
+          globalPiece.white_Bishop_2 = square.piece;
+        } else {
+          globalPiece.white_Bishop_1 = square.piece;
+        }
       }
 
       // Render whiteQueen
       if (square.id == "d1") {
         square.piece = pieces.whiteQueen(square.id);
+        globalPiece.white_Queen = square.piece; // store white queen piece in global object
       }
 
       // Render whiteKing
       if (square.id == "e1") {
         square.piece = pieces.whiteKing(square.id);
+        globalPiece.white_King = square.piece; // store white king piece in global object
       }
 
       rowElement.appendChild(squareDiv);
@@ -214,6 +228,6 @@ export {
   initGameRender,
   clearHighlight,
   selfHighlight,
-  moveElement,
   globalStateRender,
+  globalPiece,
 };
