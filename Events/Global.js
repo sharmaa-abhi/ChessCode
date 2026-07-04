@@ -40,7 +40,7 @@ function changeTurn() {
 // function to check
 function checkForCheck() {
   if (inTurn === "white") {
-    const whiteKingCurrentPosition = globalPiece.white_King.current_Position;
+    // const whiteKingCurrentPosition = globalPiece.white_King.current_Position;
     const knight_1 = globalPiece.black_Knight_1.current_Position;
     const knight_2 = globalPiece.black_Knight_2.current_Position;
     const king = globalPiece.black_King.current_Position;
@@ -116,7 +116,7 @@ function callBackPawnPromotion(piece, id) {
   image.classList.add("piece");
 
   const currentSquareElement = document.getElementById(id);
-  currentSquareElement.innerHTML = "";
+  currentSquareElement.querySelector("img")?.remove();
   currentSquareElement.append(image);
 }
 
@@ -154,9 +154,16 @@ function moveElement(piece, id) {
   const previousPiece = document.getElementById(piece.current_Position);
   previousPiece?.classList.remove("highlightYellow");
   const currentPiece = document.getElementById(id);
-  currentPiece.innerHTML += previousPiece?.querySelector("img")?.outerHTML;
-  previousPiece?.querySelector("img")?.remove();
-  if (previousPiece) previousPiece.innerHTML = "";
+
+  // Remove existing piece image (captured piece) if present
+  currentPiece?.querySelector("img")?.remove();
+
+  // Move the moving piece's image element to the target square
+  const imgElement = previousPiece?.querySelector("img");
+  if (imgElement) {
+    currentPiece.appendChild(imgElement);
+  }
+
   piece.current_Position = id;
   if (pawnIsPromoted) {
     pawnPromotion(inTurn, callBackPawnPromotion, id);
@@ -1354,6 +1361,10 @@ function globalEvent() {
     }
   });
 }
+
+// Expose for browser testing
+window.getInTurn = () => inTurn;
+window.setInTurn = (val) => { inTurn = val; };
 
 export {
   globalEvent,

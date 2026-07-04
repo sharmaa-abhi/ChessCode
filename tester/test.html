@@ -143,6 +143,23 @@
           return km[id];
         }
 
+        function setBoardSquare(id, pieceObj) {
+          const square = sq(id);
+          if (square) {
+            square.piece = pieceObj;
+            const el = doc.getElementById(id);
+            if (el) {
+              el.innerHTML = "";
+              if (pieceObj) {
+                const img = doc.createElement("img");
+                img.src = pieceObj.img;
+                img.className = "piece";
+                el.appendChild(img);
+              }
+            }
+          }
+        }
+
         section("1️⃣  Initial Board State");
         ["a1", "h1", "a8", "h8"].forEach((id) => {
           if (sq(id) && sq(id).piece)
@@ -312,11 +329,11 @@
                               );
                             else
                               fail("d5 should be RED (pawn capture of enemy)");
-                            showSummary();
+                            runPawnPromotionTests();
                           }, 300);
                         } else {
                           fail("No img at e4");
-                          showSummary();
+                          runPawnPromotionTests();
                         }
                       }, 300);
                     } else {
@@ -329,6 +346,165 @@
               }
             }, 300);
           }
+        }
+
+        function runPawnPromotionTests() {
+          section("🔟  Pawn Promotion (White pawn to 8th rank)");
+          setBoardSquare("a7", {
+            current_Position: "a7",
+            img: "./Assets/pieces/white/pawn.png",
+            piece_name: "WHITE_PAWN",
+          });
+          setBoardSquare("a8", null);
+          w.setInTurn("white");
+
+          const a7el = doc.getElementById("a7");
+          const a7img = a7el && a7el.querySelector("img");
+          if (!a7img) {
+            fail("No white pawn image at a7");
+            showSummary();
+            return;
+          }
+
+          a7img.click();
+          setTimeout(() => {
+            const a7glow = a7el.classList.contains("highlightYellow");
+            const a8el = doc.getElementById("a8");
+            const a8dot = a8el && a8el.querySelector("span.highlight");
+            if (a7glow) pass("a7 glows yellow after click");
+            else fail("a7 should glow yellow");
+            if (a8dot) pass("a8 has green dot (move ahead)");
+            else fail("a8 should have green dot");
+
+            if (a8dot) {
+              a8dot.click();
+              setTimeout(() => {
+                const modal = doc.querySelector(".modal-container");
+                if (modal) pass("Pawn promotion modal is displayed");
+                else {
+                  fail("Pawn promotion modal not found");
+                  showSummary();
+                  return;
+                }
+
+                const modalImgs = modal.querySelectorAll("img");
+                if (modalImgs.length === 4) pass("Modal has 4 piece options");
+                else fail("Expected 4 options in modal, found " + modalImgs.length);
+
+                // Click Queen (last image)
+                if (modalImgs.length > 0) {
+                  modalImgs[3].click();
+                  setTimeout(() => {
+                    const modalClosed = !doc.querySelector(".modal-container");
+                    const pieceAtA8 = sq("a8") && sq("a8").piece;
+                    const a8img = a8el && a8el.querySelector("img");
+                    const a7empty = sq("a7") && sq("a7").piece === null;
+
+                    if (modalClosed) pass("Pawn promotion modal is closed after selection");
+                    else fail("Modal should be closed");
+
+                    if (pieceAtA8 && pieceAtA8.piece_name === "WHITE_QUEEN") pass("a8 piece is WHITE_QUEEN in globalData");
+                    else fail("Expected WHITE_QUEEN at a8");
+
+                    if (a8img && a8img.src.includes("queen.png")) pass("a8 square renders Queen image in DOM");
+                    else fail("a8 should render Queen image");
+
+                    if (a7empty) pass("a7 is empty after move");
+                    else fail("a7 should be empty");
+
+                    if (w.getInTurn() === "black") pass("Turn changed to black");
+                    else fail("Turn should be black");
+
+                    // Proceed to Black Pawn Promotion
+                    runBlackPawnPromotionTests();
+                  }, 300);
+                } else {
+                  showSummary();
+                }
+              }, 300);
+            } else {
+              showSummary();
+            }
+          }, 300);
+        }
+
+        function runBlackPawnPromotionTests() {
+          section("11. Pawn Promotion (Black pawn to 1st rank)");
+          setBoardSquare("b2", {
+            current_Position: "b2",
+            img: "./Assets/pieces/black/pawn.png",
+            piece_name: "BLACK_PAWN",
+          });
+          setBoardSquare("b1", null);
+          w.setInTurn("black");
+
+          const b2el = doc.getElementById("b2");
+          const b2img = b2el && b2el.querySelector("img");
+          if (!b2img) {
+            fail("No black pawn image at b2");
+            showSummary();
+            return;
+          }
+
+          b2img.click();
+          setTimeout(() => {
+            const b2glow = b2el.classList.contains("highlightYellow");
+            const b1el = doc.getElementById("b1");
+            const b1dot = b1el && b1el.querySelector("span.highlight");
+            if (b2glow) pass("b2 glows yellow after click");
+            else fail("b2 should glow yellow");
+            if (b1dot) pass("b1 has green dot (move ahead)");
+            else fail("b1 should have green dot");
+
+            if (b1dot) {
+              b1dot.click();
+              setTimeout(() => {
+                const modal = doc.querySelector(".modal-container");
+                if (modal) pass("Pawn promotion modal is displayed for black");
+                else {
+                  fail("Pawn promotion modal not found for black");
+                  showSummary();
+                  return;
+                }
+
+                const modalImgs = modal.querySelectorAll("img");
+                if (modalImgs.length === 4) pass("Modal has 4 piece options for black");
+                else fail("Expected 4 options in modal for black, found " + modalImgs.length);
+
+                // Click Queen (last image)
+                if (modalImgs.length > 0) {
+                  modalImgs[3].click();
+                  setTimeout(() => {
+                    const modalClosed = !doc.querySelector(".modal-container");
+                    const pieceAtB1 = sq("b1") && sq("b1").piece;
+                    const b1img = b1el && b1el.querySelector("img");
+                    const b2empty = sq("b2") && sq("b2").piece === null;
+
+                    if (modalClosed) pass("Pawn promotion modal is closed after black selection");
+                    else fail("Modal should be closed");
+
+                    if (pieceAtB1 && pieceAtB1.piece_name === "BLACK_QUEEN") pass("b1 piece is BLACK_QUEEN in globalData");
+                    else fail("Expected BLACK_QUEEN at b1");
+
+                    if (b1img && b1img.src.includes("queen.png")) pass("b1 square renders Queen image in DOM");
+                    else fail("b1 should render Queen image");
+
+                    if (b2empty) pass("b2 is empty after move");
+                    else fail("b2 should be empty");
+
+                    if (w.getInTurn() === "white") pass("Turn changed back to white");
+                    else fail("Turn should be white");
+
+                    showSummary();
+                  }, 300);
+                } else {
+                  showSummary();
+                }
+              }, 300);
+            } else {
+              showSummary();
+            }
+          }, 300);
         }
       }
 
