@@ -19,6 +19,7 @@ import {
 } from "../Helper/commonHelper.js";
 import { globalStateRender } from "../Render/main.js";
 import { logMoves } from "../Helper/logging.js";
+import { pawnPromotion } from "../Helper/modelCreator.js";
 
 // Whether highlight mode is active.
 let highlightState = false;
@@ -83,12 +84,36 @@ function captureInTurn(square) {
   return;
 }
 
+function checkForPawnPromotion(piece, id) {
+  if (inTurn === "white") {
+    if (piece.piece_name.toLowerCase().includes("pawn") && id.includes("8")) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if (piece.piece_name.toLowerCase().includes("pawn") && id.includes("1")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
 // move element with square id
 function moveElement(piece, id) {
+  // pawnPromotion("white");
+  const pawnIsPromoted = checkForPawnPromotion(piece, id);
+
   const targetSquare = keySquareMapper[id];
   const isCapture = !!(targetSquare && targetSquare.piece);
   logMoves(
-    { piece: piece.piece_name, from: piece.current_Position, to: id, isCapture },
+    {
+      piece: piece.piece_name,
+      from: piece.current_Position,
+      to: id,
+      isCapture,
+    },
     inTurn,
   );
   const flatData = globalData.flat();
@@ -112,6 +137,9 @@ function moveElement(piece, id) {
   currentPiece.innerHTML += previousPiece.querySelector("img").outerHTML;
   previousPiece.querySelector("img")?.remove();
   piece.current_Position = id;
+  if (pawnIsPromoted) {
+    pawnPromotion(inTurn);
+  }
   checkForCheck();
   changeTurn();
 }
