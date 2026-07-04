@@ -9,6 +9,7 @@ function blackPawn(current_Position) {
 
 function blackRook(current_Position) {
   return {
+    move: false,
     current_Position,
     img: "./Assets/Pieces/black/rook.png",
     piece_name: "BLACK_ROOK",
@@ -33,6 +34,7 @@ function blackQueen(current_Position) {
 
 function blackKing(current_Position) {
   return {
+    move: false,
     current_Position,
     img: "./Assets/Pieces/black/king.png",
     piece_name: "BLACK_KING",
@@ -58,6 +60,7 @@ function whitePawn(current_Position) {
 
 function whiteRook(current_Position) {
   return {
+    move: false,
     current_Position,
     img: "./Assets/Pieces/white/rook.png",
     piece_name: "WHITE_ROOK",
@@ -81,6 +84,7 @@ function whiteBishop(current_Position) {
 }
 function whiteKing(current_Position) {
   return {
+    move: false,
     current_Position,
     img: "./Assets/Pieces/white/king.png",
     piece_name: "WHITE_KING",

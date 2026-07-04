@@ -121,9 +121,32 @@ function callBackPawnPromotion(piece, id) {
 }
 
 // move element with square id
-function moveElement(piece, id) {
+function moveElement(piece, id, castle) {
   // pawnPromotion("white");
   const pawnIsPromoted = checkForPawnPromotion(piece, id);
+
+  if (piece.piece_name.includes("KING") || piece.piece_name.includes("ROOK")) {
+    piece.move = true;
+
+    if (
+      piece.piece_name.includes("KING") &&
+      piece.piece_name.includes("WHITE")
+    ) {
+      if (id === "c1" || id === "g1") {
+        let rook = keySquareMapper[id === "c1" ? "a1" : "h1"];
+        moveElement(rook.piece, id === "c1" ? "d1" : "f1", true);
+      }
+    }
+    if (
+      piece.piece_name.includes("KING") &&
+      piece.piece_name.includes("BLACK")
+    ) {
+      if (id === "c8" || id === "g8") {
+        let rook = keySquareMapper[id === "c8" ? "a8" : "h8"];
+        moveElement(rook.piece, id === "c8" ? "d8" : "f8", true);
+      }
+    }
+  }
 
   const targetSquare = keySquareMapper[id];
   const isCapture = !!(targetSquare && targetSquare.piece);
@@ -169,7 +192,9 @@ function moveElement(piece, id) {
     pawnPromotion(inTurn, callBackPawnPromotion, id);
   }
   checkForCheck();
-  changeTurn();
+  if (!castle) {
+    changeTurn();
+  }
 }
 
 // Local helper that clears highlights and resets highlight state.
@@ -235,6 +260,28 @@ function whiteKingClick(square) {
   } = highlightedSquareIds;
 
   let result = [];
+
+  if (!piece.move) {
+    const rook1 = globalPiece.white_Rook_1;
+    const rook2 = globalPiece.white_Rook_2;
+    if (!rook1.move) {
+      const b1 = keySquareMapper["b1"];
+      const c1 = keySquareMapper["c1"];
+      const d1 = keySquareMapper["d1"];
+      if (!b1.piece && !c1.piece && !d1.piece) {
+        result.push("c1");
+      }
+    }
+    if (!rook2.move) {
+      const f1 = keySquareMapper["f1"];
+      const g1 = keySquareMapper["g1"];
+
+      if (!f1.piece && !g1.piece) {
+        result.push("g1");
+      }
+    }
+  }
+
   result.push(checkSquareCaptureId(bottomLeft));
   result.push(checkSquareCaptureId(topLeft));
   result.push(checkSquareCaptureId(bottomRight));
@@ -335,6 +382,28 @@ function blackKingClick(square) {
   } = highlightedSquareIds;
 
   let result = [];
+
+  if (!piece.move) {
+    const rook1 = globalPiece.black_Rook_1;
+    const rook2 = globalPiece.black_Rook_2;
+    if (!rook1.move) {
+      const b8 = keySquareMapper["b8"];
+      const c8 = keySquareMapper["c8"];
+      const d8 = keySquareMapper["d8"];
+      if (!b8.piece && !c8.piece && !d8.piece) {
+        result.push("c8");
+      }
+    }
+    if (!rook2.move) {
+      const f8 = keySquareMapper["f8"];
+      const g8 = keySquareMapper["g8"];
+
+      if (!f8.piece && !g8.piece) {
+        result.push("g8");
+      }
+    }
+  }
+
   result.push(checkSquareCaptureId(bottomLeft));
   result.push(checkSquareCaptureId(topLeft));
   result.push(checkSquareCaptureId(bottomRight));
@@ -1364,7 +1433,9 @@ function globalEvent() {
 
 // Expose for browser testing
 window.getInTurn = () => inTurn;
-window.setInTurn = (val) => { inTurn = val; };
+window.setInTurn = (val) => {
+  inTurn = val;
+};
 
 export {
   globalEvent,

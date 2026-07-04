@@ -105,7 +105,7 @@ function initGameRender(data) {
       // Render blackKnight
       if (square.id == "b8" || square.id == "g8") {
         square.piece = pieces.blackKnight(square.id);
-        if ((globalPiece.black_Knight_1 = square.piece)) {
+        if (globalPiece.black_Knight_1) {
           globalPiece.black_Knight_2 = square.piece;
         } else {
           globalPiece.black_Knight_1 = square.piece;
@@ -114,7 +114,7 @@ function initGameRender(data) {
       // Render blackRook
       if (square.id == "h8" || square.id == "a8") {
         square.piece = pieces.blackRook(square.id);
-        if ((globalPiece.black_Rook_1 = square.piece)) {
+        if (globalPiece.black_Rook_1) {
           globalPiece.black_Rook_2 = square.piece;
         } else {
           globalPiece.black_Rook_1 = square.piece;
@@ -124,7 +124,7 @@ function initGameRender(data) {
       // Render blackBishop
       if (square.id == "c8" || square.id == "f8") {
         square.piece = pieces.blackBishop(square.id);
-        if ((globalPiece.black_Bishop_1 = square.piece)) {
+        if (globalPiece.black_Bishop_1) {
           globalPiece.black_Bishop_2 = square.piece;
         } else {
           globalPiece.black_Bishop_1 = square.piece;
@@ -150,7 +150,7 @@ function initGameRender(data) {
       // Render whiteKnight
       if (square.id == "b1" || square.id == "g1") {
         square.piece = pieces.whiteKnight(square.id);
-        if ((globalPiece.white_Knight_1 = square.piece)) {
+        if (globalPiece.white_Knight_1) {
           globalPiece.white_Knight_2 = square.piece;
         } else {
           globalPiece.white_Knight_1 = square.piece;
@@ -160,7 +160,7 @@ function initGameRender(data) {
       // Render whiteRook
       if (square.id == "h1" || square.id == "a1") {
         square.piece = pieces.whiteRook(square.id);
-        if ((globalPiece.white_Rook_1 = square.piece)) {
+        if (globalPiece.white_Rook_1) {
           globalPiece.white_Rook_2 = square.piece;
         } else {
           globalPiece.white_Rook_1 = square.piece;
@@ -170,7 +170,7 @@ function initGameRender(data) {
       // Render whiteBishop
       if (square.id == "c1" || square.id == "f1") {
         square.piece = pieces.whiteBishop(square.id);
-        if ((globalPiece.white_Bishop_1 = square.piece)) {
+        if (globalPiece.white_Bishop_1) {
           globalPiece.white_Bishop_2 = square.piece;
         } else {
           globalPiece.white_Bishop_1 = square.piece;

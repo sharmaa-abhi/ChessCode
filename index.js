@@ -1,5 +1,5 @@
 import { initGame } from "./Data/data.js";
-import { initGameRender } from "./Render/main.js";
+import { initGameRender, globalPiece } from "./Render/main.js";
 import { globalEvent } from "./Events/Global.js";
 
 // console.log(initGame());
@@ -18,6 +18,7 @@ globalEvent();
 // Expose state globally so test.html can access it via iframe
 window.globalData = globalData;
 window.keySquareMapper = keySquareMapper;
-window.__chess = { globalData, keySquareMapper };
+window.globalPiece = globalPiece;
+window.__chess = { globalData, keySquareMapper, globalPiece };
 
-export { globalData , keySquareMapper };
+export { globalData , keySquareMapper, globalPiece };
