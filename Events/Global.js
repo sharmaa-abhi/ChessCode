@@ -1060,12 +1060,10 @@ function whitePawnClick(square) {
   });
 
   // capture id logic
-  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${
-    Number(current_pos[1]) + 1
-  }`;
-  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${
-    Number(current_pos[1]) + 1
-  }`;
+  const col1 = `${String.fromCharCode(current_pos[0].charCodeAt(0) - 1)}${Number(current_pos[1]) + 1
+    }`;
+  const col2 = `${String.fromCharCode(current_pos[0].charCodeAt(0) + 1)}${Number(current_pos[1]) + 1
+    }`;
 
   let captureIds = [col1, col2];
   // Note: Do NOT use checkSquareCaptureId for captureIds.

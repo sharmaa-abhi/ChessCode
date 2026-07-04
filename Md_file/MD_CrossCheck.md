@@ -1,25 +1,25 @@
 # 🔬 Deep Cross-Check — MD Files vs Actual JS Code
 
-**Last Updated:** June 30, 2026 — 08:25 PM IST  
+**Last Updated:** July 4, 2026 — 08:40 PM IST  
 Every claim in every MD file verified line-by-line against the real JavaScript.
 
 Legend: ✅ Correct &nbsp; ❌ Wrong &nbsp; ⚠️ Misleading / Incomplete
 
 ---
 
-## 🔴 MAJOR DISCOVERY (June 22, 2026)
+## 🟢 MAJOR UPDATE (July 4, 2026)
 
-**All piece handlers are already implemented in `Events/Global.js`!**
+**Full game now playable with turn management, timers, castling, and pawn promotion!**
 
-This was overlooked in previous audits. The code contains:
-- ✅ `whitePawnClick()`, `blackPawnClick()` — **Fully functional**
-- ✅ `whiteBishopClick()`, `blackBishopClick()` — Handlers exist
-- ✅ `whiteRookClick()`, `blackRookClick()` — Handlers exist  
-- ✅ `whiteKnightClick()`, `blackKnightClick()` — Handlers exist
-- ✅ `whiteQueenClick()`, `blackQueenClick()` — Handlers exist
-- ✅ `whiteKingClick()`, `blackKingClick()` — Handlers exist
-
-**Status:** All handlers are wired into `globalEvent()` via switch statement. Project is 95% complete; only turn management is needed.
+Changes made to the codebase:
+- ✅ **Turn enforcement fixed** — Removed broken `if (inTurn == "X");` semicolons from switch statement
+- ✅ **Chess timer added** — New `Helper/timer.js` with `ChessTimer` class
+- ✅ **Turn indicator added** — Visual dot + text in side panel
+- ✅ **Last-move highlighting** — `.lastMoveHighlight` CSS class applied after each move
+- ✅ **Pawn promotion fix** — `id?.includes("8")` → `id?.[1] === "8"` (only checks rank digit)
+- ✅ **Black king capture fix** — Added missing `captureHighlight` handler in `blackKingClick()`
+- ✅ **Pawn storage fix** — `globalPiece.black_Pawn` → `globalPiece.black_Pawns[]` (array)
+- ✅ **Dead code removed** — `Greet()` from data.js, `renderHighlight()` from main.js
 
 ---
 
@@ -27,40 +27,46 @@ This was overlooked in previous audits. The code contains:
 
 | File | Status | Notes |
 |------|--------|-------|
-| `Flowchart.md` | ✅ Clean | Fully updated for recent `Global.js` refactor. |
-| `FlowChart2.md` | ✅ Clean | Fully updated for recent `Global.js` refactor. |
-| `FunctionReference.md` | ✅ Clean | Accurately describes the simplified flow. |
-| `README.md` | ✅ Updated | Updated June 22, 2026 — reflects piece handler discovery. |
-| `Function.md` | ✅ Clean | 700+ lines, fully complete and updated for the recent `Global.js` refactor. |
-| `ProjectSummary.md` | ✅ Updated | Updated June 22, 2026 — notes all piece handlers. |
-| `IMPLEMENTATION_STATUS.md` | ✅ Updated | Updated June 22, 2026 — reflects handlers, priority on turn management. |
+| `Flowchart.md` | ✅ Clean | Flowcharts for pawn click logic. |
+| `FlowChart2.md` | ✅ Clean | Visual flowcharts for all major flows. |
+| `FunctionReference.md` | ✅ Updated July 4 | All 65 functions documented with new modules. |
+| `README.md` | ✅ Updated July 4 | Full feature list, updated structure, getting started. |
+| `Function.md` | ⚠️ Needs Update | 700+ lines — needs sync with new functions (timer, logging, etc.). |
+| `ProjectSummary.md` | ✅ Updated July 4 | Full architecture with all new features. |
+| `IMPLEMENTATION_STATUS.md` | ✅ Updated July 4 | Feature matrix shows all implemented features. |
+| `Design_Architecture.md` | ✅ Updated July 4 | New module layer map with timer, logging, modelCreator. |
+| `Design_Data.md` | ✅ Clean | Data structures still accurate. |
+| `Design_PieceMovement.md` | ✅ Clean | Movement rules still accurate. |
+| `Design_UIUX.md` | ✅ Updated July 4 | New layout, timer UI, turn indicator, last-move highlight. |
+| `All_Bugs_Report.md` | ✅ Updated July 4 | New bugs found & fixed documented. |
+| `ErrorReport.md` | ✅ Updated July 4 | Reflects current status. |
+| `DOCUMENTATION_UPDATE_SUMMARY.md` | ✅ Updated July 4 | July 4 changes documented. |
+| `MD_CrossCheck.md` | ✅ Updated July 4 | This file — reflects current state. |
 
 ---
 
-## 🔧 Resolved Issues (From Previous Audits)
+## 🔧 Issues Resolved (July 4, 2026)
 
-1. **`Global.js` Refactor:** The logic inside `whitePawnClick` and `blackPawnClick` was significantly refactored recently. The use of `globalData.forEach` loops was replaced with direct lookups using `keySquareMapper`. The MD files `Function.md`, `Flowchart.md`, and `FlowChart2.md` have now been updated to match this new implementation.
-2. **White Pawn Movement Bug:** There was a logic error in `Global.js` where the white pawn subtracted from its row number instead of adding to it on its first move (row "2"). This was corrected in `Global.js`.
-3. **Capture Logic Changes:** The previous documentation showed capture logic only occurring when a pawn was NOT on its starting row. The updated code evaluates captures on all pawn moves. The flowcharts have been updated to reflect this.
-4. **`MD_Error_Report.md` Merged:** Stale error reports and duplicate documents have been consolidated.
-5. **Documentation Completion (May 22, 2026):** Updated README.md with complete features, setup instructions, and project structure. Enhanced ProjectSummary.md with detailed pawn flow documentation. Created new IMPLEMENTATION_STATUS.md for feature tracking and roadmap.
+1. **Turn enforcement was broken** — `if (inTurn == "white");` had semicolons making the conditions no-ops. All 12 cases in the switch statement were affected. Fixed by removing the broken if-statements entirely (turn is already gated by `captureInTurn` guard above the switch).
+
+2. **Black king couldn't capture** — `blackKingClick()` was missing the `square.captureHighlight` check that `whiteKingClick()` had. Added the missing block.
+
+3. **Pawn promotion matched wrong ranks** — `id?.includes("8")` could match column names. Fixed to `id?.[1] === "8"`.
+
+4. **`globalPiece` pawn storage** — Only stored last pawn reference instead of all 8. Changed to arrays: `globalPiece.black_Pawns[]`, `globalPiece.white_Pawns[]`.
+
+5. **Dead code cleanup** — Removed `Greet()` (data.js), `renderHighlight()` (main.js).
 
 ---
 
-## 🔍 CODE AUDIT (May 22, 2026 - Current Session)
+## 🔍 Previous Issues (Already Resolved)
 
-**New File Created:** [`Code_Audit_Report.md`](./Code_Audit_Report.md)
-
-### Issues Found:
-
-| # | Issue | Severity | Status |
-|---|-------|----------|--------|
-| 1 | Unreachable code in `whitePawnClick()` | 🔴 Critical | Found |
-| 2 | Unused import in `Render/main.js` | 🟠 High | Found |
-| 3 | Variable typo `sqaureId` → `squareId` | 🟠 High | Found |
-| 4 | String `"null"` vs actual `null` | 🟡 Medium | Found |
-| 5 | Large dead code block in `constant.js` | 🟡 Medium | Found |
-| 6 | Unused function `renderHighlight()` | 🟢 Low | Found |
-| 7 | Unused state variable pattern | 🟢 Low | Found |
-
-**See [Code_Audit_Report.md](./Code_Audit_Report.md) for detailed analysis and fix recommendations.**
+| # | Issue | Status |
+|---|-------|--------|
+| 1 | White pawn direction bug (subtract → add) | ✅ Fixed |
+| 2 | Pawn captures blocked by `checkSquareCaptureId` | ✅ Fixed |
+| 3 | Edge pawn crash (undefined column) | ✅ Fixed |
+| 4 | Render performance O(N²) → O(N) | ✅ Fixed |
+| 5 | Unreachable code in `whitePawnClick()` | ✅ Fixed (code restructured) |
+| 6 | Unused `renderHighlight()` | ✅ Removed |
+| 7 | No turn validation | ✅ Implemented |

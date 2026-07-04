@@ -1,7 +1,7 @@
 # 🎨 ChessCode — UI/UX Design
 
-**Covers:** Visual design system, color palette, CSS class system, board layout, and the highlighting state model.  
-**Last Updated:** June 30, 2026 — 08:25 PM IST
+**Covers:** Visual design system, color palette, CSS class system, board layout, timer/logger UI, and the highlighting state model.  
+**Last Updated:** July 4, 2026 — 08:40 PM IST
 
 ---
 
@@ -15,7 +15,12 @@
 | Selected piece | `#f7f769` | Bright yellow — self-highlight glow |
 | Capture target | `#EE4b2b` | Vivid red-orange — enemy capture square |
 | Move dot fill | `rgba(0,0,0,0.2)` | Translucent black — valid move indicator |
+| Last move highlight | `rgba(255,255,50,0.38)` | Translucent yellow — source/destination of last move |
+| Timer active glow | `rgba(100,255,170,0.3)` | Green glow — active player's timer |
+| Timer low-time | `#ff4444` | Red — below 30 seconds warning |
 | Global text | `white` | Applied via `* { color: white }` |
+| Side panel background | `#262522` | Dark panels — logger, turn indicator |
+| Side panel border | `#3d3b37` | Subtle border — separates panels |
 
 ---
 
@@ -24,32 +29,34 @@
 ### Dimensions
 
 ```
-Board total:  560px × 560px
-Square size:   70px ×  70px  (8 × 70 = 560)
-Piece image:   70px ×  70px  (fills square completely)
-Move dot:      20px ×  20px  (centered via absolute position)
+Board total:  600px × 600px
+Square size:   75px ×  75px  (8 × 75 = 600)
+Piece image:   75px ×  75px  (fills square completely)
+Move dot:      25px ×  25px  (centered via absolute position)
 ```
 
-### Structure
-
-```html
-<div id="root">          ← flex column, centered on page, width: max-content
-  <div class="squareRow">   ← flex row, 560px wide, 70px tall
-    <div id="a8" class="black square"> ... </div>
-    <div id="b8" class="white square"> ... </div>
-    ...8 squares...
-  </div>
-  ...8 rows...
-</div>
-```
-
-### Color Assignment
-
-Squares alternate based on row parity:
+### Page Layout (Flexbox)
 
 ```
-Even rows (2, 4, 6, 8):  a=white, b=black, c=white, d=black ...
-Odd  rows (1, 3, 5, 7):  a=black, b=white, c=black, d=white ...
+┌─────────────────────────────────────────────────────────┐
+│  body#flex (display: flex, gap: 24px)                   │
+│                                                          │
+│  ┌────────────────────┐  ┌────────────────────────────┐ │
+│  │  .board-container  │  │  .side-panel               │ │
+│  │                    │  │                            │ │
+│  │  ┌──────────────┐  │  │  ┌──────────────────────┐ │ │
+│  │  │ #black-timer │  │  │  │ #turn-indicator      │ │ │
+│  │  └──────────────┘  │  │  │  ⚪ White's Turn     │ │ │
+│  │  ┌──────────────┐  │  │  └──────────────────────┘ │ │
+│  │  │    #root     │  │  │  ┌──────────────────────┐ │ │
+│  │  │  (8×8 board) │  │  │  │ #chessboardmovelogger│ │ │
+│  │  │              │  │  │  │  ┌─ Moves ────────┐  │ │ │
+│  │  └──────────────┘  │  │  │  │ 1. e2→e4  e7→e5│  │ │ │
+│  │  ┌──────────────┐  │  │  │  │ 2. ...         │  │ │ │
+│  │  │ #white-timer │  │  │  │  └────────────────┘  │ │ │
+│  │  └──────────────┘  │  │  └──────────────────────┘ │ │
+│  └────────────────────┘  └────────────────────────────┘ │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -60,11 +67,11 @@ Odd  rows (1, 3, 5, 7):  a=black, b=white, c=black, d=white ...
 
 | Class | Applied To | Effect |
 |---|---|---|
-| `.square` | Every `div` square | `70×70px`, `position: relative` |
+| `.square` | Every `div` square | `75×75px`, `position: relative` |
 | `.white` | Light tile squares | `background: #ebecd0` |
 | `.black` | Dark tile squares | `background: #779556` |
-| `.squareRow` | Each row wrapper | `flex, 560×70px` |
-| `.piece` | Piece `<img>` tags | `70×70px`, `cursor: pointer` |
+| `.squareRow` | Each row wrapper | `flex, 600×75px` |
+| `.piece` | Piece `<img>` tags | `75×75px`, `cursor: pointer` |
 
 ### State Classes (added/removed at runtime)
 
@@ -72,12 +79,28 @@ Odd  rows (1, 3, 5, 7):  a=black, b=white, c=black, d=white ...
 |---|---|---|---|
 | `.highlightYellow` | Square `div` | Piece selected | Yellow background `#f7f769` |
 | `.captureColor` | Square `div` | Enemy piece in range | Red-orange background `#EE4b2b` |
+| `.lastMoveHighlight` | Square `div` | After move completes | Translucent yellow on source + destination |
+
+### Timer Classes
+
+| Class | Applied To | Trigger | Effect |
+|---|---|---|---|
+| `.timer` | Timer `div` | Always | Base timer styling |
+| `.active-timer` | Timer `div` | Current player's turn | Green border, bright text, glow |
+| `.low-time` | Timer `div` | < 30 seconds remaining | Red background, pulsing text |
+
+### Turn Indicator Classes
+
+| Class | Applied To | Trigger | Effect |
+|---|---|---|---|
+| `.turn-dot-white` | `#turn-dot` | White's turn | White dot with glow |
+| `.turn-dot-black` | `#turn-dot` | Black's turn | Dark dot with border |
 
 ### DOM Children (highlight dot)
 
 | Element | Class | Trigger | Effect |
 |---|---|---|---|
-| `<span>` | `.highlight` | `element.highlight = true` | 20px dark circle centered in square |
+| `<span>` | `.highlight` | `element.highlight = true` | 25px dark circle centered in square |
 
 ---
 
@@ -104,54 +127,47 @@ flowchart TD
 
 > **Capture beats move-dot:** When a square is marked as a capture target (`captureHighlight = true`), its `highlight` flag is immediately cleared to `null`. This prevents the green dot from rendering underneath the red background.
 
-```js
-// In checkPieceOfOpponentOnElement():
-element.captureHighlight = true;
-element.highlight = null;  // ← priority rule enforced here
-```
-
 ---
 
 ## 📊 Visual State Table
 
-| Square State | `.highlightYellow` | `.captureColor` | `span.highlight` | Appearance |
-|---|---|---|---|---|
-| Default (empty) | ❌ | ❌ | ❌ | Normal tile color |
-| Selected piece | ✅ | ❌ | ❌ | Yellow glow |
-| Valid move dot | ❌ | ❌ | ✅ | Dark circle in center |
-| Capture target | ❌ | ✅ | ❌ | Red-orange tile |
+| Square State | `.highlightYellow` | `.captureColor` | `.lastMoveHighlight` | `span.highlight` | Appearance |
+|---|---|---|---|---|---|
+| Default (empty) | ❌ | ❌ | ❌ | ❌ | Normal tile color |
+| Selected piece | ✅ | ❌ | ❌ | ❌ | Yellow glow |
+| Valid move dot | ❌ | ❌ | ❌ | ✅ | Dark circle in center |
+| Capture target | ❌ | ✅ | ❌ | ❌ | Red-orange tile |
+| Last move square | ❌ | ❌ | ✅ | ❌ | Translucent yellow overlay |
 
 ---
 
-## 🖼️ Piece Image Layout
+## ⏱️ Timer UI
 
 ```
-Piece <img> sits inside square <div>
-  ↳ width: 70px, height: 70px
-  ↳ display: block, margin: auto
-  ↳ cursor: pointer (triggers click events)
-
-Highlight <span> is absolutely positioned inside square <div>
-  ↳ position: absolute
-  ↳ top: 50%, left: 50%
-  ↳ transform: translate(-50%, -50%)
-  ↳ width: 20px, height: 20px, border-radius: 50%
+┌─────────────────────────────────┐
+│  Black         10:00            │  ← #black-timer (top of board)
+├─────────────────────────────────┤
+│                                 │
+│          8×8 Board              │
+│                                 │
+├─────────────────────────────────┤
+│  White         09:42            │  ← #white-timer (bottom, .active-timer)
+└─────────────────────────────────┘
 ```
 
----
-
-## 📱 Responsive Considerations
-
-> ⚠️ The board is currently **fixed at 560×560px** and does not scale for mobile or small screens. Future improvements:
-> - Replace `px` sizes with `clamp()` or `vmin` units
-> - Add `max-width: 100%` on `#root`
-> - Make piece images `width: 100%` relative to square
+- **Active timer** has green accent, bright white text with subtle glow
+- **Low-time** (< 30s) pulses red with `animation: pulse-time 1s infinite`
+- **Timeout** shows full-screen overlay with winner announced
 
 ---
 
 ## 🔮 Design Tokens Cheatsheet
 
 ```css
+/* Fonts */
+--font-ui:       "Inter", sans-serif;
+--font-mono:     "JetBrains Mono", monospace;
+
 /* Colors */
 --bg-page:       #302E2B;
 --sq-light:      #ebecd0;
@@ -159,9 +175,14 @@ Highlight <span> is absolutely positioned inside square <div>
 --hl-selected:   #f7f769;
 --hl-capture:    #EE4b2b;
 --hl-dot:        rgba(0, 0, 0, 0.2);
+--hl-lastmove:   rgba(255, 255, 50, 0.38);
+--panel-bg:      #262522;
+--panel-border:  #3d3b37;
+--timer-active:  rgba(100, 255, 170, 0.3);
+--timer-low:     #ff4444;
 
 /* Sizes */
---board-size:    560px;
---square-size:   70px;
---dot-size:      20px;
+--board-size:    600px;
+--square-size:   75px;
+--dot-size:      25px;
 ```

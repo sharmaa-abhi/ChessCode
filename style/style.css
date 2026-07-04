@@ -5,15 +5,41 @@
 
 body {
   background-color: #302e2b;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
 }
+
+/* ===== LAYOUT ===== */
+
+#flex {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 0;
+}
+
+/* ===== BOARD ===== */
 
 #root {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: max-content;
-  /* margin: 20px auto; */
-  margin-left: 55px;
 }
 
 .squareRow {
@@ -46,7 +72,6 @@ body {
   width: 75px;
   height: 75px;
   margin: auto;
-  /* background-color: transparent; */
   display: block;
   cursor: pointer;
 }
@@ -66,15 +91,20 @@ body {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+/* ===== LAST MOVE HIGHLIGHT ===== */
+
+.lastMoveHighlight {
+  background-color: rgba(255, 255, 50, 0.38) !important;
+}
+
+/* ===== SQUARE LABELS ===== */
+
 .labelId {
   position: absolute;
-  /* bottom: 2px;
-  right: 2px; */
-  /* font-size: 10px; */
   color: #302e2b;
   font-size: 12px;
   font-weight: 600;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Inter", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   left: 2px;
   top: 0.5px;
 }
@@ -87,25 +117,132 @@ body {
   color: #eeeed2;
 }
 
-#flex {
+/* ===== CHESS TIMERS ===== */
+
+.timer {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 600px;
+  padding: 10px 20px;
+  background-color: #1e1d1b;
+  border: 1px solid #3d3b37;
+  font-family: "JetBrains Mono", monospace;
+  transition: all 0.3s ease;
 }
+
+#black-timer {
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+
+#white-timer {
+  border-radius: 0 0 8px 8px;
+  border-top: none;
+}
+
+.timer-label {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.timer-time {
+  font-size: 28px;
+  font-weight: 700;
+  color: #999;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.active-timer {
+  background-color: #262522;
+  border-color: #4a8;
+}
+
+.active-timer .timer-label {
+  color: #ccc;
+}
+
+.active-timer .timer-time {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(100, 255, 170, 0.3);
+}
+
+.low-time {
+  background-color: #3a1515 !important;
+  border-color: #e74c3c !important;
+}
+
+.low-time .timer-time {
+  color: #ff4444 !important;
+  text-shadow: 0 0 16px rgba(255, 50, 50, 0.6) !important;
+  animation: pulse-time 1s ease-in-out infinite;
+}
+
+.low-time .timer-label {
+  color: #ff6666 !important;
+}
+
+@keyframes pulse-time {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ===== TURN INDICATOR ===== */
+
+#turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background-color: #262522;
+  border: 1px solid #3d3b37;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: "Inter", sans-serif;
+}
+
+#turn-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.turn-dot-white {
+  background-color: #f0f0f0;
+  box-shadow: 0 0 10px rgba(240, 240, 240, 0.5);
+}
+
+.turn-dot-black {
+  background-color: #333;
+  box-shadow: 0 0 10px rgba(50, 50, 50, 0.5);
+  border: 2px solid #666;
+}
+
+#turn-text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #e0e0e0;
+}
+
+/* ===== MOVE LOGGER ===== */
 
 #chessboardmovelogger {
   display: flex;
   flex-direction: column;
-  height: 600px;
-  width: 600px;
-  margin: 20px 20px 20px 40px;
+  height: 530px;
+  width: 350px;
   background-color: #262522;
   border: 1px solid #3d3b37;
-  border-radius: 5px;
+  border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  font-family:
-    "Segoe UI",
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
 .logger-header {
@@ -118,8 +255,8 @@ body {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   border-bottom: 1px solid #3d3b37;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
 }
 
 #chessboardmovelogger ol {
@@ -155,13 +292,13 @@ body {
   content: counter(move-counter) ".";
   color: #646464;
   font-weight: 700;
-  font-family: monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 13px;
 }
 
 .leftSide,
 .rightSide {
-  font-family: monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -194,6 +331,8 @@ body {
   background: #575550;
 }
 
+/* ===== PAWN PROMOTION MODAL ===== */
+
 .modal-container {
   position: absolute;
   top: 0;
@@ -211,7 +350,7 @@ body {
 }
 
 .modal p {
-  font-family: sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 40px;
   padding: 4px 8px;
   color: #fff;
@@ -221,14 +360,73 @@ body {
 
 .modal img {
   box-sizing: border-box;
-  /* width: 100px;
-  height: 100px;
-  margin: 10px;
-  border-radius: 50%;
-  */
   width: 180px;
   border : 5px solid transparent;
 }
 .modal img:hover {
   border: 5px solid yellow;
+}
+
+/* ===== TIMEOUT OVERLAY ===== */
+
+#timeout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.timeout-modal {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 2px solid #e74c3c;
+  border-radius: 16px;
+  padding: 48px 64px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(231, 76, 60, 0.3);
+  animation: scaleIn 0.3s ease;
+}
+
+.timeout-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.timeout-title {
+  font-family: "Inter", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #e74c3c;
+  margin-bottom: 8px;
+}
+
+.timeout-message {
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  color: #aaa;
+  margin-bottom: 16px;
+}
+
+.timeout-winner {
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2ecc71;
+  text-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

@@ -1,31 +1,33 @@
 # ✅ ChessCode — Current Implementation Status
 
-**Last Updated:** June 30, 2026 — 08:25 PM IST  
-**Project Phase:** All piece handlers coded; blocked only by turn management
+**Last Updated:** July 4, 2026 — 08:40 PM IST  
+**Project Phase:** Fully playable chess with timers, castling, and pawn promotion
 
 ---
 
-## 🔴 Current Status (June 22, 2026)
+## 🟢 Current Status (July 4, 2026)
 
-**MAJOR DISCOVERY:** All piece click handlers are already implemented in `Events/Global.js`!
+**MAJOR UPDATE:** Turn management, chess timers, castling, pawn promotion, move logging, last-move highlighting, and turn indicator all implemented!
 
 ### What's Working Now ✅
-- ✅ **Pawn movement** (white & black) — fully functional with captures
-- ✅ **Bishop handlers** (`whiteBishopClick`, `blackBishopClick`) — coded and wired
-- ✅ **Rook handlers** (`whiteRookClick`, `blackRookClick`) — coded and wired
-- ✅ **Knight handlers** (`whiteKnightClick`, `blackKnightClick`) — coded and wired
-- ✅ **Queen handlers** (`whiteQueenClick`, `blackQueenClick`) — coded and wired
-- ✅ **King handlers** (`whiteKingClick`, `blackKingClick`) — coded and wired
+- ✅ **All piece movement** — Pawns, rooks, bishops, knights, queens, kings (both colors)
+- ✅ **Turn management** — `inTurn` variable enforces white/black alternation
+- ✅ **Chess timers** — 10-minute per-player countdown clocks (via `Helper/timer.js`)
+- ✅ **Timer warnings** — Low-time pulse animation at 30 seconds, timeout detection
+- ✅ **Castling** — King-side and queen-side for both colors (with rook/king `move` flag tracking)
+- ✅ **Pawn promotion** — Modal UI for selecting Queen, Rook, Bishop, or Knight
+- ✅ **Move logger** — Real-time move history with Unicode piece symbols and chess notation
+- ✅ **Last-move highlighting** — Source and destination squares highlighted after each move
+- ✅ **Turn indicator** — Visual dot + text showing whose turn it is
+- ✅ **Capture mechanics** — All pieces can capture opponent pieces
 - ✅ **Event delegation** — All handlers wired in `globalEvent()` via switch statement
-- ✅ **Helper functions** — Move calculation functions exist in `commonHelper.js`
+- ✅ **Helper functions** — Full suite in `commonHelper.js` for all piece types
 
-### What's Blocking Full Functionality ❌
-- **No turn validation** — Both colors can move any piece at any time
-- **No move validation** — Pieces can potentially move into invalid squares
-- **No capture validation** — May need refinement for piece-specific rules
-
-### Immediate Next Step 🎯
-**Implement turn management** to enable full multi-piece gameplay.
+### What's Still Missing ❌
+- **Check detection** — `checkForCheck()` is a stub, doesn't actually validate king safety
+- **Checkmate detection** — No game-end logic
+- **Stalemate detection** — No draw detection
+- **En passant** — Special pawn capture not coded
 
 ---
 
@@ -35,67 +37,60 @@
 
 | Component | Status | Details |
 |-----------|--------|---------|
-| Board rendering | ✅ Complete | 8×8 board renders with alternating colors |
-| Piece rendering | ✅ Complete | All 12 pieces render on board with correct images |
-| Data structure | ✅ Complete | `globalData` array + `keySquareMapper` efficient lookup |
+| Board rendering | ✅ Complete | 8×8 board renders with alternating colors (600×600px) |
+| Piece rendering | ✅ Complete | All 12 pieces render with correct images (75×75px) |
+| Data structure | ✅ Complete | `globalData` array + `keySquareMapper` O(1) lookup |
 | Click event system | ✅ Complete | Single listener on root div with delegation |
+| Turn management | ✅ Complete | `inTurn` variable, `changeTurn()` function, UI indicator |
+| Chess timers | ✅ Complete | `ChessTimer` class with per-player countdown, timeout, low-time warnings |
+| Move logger | ✅ Complete | Real-time notation panel with Unicode piece symbols |
+| Last-move highlight | ✅ Complete | `.lastMoveHighlight` CSS class on source/destination squares |
+| Turn indicator | ✅ Complete | Colored dot + text updates on each turn |
 
-### White Pawn Movement ✅
-
-| Feature | Status | Details |
-|---------|--------|---------|
-| Selection highlight | ✅ Complete | Yellow glow shows on clicked pawn |
-| Move highlighting | ✅ Complete | Green dots show valid moves ahead |
-| Initial move (2 squares) | ✅ Complete | Pawns on row 2 show 2 squares ahead |
-| Subsequent moves (1 square) | ✅ Complete | Pawns show 1 square ahead after first move |
-| Capture highlighting | ✅ Complete | Diagonal squares show red if opponent piece present |
-| Move execution | ✅ Complete | Click green dot or red capture square to move |
-| State management | ✅ Complete | `moveState`, `selfHighlightState`, `highlightState` tracked |
-
-### Black Pawn Movement ✅
-
-| Feature | Status | Details |
-|---------|--------|---------|
-| Selection highlight | ✅ Complete | Yellow glow shows on clicked pawn |
-| Move highlighting | ✅ Complete | Green dots show valid moves (downward) |
-| Initial move (2 squares) | ✅ Complete | Pawns on row 7 show 2 squares down |
-| Subsequent moves (1 square) | ✅ Complete | Pawns show 1 square down after first move |
-| Capture highlighting | ✅ Complete | Diagonal squares show red if opponent piece present |
-| Move execution | ✅ Complete | Click green dot or red capture square to move |
-
-### Other Pieces (Handlers Coded, Awaiting Turn Validation) ✅⏳
+### All Piece Movement ✅
 
 | Piece | Status | Details |
 |-------|--------|---------|
-| Rook | ✅ Handlers Coded | `whiteRookClick`, `blackRookClick` implemented; move logic calculated |
-| Knight | ✅ Handlers Coded | `whiteKnightClick`, `blackKnightClick` implemented; move logic calculated |
-| Bishop | ✅ Handlers Coded | `whiteBishopClick`, `blackBishopClick` implemented; move logic calculated |
-| Queen | ✅ Handlers Coded | `whiteQueenClick`, `blackQueenClick` implemented; move logic calculated |
-| King | ✅ Handlers Coded | `whiteKingClick`, `blackKingClick` implemented; move logic calculated |
+| White Pawn | ✅ Complete | Forward 1-2, diagonal capture, promotion |
+| Black Pawn | ✅ Complete | Forward 1-2, diagonal capture, promotion |
+| White Rook | ✅ Complete | Straight lines, capture, castling tracking |
+| Black Rook | ✅ Complete | Straight lines, capture, castling tracking |
+| White Bishop | ✅ Complete | Diagonals, capture |
+| Black Bishop | ✅ Complete | Diagonals, capture |
+| White Knight | ✅ Complete | L-shape jumps, capture |
+| Black Knight | ✅ Complete | L-shape jumps, capture |
+| White Queen | ✅ Complete | All 8 directions, capture |
+| Black Queen | ✅ Complete | All 8 directions, capture |
+| White King | ✅ Complete | 1-square all directions, capture, castling |
+| Black King | ✅ Complete | 1-square all directions, capture, castling |
 
-**Blocker:** No turn validation means pieces can be moved by either side at any time. Once turn management is added, all pieces become fully playable.
+### Special Moves
 
-### Advanced Game Features ❌
+| Feature | Status | Details |
+|---------|--------|---------|
+| Castling (King-side) | ✅ Complete | Both colors; validates king/rook haven't moved, path clear |
+| Castling (Queen-side) | ✅ Complete | Both colors; validates king/rook haven't moved, path clear |
+| Pawn Promotion | ✅ Complete | Modal UI for Queen/Rook/Bishop/Knight selection |
+| En Passant | ❌ Not Implemented | Special pawn capture not coded |
 
-| Feature | Status | Details | Blocker |
-|---------|--------|---------|---------|
-| **Turn management** | ⏳ **PRIORITY** | No white/black turn enforcement | **BLOCKS all multi-piece play** |
-| Check detection | ❌ Not Implemented | No king safety checks | Depends on turn mgmt |
-| Checkmate detection | ❌ Not Implemented | No game-end logic | Depends on turn mgmt |
-| Pawn promotion | ❌ Not Implemented | Pawns reaching end don't transform | Depends on turn mgmt |
-| En passant | ❌ Not Implemented | Special pawn capture not coded | Depends on turn mgmt |
-| Castling | ❌ Not Implemented | King-rook move not coded | Depends on turn mgmt |
-| Piece capture mechanics | ❌ Not Implemented | Other pieces can't capture | Depends on turn mgmt |
-| Move history | ❌ Not Implemented | No undo/move log | Nice-to-have |
-| Game state persistence | ❌ Not Implemented | No save/load feature | Nice-to-have |
+### Game Rules
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| Turn management | ✅ Complete | White/black alternation via `inTurn` + `changeTurn()` |
+| Check detection | ⏳ Stub | `checkForCheck()` exists but doesn't validate king safety |
+| Checkmate detection | ❌ Not Implemented | No game-end logic |
+| Stalemate detection | ❌ Not Implemented | No draw detection |
+| Timer timeout | ✅ Complete | Game ends with winner declared overlay |
 
 ---
 
 ## 🗂️ File Status
 
 ### Entry Point
-- **index.html** ✅ Complete
-- **index.js** ✅ Complete (exports `globalData`, `keySquareMapper`)
+- **index.html** ✅ Complete — Board layout with timer panel, turn indicator, move logger
+- **index.js** ✅ Complete — Exports `globalData`, `keySquareMapper`, `globalPiece`
+- **server.js** ✅ Complete — Node.js HTTP server on port 8082
 
 ### Data Layer
 - **Data/data.js** ✅ Complete
@@ -105,47 +100,44 @@
 
 - **Data/pieces.js** ✅ Complete
   - 12 piece factory functions
-  - Each returns piece object with name, image path, and position
+  - King and Rook factories include `move: false` flag for castling
 
 ### Render Layer
 - **Render/main.js** ✅ Complete
-  - `initGameRender()` - Draws board and places pieces (called once on startup)
+  - `initGameRender()` - Draws board, places pieces, initializes `globalPiece` with arrays for pawns
   - `pieceRender()` - Renders piece images on squares
   - `globalStateRender()` - Updates highlight state from data
-  - `moveElement()` - Moves piece on board, updates DOM and data
   - `selfHighlight()` - Adds yellow glow to selected piece
   - `clearHighlight()` - Removes all highlight dots and colors
-  - `renderHighlight()` - Creates individual highlight dot
-  - **Note:** Imports `movePieceFromXtoY` from Global.js but this function is unused
 
 ### Events Layer
-- **Events/Global.js** ✅ **FEATURE COMPLETE** (all piece handlers implemented)
-  - `globalEvent()` - Main click listener with delegation & switch statement for all pieces
-  - **Pawn handlers:** `whitePawnClick()`, `blackPawnClick()` ✅
-  - **Bishop handlers:** `whiteBishopClick()`, `blackBishopClick()` ✅
-  - **Rook handlers:** `whiteRookClick()`, `blackRookClick()` ✅
-  - **Knight handlers:** `whiteKnightClick()`, `blackKnightClick()` ✅
-  - **Queen handlers:** `whiteQueenClick()`, `blackQueenClick()` ✅
-  - **King handlers:** `whiteKingClick()`, `blackKingClick()` ✅
-  - `clearPreviousSelfHighlight()` - Removes yellow glow
-  - `clearHighlightLocal()` - Resets highlight state
-  - `movePieceFromXtoY()` - **Currently unused**, replaced by `moveElement()`
+- **Events/Global.js** ✅ **FEATURE COMPLETE**
+  - `globalEvent()` - Main click listener with delegation & turn-gated switch statement
+  - `changeTurn()` - Toggles `inTurn`, updates turn indicator UI, switches chess timer
+  - `moveElement()` - Moves piece, logs move, handles castling, tracks last-move, checks promotion
+  - `checkForPawnPromotion()` - Validates pawn reached final rank
+  - `callBackPawnPromotion()` - Callback for promotion modal selection
+  - `checkForCheck()` - Stub for check detection
+  - All 12 piece click handlers: pawn, bishop, rook, knight, queen, king (both colors)
+  - `clearPreviousSelfHighlight()`, `clearHighlightLocal()`
 
 ### Helper Layer
-- **Helper/constant.js** ✅ Complete
-  - Exports `ROOT_DIV` shared constant
-
-- **Helper/commonHelper.js** ✅ Complete
-  - `checkPieceOfOpponentOnElement()` - Checks diagonal squares for opponent pieces, marks capture squares
-  - `checkSquareCaptureId()` - Returns array of empty squares before blocked piece (for forward movement)
+- **Helper/constant.js** ✅ Complete — Exports `ROOT_DIV`
+- **Helper/commonHelper.js** ✅ Complete — Full suite of move calculators and capture detection
+- **Helper/logging.js** ✅ Complete — Move logger with Unicode symbols and chess notation
+- **Helper/timer.js** ✅ Complete — `ChessTimer` class with countdown, timeout, low-time warnings
+- **Helper/modelCreator.js** ✅ Complete — `ModalCreater` class and `pawnPromotion()` function
 
 ### Styling
 - **style/style.css** ✅ Complete
-  - `.square` - Square styling with background colors
-  - `.piece` - Piece image styling and positioning
-  - `.highlightYellow` - Yellow glow for selected piece
-  - `.highlight` - Green dot for valid moves
-  - `.captureColor` - Red background for capture squares
+  - Board and piece styling
+  - Timer styling with active/low-time states and pulse animation
+  - Turn indicator with colored dot
+  - Move logger with premium scrollbar
+  - Last-move highlight
+  - Pawn promotion modal
+  - Timeout overlay with animation
+  - Google Fonts (Inter, JetBrains Mono)
 
 ---
 
@@ -153,118 +145,60 @@
 
 ### ✅ Strengths
 - Clean separation of concerns (Data, Render, Events, Helpers)
-- **All piece handlers already implemented** — handlers exist for all 12 piece types
-- **Comprehensive event delegation** — switch statement properly routes all piece clicks
-- Efficient lookup using `keySquareMapper` instead of repeated flattening
+- All piece handlers implemented with full move calculation
+- Turn management enforced via `inTurn` + `changeTurn()`
+- Chess timers with timeout detection
+- Efficient lookup using `keySquareMapper` (O(1))
 - Proper event delegation for click handling
 - No external dependencies (vanilla JS)
 - ES Module structure for clean imports/exports
 
-### ⚠️ Issues (Blocking Full Gameplay)
+### ⚠️ Known Issues
 
-1. **No Turn Validation** ⏳ **HIGHEST PRIORITY**
-   - Either color can move any piece at any time
-   - **Impact:** Game unplayable for two-player mode
-   - **Severity:** Critical (blocks entire project goal)
-   - **Fix:** Add `currentTurn` state, validate piece color before move execution
-
-2. **Unused Import in Render/main.js** 
-   - Imports `movePieceFromXtoY` from Global.js but never uses it
-   - Actually uses `moveElement()` for piece movement
-   - **Impact:** Minimal; just unused import
-   - **Fix:** Remove unused import (line 4)
-
-3. **No Move Validation for Piece-Specific Rules**
-   - Pieces may move to invalid squares (e.g., knight moving wrong L-shape)
-   - **Impact:** Game logic violations possible
-   - **Severity:** High (affects gameplay correctness)
-   - **Fix:** Enhance move calculation in helper functions
-
-4. **No Capture Validation**
-   - Piece-specific capture rules not enforced
-   - **Impact:** Capture mechanics may be inconsistent
-   - **Severity:** Medium (depends on piece rules)
-   - **Fix:** Validate captures per piece type
+1. **Incomplete `checkForCheck()`** — Stub function, doesn't actually validate king safety
+2. **`movePieceFromXtoY()` is dead code** — Replaced by `moveElement()`, kept for export compatibility
 
 ---
 
 ## 🚀 Next Steps (Priority Order)
 
-### Phase 1 (Turn Management) — **IMMEDIATE PRIORITY** ⏳
-1. Add `currentTurn` state variable (default: "white")
-2. Validate piece color matches current turn in piece click handlers
-3. Switch turns after valid move in `moveElement()`
-4. Display current turn in UI (optional enhancement)
+### Phase 1 (Check Detection)
+1. Complete `checkForCheck()` to scan all opponent attack squares
+2. Highlight king in check
+3. Restrict moves that leave king in check
 
-**Why:** All other features are blocked by this. Without turn validation, only pawn chess is functional.
+### Phase 2 (Checkmate & Stalemate)
+1. Detect when no legal moves exist
+2. Distinguish checkmate vs stalemate
+3. Show game-end overlay
 
-### Phase 2 (Move Validation)
-1. Validate move destinations per piece type (knight L-shapes, rook straight lines, etc.)
-2. Prevent moves that put own king in check
-3. Implement capture rules properly
-4. Test all piece combinations
+### Phase 3 (En Passant)
+1. Track last pawn double-move
+2. Allow en passant capture on adjacent pawns
 
-### Phase 3 (Game Rules)
-1. Implement check detection
-2. Implement checkmate detection
-3. Implement stalemate detection
-4. Implement pawn promotion
-5. Implement castling rules
-
-### Phase 4 (En Passant & Special Moves)
-1. Track last pawn move for en passant detection
-2. Implement en passant capture logic
-
-### Phase 5 (Polish & Features)
+### Phase 4 (Polish)
 1. Add move history/undo
 2. Add game state persistence
-3. Add UI controls (new game, undo, resign)
+3. Add new game / resign buttons
 4. Add AI opponent (optional)
-
----
-
-## 📝 Code Conventions in Use
-
-All documented conventions are being followed:
-- ✅ Use `globalData` (not `gobalData`)
-- ✅ Use `highlight` property (not `highLight`)
-- ✅ Use `selfHighlight` naming (not `selfHighLight`)
-- ✅ Use `captureHighlight` for capture detection
-- ✅ Square variable names use `square` (not `sqaure`)
-
----
-
-## 📚 Documentation Files
-
-| File | Purpose | Status |
-|------|---------|--------|
-| README.md | Quick start & overview | ✅ Updated May 22 |
-| ProjectSummary.md | Architecture & concepts | ✅ Updated May 22 |
-| Function.md | Every function explained | ✅ Current |
-| FunctionReference.md | Quick reference table | ✅ Current |
-| Flowchart.md | Mermaid flowcharts | ✅ Current |
-| FlowChart2.md | Additional flowcharts | ✅ Current |
-| MD_CrossCheck.md | Audit: docs vs code | ✅ Current |
-| ErrorReport.md | Known issues | ✅ Current |
-| IMPLEMENTATION_STATUS.md | This file | ✅ New - May 22 |
 
 ---
 
 ## 🎯 Summary
 
-**ChessCode is 95% complete for full chess gameplay.** 
+**ChessCode is a fully playable 2-player chess game** with turn management, timers, castling, pawn promotion, and move logging.
 
 **What's Done:**
-- ✅ All 12 piece types have click handlers implemented
-- ✅ Move highlighting calculated for all pieces
-- ✅ Board rendering, piece placement, event system all working
-- ✅ Pawn movement fully functional (white & black)
+- ✅ All 12 piece types with movement, capture, and special moves
+- ✅ Turn management with visual indicator
+- ✅ 10-minute per-player chess timers with timeout
+- ✅ Castling (both sides, both colors)
+- ✅ Pawn promotion (modal selection)
+- ✅ Move logger with chess notation
+- ✅ Last-move highlighting
+- ✅ Premium dark theme UI
 
-**What's Missing (The Final 5%):**
-- ⏳ **Turn validation** — Blocks multi-piece play; must implement first
-- ⏳ **Move validation** — Ensures pieces move legally per chess rules
-- ⏳ **Capture mechanics** — Ensures captures work for all pieces
-
-**Immediate Action:** Implement turn management (Phase 1) to unlock full multi-piece gameplay. All piece handlers are already coded and wired — they just need turn gating to work properly.
-
-**Timeline:** Turn management can be implemented in ~30 minutes. After that, the game will be fully playable with all pieces moving correctly.
+**What's Missing (The Final ~10%):**
+- ⏳ **Check/Checkmate detection** — Core chess rule enforcement
+- ⏳ **Stalemate/draw** — Game-end conditions
+- ⏳ **En passant** — Special pawn rule
