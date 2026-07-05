@@ -91,12 +91,6 @@ body {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-/* ===== LAST MOVE HIGHLIGHT ===== */
-
-.lastMoveHighlight {
-  background-color: rgba(255, 255, 50, 0.38) !important;
-}
-
 /* ===== SQUARE LABELS ===== */
 
 .labelId {
@@ -117,131 +111,19 @@ body {
   color: #eeeed2;
 }
 
-/* ===== CHESS TIMERS ===== */
 
-.timer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 600px;
-  padding: 10px 20px;
-  background-color: #1e1d1b;
-  border: 1px solid #3d3b37;
-  font-family: "JetBrains Mono", monospace;
-  transition: all 0.3s ease;
-}
-
-#black-timer {
-  border-radius: 8px 8px 0 0;
-  border-bottom: none;
-}
-
-#white-timer {
-  border-radius: 0 0 8px 8px;
-  border-top: none;
-}
-
-.timer-label {
-  font-family: "Inter", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #888;
-  transition: color 0.3s ease;
-}
-
-.timer-time {
-  font-size: 28px;
-  font-weight: 700;
-  color: #999;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.active-timer {
-  background-color: #262522;
-  border-color: #4a8;
-}
-
-.active-timer .timer-label {
-  color: #ccc;
-}
-
-.active-timer .timer-time {
-  color: #fff;
-  text-shadow: 0 0 12px rgba(100, 255, 170, 0.3);
-}
-
-.low-time {
-  background-color: #3a1515 !important;
-  border-color: #e74c3c !important;
-}
-
-.low-time .timer-time {
-  color: #ff4444 !important;
-  text-shadow: 0 0 16px rgba(255, 50, 50, 0.6) !important;
-  animation: pulse-time 1s ease-in-out infinite;
-}
-
-.low-time .timer-label {
-  color: #ff6666 !important;
-}
-
-@keyframes pulse-time {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* ===== TURN INDICATOR ===== */
-
-#turn-indicator {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  background-color: #262522;
-  border: 1px solid #3d3b37;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  font-family: "Inter", sans-serif;
-}
-
-#turn-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.turn-dot-white {
-  background-color: #f0f0f0;
-  box-shadow: 0 0 10px rgba(240, 240, 240, 0.5);
-}
-
-.turn-dot-black {
-  background-color: #333;
-  box-shadow: 0 0 10px rgba(50, 50, 50, 0.5);
-  border: 2px solid #666;
-}
-
-#turn-text {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #e0e0e0;
-}
 
 /* ===== MOVE LOGGER ===== */
 
 #chessboardmovelogger {
   display: flex;
   flex-direction: column;
-  height: 530px;
-  width: 350px;
+  height: 600px;
+  width: 600px;
   background-color: #262522;
   border: 1px solid #3d3b37;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0,0, 0.4);
   font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
@@ -367,66 +249,4 @@ body {
   border: 5px solid yellow;
 }
 
-/* ===== TIMEOUT OVERLAY ===== */
 
-#timeout-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease;
-}
-
-.timeout-modal {
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  border: 2px solid #e74c3c;
-  border-radius: 16px;
-  padding: 48px 64px;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(231, 76, 60, 0.3);
-  animation: scaleIn 0.3s ease;
-}
-
-.timeout-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-}
-
-.timeout-title {
-  font-family: "Inter", sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  color: #e74c3c;
-  margin-bottom: 8px;
-}
-
-.timeout-message {
-  font-family: "Inter", sans-serif;
-  font-size: 18px;
-  color: #aaa;
-  margin-bottom: 16px;
-}
-
-.timeout-winner {
-  font-family: "Inter", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: #2ecc71;
-  text-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}

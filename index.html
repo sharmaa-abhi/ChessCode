@@ -3,49 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChessCode</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    <title>ChessCode</title>    
     <link rel="stylesheet" href="./style/style.css" />
   </head>
-  <body id="flex">
-    <!-- Board area with timers -->
-    <div class="board-container">
-      <!-- Black timer (top of board) -->
-      <div id="black-timer" class="timer">
-        <span class="timer-label">Black</span>
-        <span class="timer-time" id="black-time">10:00</span>
-      </div>
-
-      <div id="root"></div>
-
-      <!-- White timer (bottom of board) -->
-      <div id="white-timer" class="timer active-timer">
-        <span class="timer-label">White</span>
-        <span class="timer-time" id="white-time">10:00</span>
-      </div>
-    </div>
-
-    <!-- Side panel: turn indicator + move logger -->
-    <div class="side-panel">
-      <div id="turn-indicator">
-        <span id="turn-dot" class="turn-dot-white"></span>
-        <span id="turn-text">White's Turn</span>
-      </div>
-
+ <body id="flex">    
+      <div id="root"></div>   
       <div id="chessboardmovelogger">
         <div class="logger-header">Moves</div>
         <ol></ol>
       </div>
     </div>
-
-    <!-- Comment out old standalone logger -->
-    <!-- <div id="chessboardmovelogger">
-      <div class="logger-header">Moves</div>
-      <ol></ol>
-    </div> -->
-
     <script type="module" src="./index.js"></script>
   </body>
 </html>
