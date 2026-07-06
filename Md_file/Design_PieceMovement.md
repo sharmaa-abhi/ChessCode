@@ -1,13 +1,13 @@
 # ♟️ ChessCode — Piece Movement Design
 
-**Covers:** Movement rules, highlight calculation, capture detection, and ray-blocking logic for all 6 piece types.  
-**Last Updated:** June 30, 2026 — 08:25 PM IST
+**Covers:** Movement rules, highlight calculation, capture detection, ray-blocking logic, castling, and pawn promotion for all 6 piece types.  
+**Last Updated:** July 4, 2026 — 08:40 PM IST
 
 ---
 
 ## 🔧 Core Utilities
 
-All movement logic relies on three functions in `Helper/commonHelper.js`:
+All movement logic relies on functions in `Helper/commonHelper.js`:
 
 | Function | Purpose |
 |---|---|
@@ -35,7 +35,8 @@ temp loop             → checks a4 → if enemy: mark RED
 
 **Direction:** Upward (row + 1)  
 **First move:** 2 squares if still on row 2  
-**Captures:** Diagonals only (±1 column, +1 row)
+**Captures:** Diagonals only (±1 column, +1 row)  
+**Promotion:** Reaching row 8 triggers `pawnPromotion()` modal
 
 ```
 Starting (row 2):          Not starting:
@@ -62,27 +63,28 @@ col2 = charCode(col + 1) + (row + 1)  // right diagonal
 
 > **Rule:** `checkSquareCaptureId` is used for forward moves (stops if blocked). Captures use `checkPieceOfOpponentOnElement` directly — diagonal squares are independent.
 
+### Pawn Promotion
+
+When a pawn reaches the final rank (row 8 for white, row 1 for black), `checkForPawnPromotion()` returns `true`. After the move is executed, `pawnPromotion(color, callback, id)` shows a modal overlay with 4 choices: Queen, Rook, Bishop, Knight. The selected piece replaces the pawn on the board.
+
+```
+Promotion check:  id?.[1] === "8"  (white)
+                  id?.[1] === "1"  (black)
+```
+
 ---
 
 ### Black Pawn
 
 **Direction:** Downward (row - 1)  
 **First move:** 2 squares if still on row 7  
-**Captures:** Diagonals (±1 column, -1 row)
+**Captures:** Diagonals (±1 column, -1 row)  
+**Promotion:** Reaching row 1 triggers modal
 
 ```
   ♟
   🟢
 🔴 🔴
-```
-
-**Move squares:**
-```js
-// From e7
-["e6", "e5"]   // row 7 → 2 forward squares (downward)
-
-// From e5
-["e4"]         // other rows → 1 forward square
 ```
 
 ---
@@ -91,7 +93,8 @@ col2 = charCode(col + 1) + (row + 1)  // right diagonal
 
 **Directions:** 4 straight rays (top, bottom, left, right)  
 **Range:** Unlimited until blocked  
-**Captures:** First enemy piece on each ray
+**Captures:** First enemy piece on each ray  
+**Castling:** Tracked via `piece.move` flag — set to `true` after first move
 
 ```
      🟢
@@ -101,16 +104,6 @@ col2 = charCode(col + 1) + (row + 1)  // right diagonal
 ```
 
 **Helper:** `giveRookHighlightedIds(pos)` → `{ top, bottom, left, right }`
-
-**Algorithm:**
-```
-For each direction:
-  1. Generate full ray array
-  2. checkSquareCaptureId → empty squares get green dots
-  3. Walk temp array: first piece on ray →
-       friendly → stop (already blocked by step 2)
-       enemy    → mark RED (captureHighlight)
-```
 
 ---
 
@@ -128,8 +121,6 @@ For each direction:
 
 **Helper:** `giveBishopHighlightedIds(pos)` → `{ topLeft, topRight, bottomLeft, bottomRight }`
 
-**Same algorithm as Rook** — 4 rays, `checkSquareCaptureId` + `temp` loop.
-
 ---
 
 ## ♞ Knight
@@ -137,13 +128,6 @@ For each direction:
 **Pattern:** L-shape — 2 squares in one direction, 1 perpendicular  
 **Range:** Fixed (jumps, not rays — cannot be blocked)  
 **Captures:** Any enemy piece on a valid landing square
-
-```
-🟢 . 🟢
-. ♞ .
-🟢 . 🟢
-(simplified — actual L-shape)
-```
 
 **Helper:** `giveKnightHighlightedIds(pos)` → flat array of all valid landing square IDs
 
@@ -171,16 +155,9 @@ highlightedSquareIds.forEach((id) => {
 **Range:** Unlimited until blocked  
 **Captures:** First enemy piece on each ray
 
-```
-🔴 🟢 🔴
-🟢 ♛ 🟢
-🔴 🟢 🔴
-```
-
 **Helper:** `giveQueenHighlightedIds(pos)` → `{ top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight }`
 
 ```js
-// Internally:
 function giveQueenHighlightedIds(id) {
   return {
     ...giveRookHighlightedIds(id),
@@ -189,64 +166,42 @@ function giveQueenHighlightedIds(id) {
 }
 ```
 
-**Same algorithm as Rook/Bishop** — 8 rays total.
-
 ---
 
 ## ♚ King
 
 **Directions:** All 8  
 **Range:** 1 square per direction only  
-**Captures:** Any enemy piece 1 square away
+**Captures:** Any enemy piece 1 square away  
+**Castling:** Available when `king.move === false` and `rook.move === false` and path is clear
+
+**Helper:** `giveKingHighlightedIds(pos)` — reuses Rook + Bishop helpers but slices each ray to `[0]` (first square only)
+
+### Castling Logic
 
 ```
-🔴 🟢 🔴
-🟢 ♚ 🟢
-🔴 🟢 🔴
+White King-side:  King e1 → g1, Rook h1 → f1  (f1 and g1 must be empty)
+White Queen-side: King e1 → c1, Rook a1 → d1  (b1, c1, d1 must be empty)
+
+Black King-side:  King e8 → g8, Rook h8 → f8  (f8 and g8 must be empty)
+Black Queen-side: King e8 → c8, Rook a8 → d8  (b8, c8, d8 must be empty)
 ```
 
-**Helper:** `giveKingHighlightedIds(pos)` — reuses Rook + Bishop helpers but slices each ray to `[0]` (first square only):
-
-```js
-for (const key in returnResult) {
-  if (element.length !== 0) {
-    returnResult[key] = [element[0]];  // ← only 1 square per direction
-  }
-}
-```
-
-**Same algorithm as Rook/Bishop** — but rays have max 1 element.
-
----
-
-## 🔄 Shared Sliding-Piece Algorithm
-
-All pieces except Knight follow this pattern:
-
-```mermaid
-flowchart TD
-    A[Call giveXXXHighlightedIds] --> B[Destructure into direction arrays]
-    B --> C[checkSquareCaptureId on each direction]
-    C --> D[result.flat = empty squares only]
-    D --> E[Set highlight=true on empty squares]
-    E --> F[Walk each full direction in temp array]
-    F --> G{First piece in ray?}
-    G -- friendly --> H[break — already blocked]
-    G -- enemy --> I[checkPieceOfOpponentOnElement — mark RED, clear green dot]
-    I --> J[break — ray stops]
-    G -- no piece --> K[continue to next square]
-    F --> L[globalStateRender]
-```
+Conditions:
+1. `king.move === false` (king hasn't moved)
+2. `rook.move === false` (rook hasn't moved)
+3. All squares between king and rook are empty
+4. When king moves to castling square, `moveElement()` automatically moves the rook
 
 ---
 
 ## 📏 Move Range Summary Table
 
-| Piece | Max Range | Directions | Can Jump? | Captures |
-|---|---|---|---|---|
-| Pawn | 1 (2 from start) | Forward only | No | Diagonal only |
-| Rook | 7 | Straight (4) | No | First enemy on ray |
-| Bishop | 7 | Diagonal (4) | No | First enemy on ray |
-| Knight | Fixed L-shape | 8 possible landing squares | **Yes** | Any enemy on landing |
-| Queen | 7 | All 8 directions | No | First enemy on ray |
-| King | 1 | All 8 directions | No | Any adjacent enemy |
+| Piece | Max Range | Directions | Can Jump? | Captures | Special |
+|---|---|---|---|---|---|
+| Pawn | 1 (2 from start) | Forward only | No | Diagonal only | Promotion on final rank |
+| Rook | 7 | Straight (4) | No | First enemy on ray | Castling (with king) |
+| Bishop | 7 | Diagonal (4) | No | First enemy on ray | — |
+| Knight | Fixed L-shape | 8 landing squares | **Yes** | Any enemy on landing | — |
+| Queen | 7 | All 8 directions | No | First enemy on ray | — |
+| King | 1 | All 8 directions | No | Any adjacent enemy | Castling (with rook) |

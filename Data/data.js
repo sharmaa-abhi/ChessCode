@@ -1,7 +1,3 @@
-function Greet() {
-  alert("Hello");
-}
-
 // for each square
 function Square(color, piece, id) {
   // const highlight = function () {

@@ -1,16 +1,21 @@
-## ✅ All MD Files — Status Update (June 30, 2026 — 08:25 PM IST)
+## ✅ All MD Files — Status Update (July 4, 2026 — 08:40 PM IST)
 
-**MAJOR DISCOVERY:** All piece handlers are already implemented in `Events/Global.js`!
+**MAJOR UPDATE:** Turn management, chess timers, castling, pawn promotion, move logging, last-move highlighting, and turn indicator all implemented!
 
 ✅ All identified errors in Markdown files have been resolved and corrected.  
-✅ The JS codebase has been thoroughly refactored and simplified.  
+✅ The JS codebase has been thoroughly updated with new features.  
 ✅ All documentation has been audited and updated to match the implementation.
 
-### June 22 Update Summary:
-- All 12 piece handlers exist (pawns, rooks, bishops, knights, queens, kings)
-- Handlers are wired into `globalEvent()` switch statement
-- **Blocker:** Turn validation not implemented (both colors can move any piece)
-- **Next Priority:** Implement turn management to unlock full gameplay
+### July 4 Update Summary:
+- Turn enforcement fixed (broken semicolons in switch removed)
+- Chess timer system added (`Helper/timer.js`)
+- Turn indicator added (visual dot + text)
+- Last-move highlighting added
+- Pawn promotion rank check fixed (`includes` → `[1] ===`)
+- Black king capture handler fixed
+- Pawn storage fixed (single ref → arrays)
+- Dead code removed (`Greet()`, `renderHighlight()`)
+- New helper modules: `timer.js`, `logging.js`, `modelCreator.js`
 
 ---
 
@@ -18,41 +23,39 @@
 
 | File | Status | Notes |
 |------|--------|-------|
-| `Flowchart.md` | ✅ UPDATED | Adjusted to match the new pawn click sequences. |
-| `FlowChart2.md` | ✅ UPDATED | Updated click handler and pawn flow sequences. |
-| `Function.md` | ✅ UPDATED | Fully documented all piece handlers. |
-| `FunctionReference.md` | ✅ UPDATED | June 22: Added all piece handlers to reference table. |
-| `ProjectSummary.md` | ✅ UPDATED | June 22: Notes all piece handlers are implemented. |
-| `MD_CrossCheck.md` | ✅ UPDATED | June 22: Documents major discovery. |
-| `README.md` | ✅ UPDATED | June 22: Reflects handler discovery, turn management priority. |
-| `IMPLEMENTATION_STATUS.md` | ✅ UPDATED | June 22: New detailed status with blocker analysis. |
+| `Flowchart.md` | ✅ Current | Pawn click flow diagrams. |
+| `FlowChart2.md` | ✅ Current | Visual flowcharts for all major flows. |
+| `Function.md` | ⚠️ Needs Sync | New functions need to be added (timer, logging, etc.). |
+| `FunctionReference.md` | ✅ UPDATED July 4 | All 65 functions documented. |
+| `ProjectSummary.md` | ✅ UPDATED July 4 | Full project overview with all features. |
+| `MD_CrossCheck.md` | ✅ UPDATED July 4 | Documents all July 4 changes. |
+| `README.md` | ✅ UPDATED July 4 | Complete feature list, structure, setup guide. |
+| `IMPLEMENTATION_STATUS.md` | ✅ UPDATED July 4 | Feature matrix shows all implemented features. |
+| `Design_Architecture.md` | ✅ UPDATED July 4 | New module layer map. |
+| `Design_Data.md` | ✅ Current | Data structures still accurate. |
+| `Design_PieceMovement.md` | ✅ Current | Movement rules still accurate. |
+| `Design_UIUX.md` | ✅ UPDATED July 4 | New layout, timers, turn indicator. |
+| `All_Bugs_Report.md` | ✅ UPDATED July 4 | July 4 bugs documented. |
+| `DOCUMENTATION_UPDATE_SUMMARY.md` | ✅ UPDATED July 4 | July 4 changes logged. |
 
 ---
 
-## 🐛 Resolved Code Bugs
+## 🐛 Resolved Code Bugs (July 4, 2026)
 
-- **White Pawn Movement**: Fixed a logical bug in `Global.js` where the white pawn on row "2" was incorrectly subtracting from its position instead of adding to it.
+| Bug | Type | Fix |
+|-----|------|-----|
+| Turn enforcement broken (semicolons) | Critical Logic | Removed broken `if` statements from switch |
+| Black king can't capture | Missing Handler | Added `captureHighlight` block to `blackKingClick()` |
+| Pawn promotion wrong rank match | Logic | `id?.includes("8")` → `id?.[1] === "8"` |
+| Pawn storage overwrites | Data Bug | Single ref → array (`globalPiece.black_Pawns[]`) |
+| Dead `Greet()` function | Dead Code | Removed from `data.js` |
+| Dead `renderHighlight()` function | Dead Code | Removed from `main.js` |
 
 ---
 
-## 🔍 CURRENT CODE AUDIT (May 22, 2026)
+## ✅ Previously Resolved Bugs
 
-**Status:** Code compiles and runs — 7 issues identified  
-**Critical Issues:** 1  
-**High Priority:** 2  
-**Medium Priority:** 2  
-**Low Priority:** 2
-
-### Issues Found:
-
-| Issue | File | Severity | Type |
-|-------|------|----------|------|
-| Unreachable code block in `whitePawnClick()` | Global.js | 🔴 Critical | Logic Error |
-| Unused import `movePieceFromXtoY` | main.js | 🟠 High | Code Quality |
-| Variable typo `sqaureId` | commonHelper.js | 🟠 High | Spelling |
-| String `"null"` instead of actual `null` | data.js | 🟡 Medium | Type Safety |
-| Large dead code comment block | constant.js | 🟡 Medium | Cleanup |
-| Unused function `renderHighlight()` | main.js | 🟢 Low | Dead Code |
-| Unused state variable pattern | Global.js | 🟢 Low | Style |
-
-**👉 See [Code_Audit_Report.md](./Code_Audit_Report.md) for complete analysis**
+- **White Pawn Movement**: Fixed direction bug (subtract → add)
+- **Pawn Captures Blocked**: Removed `checkSquareCaptureId` from capture path
+- **Edge Pawn Crash**: Added null guard for off-board squares
+- **Render Performance**: Moved `globalStateRender()` outside loop (O(N²) → O(N))

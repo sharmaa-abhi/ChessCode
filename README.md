@@ -1,70 +1,92 @@
 # ♟️ ChessCode — Browser-Based Chess Game
 
-**Last Updated:** June 30, 2026 — 08:25 PM IST  
+**Last Updated:** July 4, 2026 — 08:40 PM IST  
 
-A vanilla JavaScript chess game with ES Modules. Full 8×8 board, all pieces rendered, and complete pawn movement logic (white & black).
+A vanilla JavaScript chess game with ES Modules. Full 8×8 board, all 12 piece types fully playable with turn management, chess timers, castling, pawn promotion, and move logging.
 
 ## ✨ Features
 
 - ✅ **8×8 chessboard** with piece placement
-- ✅ **Pawn movement** (white up, black down)
+- ✅ **All piece movement** — Pawn, Rook, Bishop, Knight, Queen, King (both colors)
+- ✅ **Turn management** — White/Black alternation enforced
+- ✅ **Chess timers** — 10-minute per-player countdown clocks with low-time warnings
 - ✅ **Move highlighting** (green dots for valid moves)
-- ✅ **Capture detection** (red highlights on enemy diagonals)
+- ✅ **Capture detection** (red highlights on enemy squares)
 - ✅ **Selection glow** (yellow highlight for selected piece)
+- ✅ **Last-move highlighting** — Source and destination squares highlighted after each move
+- ✅ **Castling** — King-side and Queen-side for both colors
+- ✅ **Pawn promotion** — Modal selection (Queen, Rook, Bishop, Knight)
+- ✅ **Move logger** — Real-time move history panel with chess notation and piece symbols
+- ✅ **Turn indicator** — Visual display of whose turn it is
 - ✅ **Efficient lookups** using `keySquareMapper`
 
 ## 🚀 Tech Stack
 
 - Vanilla HTML, CSS, JavaScript
 - ES Modules (no build tools)
+- Google Fonts (Inter, JetBrains Mono)
 - No external dependencies
 
 ## 📂 Structure
 
 ```
 chessCode/
-├── index.html                 → Entry point
+├── index.html                 → Entry point (board + timer + logger layout)
 ├── index.js                   → Bootstrap (3 steps: init, render, events)
-├── style/style.css           → Styling
+├── server.js                  → Local dev server (Node.js, port 8082)
+├── style/style.css           → Styling (board, timers, logger, modals)
 ├── Data/
-│   ├── data.js              → Board builder
-│   └── pieces.js            → Piece factories
+│   ├── data.js              → Board builder (Square, squareRow, initGame)
+│   └── pieces.js            → Piece factories (12 pieces)
 ├── Helper/
-│   ├── constant.js          → ROOT_DIV
-│   └── commonHelper.js      → Utilities
+│   ├── constant.js          → ROOT_DIV shared constant
+│   ├── commonHelper.js      → Move calculation & capture utilities
+│   ├── logging.js           → Move logger (chess notation UI)
+│   ├── timer.js             → Chess timer system (per-player countdown)
+│   └── modelCreator.js      → Pawn promotion modal
 ├── Render/main.js           → DOM rendering
-├── Events/Global.js         → Event handlers & logic
-├── Assets/Pieces/           → Piece images
-└── Md_file/                 → Documentation
+├── Events/Global.js         → Event handlers, turn system, game logic
+├── Assets/Pieces/           → Piece images (white/ & black/)
+└── Md_file/                 → Documentation (15 files)
 ```
 
 ## ⚙️ How It Works
 
 ```
 initGame()  →  initGameRender()  →  globalEvent()
-  (data)         (display)          (clicks → all piece handlers)
+  (data)         (display)          (clicks → turn-gated piece handlers)
 ```
 
 1. **Data:** Build 8×8 board array (`globalData`)
-2. **Render:** Draw squares and place pieces on screen
-3. **Events:** Listen for clicks and dispatch to piece handlers (all pieces already implemented)
+2. **Render:** Draw squares, place pieces, initialize timers
+3. **Events:** Listen for clicks — validate turn → dispatch to piece handler → execute move → switch turn → switch timer
 
 ## 🎮 Gameplay
 
-- **Click any piece** → Shows valid moves (green dots) + captures (red)
-- **Click valid move** → Piece moves to that square (handlers for all pieces are coded!)
+- **Click a piece** → Shows valid moves (green dots) + captures (red)
+- **Click valid move** → Piece moves, turn switches, timer switches
 - **Click empty square** → Clears highlights
-- **White pieces:** Move up the board, **Black pieces:** Move down
-- ⏳ **Current limitation:** Turn validation not implemented — both colors can move any piece
+- **Turn enforcement** → Only the active player's pieces can be selected
+- **Timers** → Active player's clock counts down; low-time warning at 30 seconds
+- **Castling** → Available when king and rook haven't moved, path is clear
+- **Pawn promotion** → Reaching the 8th/1st rank triggers piece selection modal
+- **Timer timeout** → Game ends with winner declared on time
 
-## � Key Data
+## 📊 Key Data
 
 **`globalData`** — 8×8 array of square objects  
-**`keySquareMapper`** — ID → square lookup (O(1) instead of O(64))
+**`keySquareMapper`** — ID → square lookup (O(1) instead of O(64))  
+**`globalPiece`** — Named references to all pieces for check detection  
 
 ## 🚀 Getting Started
 
 **⚠️ Must use a local server (ES Modules require HTTP, not `file://`)**
+
+**Node.js (built-in server):**
+```bash
+node server.js
+# Open http://localhost:8082
+```
 
 **Python:**
 ```bash
@@ -72,89 +94,83 @@ python -m http.server 8000
 # Open http://localhost:8000
 ```
 
-**Node.js:**
-```bash
-npx http-server
-# Open http://localhost:8080
-```
-
 **VS Code:**
 - Install **Live Server** extension
 - Right-click `index.html` → "Open with Live Server"
 
-## ✅ Code Quality (June 22, 2026)
+## ✅ Code Quality (July 4, 2026)
 
 - ✅ No syntax errors
-- ✅ No runtime crashes  
-- ✅ **All piece handlers implemented and wired** (major discovery!)
-- ⚠️ Turn validation missing (blocks multi-piece gameplay)
-- ⚠️ Move validation needs refinement
+- ✅ No runtime crashes
+- ✅ **All piece handlers implemented and wired**
+- ✅ **Turn validation working** — white/black alternation enforced
+- ✅ **Chess timers working** — 10-minute per-player clocks
+- ✅ **Castling implemented** — both colors, king-side and queen-side
+- ✅ **Pawn promotion implemented** — modal selection UI
+- ✅ **Move logger working** — real-time notation with Unicode pieces
+- ⚠️ Check/Checkmate detection incomplete (stub exists)
+- ⚠️ En passant not implemented
 
 📖 **Full Details:** [IMPLEMENTATION_STATUS.md](./Md_file/IMPLEMENTATION_STATUS.md)
 
 ---
 
-## � Documentation
+## 📚 Documentation
 
 | File | Purpose |
 |------|---------|
 | [ProjectSummary.md](./ProjectSummary.md) | Overview & architecture |
 | [Md_file/Function.md](./Md_file/Function.md) | All functions (line-by-line) |
 | [Md_file/FunctionReference.md](./Md_file/FunctionReference.md) | Quick function reference |
-| [Md_file/Flowchart.md](./Md_file/Flowchart.md) | Visual flowcharts |
-| [Md_file/Code_Audit_Report.md](./Md_file/Code_Audit_Report.md) | Code audit (7 issues) |
+| [Md_file/Design_Architecture.md](./Md_file/Design_Architecture.md) | System architecture |
+| [Md_file/Design_Data.md](./Md_file/Design_Data.md) | Data structures |
+| [Md_file/Design_PieceMovement.md](./Md_file/Design_PieceMovement.md) | Movement rules |
+| [Md_file/Design_UIUX.md](./Md_file/Design_UIUX.md) | UI/UX design system |
 | [Md_file/All_Bugs_Report.md](./Md_file/All_Bugs_Report.md) | Bug history & fixes |
+| [Md_file/IMPLEMENTATION_STATUS.md](./Md_file/IMPLEMENTATION_STATUS.md) | Feature status matrix |
 
 ## 🚧 Not Yet Implemented
 
 | Feature | Status |
 |---------|--------|
-| Turn validation (white/black alternation) | ⏳ **PRIORITY** — Blocks multi-piece play |
-| Move validation (legal moves per piece type) | ⏳ Next priority |
-| Check / Checkmate detection | ❌ Future |
-| Pawn promotion | ❌ Future |
+| Check / Checkmate detection | ⏳ Stub exists, needs completion |
+| Stalemate detection | ❌ Future |
 | En passant | ❌ Future |
-| Castling | ❌ Future |
 | Move history / undo | ❌ Future |
 | AI opponent | ❌ Future |
 | Game state persistence | ❌ Future |
-
-**Note:** Handlers for all pieces (rook, bishop, knight, queen, king) are already implemented in `Events/Global.js`. They just need turn validation to work properly.
 
 ## 📋 Key Export Points
 
 | File | Exports |
 |------|---------|
-| `index.js` | `globalData`, `keySquareMapper` |
-| `Data/data.js` | `initGame` |
-| `Render/main.js` | `initGameRender`, `renderHighlight`, `clearHighlight`, `selfHighlight`, `moveElement`, `globalStateRender` |
-| `Events/Global.js` | `globalEvent`, `movePieceFromXtoY` |
+| `index.js` | `globalData`, `keySquareMapper`, `globalPiece` |
+| `Data/data.js` | `initGame`, `Square` |
+| `Render/main.js` | `initGameRender`, `clearHighlight`, `selfHighlight`, `globalStateRender`, `globalPiece` |
+| `Events/Global.js` | `globalEvent`, `movePieceFromXtoY`, `moveElement`, `clearPreviousSelfHighlight`, `inTurn` |
 | `Helper/constant.js` | `ROOT_DIV` |
-| `Helper/commonHelper.js` | `checkPieceOfOpponentOnElement`, `checkSquareCaptureId` |
+| `Helper/commonHelper.js` | `checkPieceOfOpponentOnElement`, `checkSquareCaptureId`, `giveXxxHighlightedIds`, `giveXxxCaptureIds`, `checkWhetherPieceExistOrNot` |
+| `Helper/logging.js` | `logMoves` |
+| `Helper/timer.js` | `chessTimer`, `ChessTimer` |
+| `Helper/modelCreator.js` | `ModalCreater`, `pawnPromotion` |
 
 ## 🎨 Styling
 
-- Board: 8×8 CSS grid
-- Pieces: PNG images
-- **Highlights:** Yellow glow (selected) | Green dot (valid move) | Red (capture)
+- Board: 8×8 CSS grid (600×600px)
+- Pieces: PNG images (75×75px)
+- **Highlights:** Yellow glow (selected) | Green dot (valid move) | Red (capture) | Light yellow (last move)
+- **Timers:** Active glow, low-time red pulse animation
+- **Fonts:** Inter (UI), JetBrains Mono (timer, moves)
+- **Theme:** Dark chess.com-inspired (charcoal/olive green)
 
 ## 📝 Code Conventions
 
 - Use `globalData`, not `gobalData`
 - Use `highlight`, not `highLight`
 - Use `square`, not `sqaure`
-
-## 🔧 Extending the Project
-
-1. Add piece logic in `Events/Global.js`
-2. Update rendering in `Render/main.js`
-3. Add game rules in `Helper/commonHelper.js`
-4. Update styles in `style/style.css`
+- Turn tracked via `inTurn` variable ("white" / "black")
+- Piece names follow `COLOR_TYPE` format (e.g., `WHITE_PAWN`, `BLACK_KING`)
 
 ## 📄 License
 
-
 Unlicensed (open for learning and extension).
-
-## error batch
-
