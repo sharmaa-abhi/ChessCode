@@ -1,7 +1,8 @@
 # 🎨 ChessCode — UI/UX Design
 
-**Covers:** Visual design system, color palette, CSS class system, board layout, timer/logger UI, and the highlighting state model.  
-**Last Updated:** July 4, 2026 — 08:40 PM IST
+**Last Updated:** July 9, 2026
+
+Covers: Visual design system, color palette, CSS class system, board layout, timer/logger UI, and the highlighting state model.
 
 ---
 
@@ -26,17 +27,31 @@
 
 ## 📐 Board Layout
 
-### Dimensions
+### Desktop Dimensions
 
 ```
 Board total:  600px × 600px
 Square size:   75px ×  75px  (8 × 75 = 600)
 Piece image:   75px ×  75px  (fills square completely)
 Move dot:      25px ×  25px  (centered via absolute position)
+Label font:    12px          (16% of square size)
 ```
+
+### Mobile Dimensions (Responsive)
+
+All sizes scale proportionally using `calc()` with viewport units:
+
+| Breakpoint | Board Width | Square Size | Dot Size | Label Size |
+|---|---|---|---|---|
+| Desktop (>1024px) | 600px | 75px | 25px | 12px |
+| Tablet (≤1024px) | `min(90vw, 560px)` | `boardWidth / 8` | `square / 3` | `square × 0.16` |
+| Phone (≤600px) | `96vw` | `boardWidth / 8` | `square / 3` | `square × 0.16` |
+| Small phone (≤400px) | `98vw` | `boardWidth / 8` | `square / 3` | `square × 0.16` |
+| Landscape phone | `85vh` (height-based) | `boardHeight / 8` | `square / 3` | `square × 0.16` |
 
 ### Page Layout (Flexbox)
 
+**Desktop:**
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  body#flex (display: flex, gap: 24px)                   │
@@ -58,6 +73,10 @@ Move dot:      25px ×  25px  (centered via absolute position)
 │  └────────────────────┘  └────────────────────────────┘ │
 └─────────────────────────────────────────────────────────┘
 ```
+
+**Mobile (≤600px):** Board and logger stack vertically (flex-direction: column).
+
+**Landscape phone:** Side-by-side using `vh` units for height-constrained fitting.
 
 ---
 
@@ -100,7 +119,7 @@ Move dot:      25px ×  25px  (centered via absolute position)
 
 | Element | Class | Trigger | Effect |
 |---|---|---|---|
-| `<span>` | `.highlight` | `element.highlight = true` | 25px dark circle centered in square |
+| `<span>` | `.highlight` | `element.highlight = true` | Dark circle centered in square (1/3 of square size) |
 
 ---
 
@@ -156,7 +175,7 @@ flowchart TD
 ```
 
 - **Active timer** has green accent, bright white text with subtle glow
-- **Low-time** (< 30s) pulses red with `animation: pulse-time 1s infinite`
+- **Low-time** (<30s) pulses red with `animation: pulse-time 1s infinite`
 - **Timeout** shows full-screen overlay with winner announced
 
 ---
@@ -181,8 +200,23 @@ flowchart TD
 --timer-active:  rgba(100, 255, 170, 0.3);
 --timer-low:     #ff4444;
 
-/* Sizes */
+/* Sizes (Desktop) */
 --board-size:    600px;
 --square-size:   75px;
 --dot-size:      25px;
 ```
+
+---
+
+## 📱 Mobile Responsive Stylesheet
+
+The responsive layout lives in `style/mobile.css` (separate from the desktop styles) with 4 breakpoints:
+
+| Breakpoint | Target | Layout | Board Sizing |
+|---|---|---|---|
+| ≤1024px | Tablets | Vertical stack | `min(90vw, 560px)` |
+| ≤600px | Phones | Vertical stack | `96vw` |
+| ≤400px | Small phones | Vertical stack | `98vw` |
+| Landscape + ≤500px height | Rotated phones | Side-by-side | `85vh` |
+
+All elements (squares, pieces, highlights, labels) scale proportionally using `calc()` — no fixed pixel values on mobile.

@@ -1,0 +1,261 @@
+/* =============================================
+   MOBILE & RESPONSIVE LAYOUT
+   Breakpoints:
+     - Tablet:  max-width 1024px
+     - Phone:   max-width 600px
+     - Small:   max-width 400px
+   ============================================= */
+
+/* ───────── Tablet (≤ 1024px) ───────── */
+@media screen and (max-width: 1024px) {
+
+  /* Stack board + logger vertically */
+  #flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+  }
+
+  body {
+    padding: 12px;
+  }
+
+  /* Scale the board to fit the viewport */
+  .squareRow {
+    width: calc(min(90vw, 560px));        /* row width adapts */
+    height: calc(min(90vw, 560px) / 8);   /* keep squares square */
+  }
+
+  .square {
+    width:  calc(min(90vw, 560px) / 8);
+    height: calc(min(90vw, 560px) / 8);
+  }
+
+  .piece {
+    width:  calc(min(90vw, 560px) / 8);
+    height: calc(min(90vw, 560px) / 8);
+  }
+
+  .highlight {
+    width:  calc(min(90vw, 560px) / 8 / 3);
+    height: calc(min(90vw, 560px) / 8 / 3);
+  }
+
+  /* Square labels – scale with square size (desktop ratio: 12px / 75px ≈ 16%) */
+  .labelId {
+    font-size: calc(min(90vw, 560px) / 8 * 0.16);
+  }
+
+  /* Move logger matches board width */
+  #chessboardmovelogger {
+    width: calc(min(90vw, 560px));
+    height: 300px;                         /* shorter on tablets */
+  }
+
+  /* Promotion modal images scale down */
+  .modal img {
+    width: 140px;
+  }
+
+  .modal p {
+    font-size: 32px;
+  }
+}
+
+
+/* ───────── Phone (≤ 600px) ───────── */
+@media screen and (max-width: 600px) {
+
+  body {
+    padding: 6px;
+  }
+
+  #flex {
+    gap: 10px;
+    padding: 6px;
+  }
+
+  /* Board fills almost the full width */
+  .squareRow {
+    width: calc(96vw);
+    height: calc(96vw / 8);
+  }
+
+  .square {
+    width:  calc(96vw / 8);
+    height: calc(96vw / 8);
+  }
+
+  .piece {
+    width:  calc(96vw / 8);
+    height: calc(96vw / 8);
+  }
+
+  .highlight {
+    width:  calc(96vw / 8 / 3);
+    height: calc(96vw / 8 / 3);
+  }
+
+  /* Square labels – scale with square size */
+  .labelId {
+    font-size: calc(96vw / 8 * 0.16);
+    left: 1px;
+    top: 0px;
+  }
+
+  /* Move logger */
+  #chessboardmovelogger {
+    width: 96vw;
+    height: 240px;
+    border-radius: 6px;
+  }
+
+  .logger-header {
+    padding: 10px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  #chessboardmovelogger li {
+    grid-template-columns: 35px 1fr 1fr;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  #chessboardmovelogger li::before {
+    font-size: 11px;
+  }
+
+  .leftSide,
+  .rightSide {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  /* Scrollbar thinner on mobile */
+  #chessboardmovelogger ol::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Promotion modal */
+  .modal img {
+    width: 100px;
+  }
+
+  .modal p {
+    font-size: 26px;
+    padding: 3px 6px;
+  }
+}
+
+
+/* ───────── Small phones (≤ 400px) ───────── */
+@media screen and (max-width: 400px) {
+
+  body {
+    padding: 2px;
+  }
+
+  #flex {
+    gap: 6px;
+    padding: 2px;
+  }
+
+  .squareRow {
+    width: 98vw;
+    height: calc(98vw / 8);
+  }
+
+  .square {
+    width:  calc(98vw / 8);
+    height: calc(98vw / 8);
+  }
+
+  .piece {
+    width:  calc(98vw / 8);
+    height: calc(98vw / 8);
+  }
+
+  .highlight {
+    width:  calc(98vw / 8 / 3);
+    height: calc(98vw / 8 / 3);
+  }
+
+  .labelId {
+    font-size: calc(98vw / 8 * 0.16);
+  }
+
+  /* Move logger compact */
+  #chessboardmovelogger {
+    width: 98vw;
+    height: 200px;
+    border-radius: 4px;
+  }
+
+  .logger-header {
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  #chessboardmovelogger li {
+    grid-template-columns: 28px 1fr 1fr;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .leftSide,
+  .rightSide {
+    font-size: 11px;
+  }
+
+  /* Promotion modal */
+  .modal img {
+    width: 80px;
+  }
+
+  .modal p {
+    font-size: 22px;
+  }
+}
+
+
+/* ───────── Landscape phones ───────── */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+
+  #flex {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Use viewport height to fit the board on screen */
+  .squareRow {
+    width: calc(85vh);
+    height: calc(85vh / 8);
+  }
+
+  .square {
+    width:  calc(85vh / 8);
+    height: calc(85vh / 8);
+  }
+
+  .piece {
+    width:  calc(85vh / 8);
+    height: calc(85vh / 8);
+  }
+
+  #chessboardmovelogger {
+    width: 240px;
+    height: 85vh;
+  }
+
+  .highlight {
+    width:  calc(85vh / 8 / 3);
+    height: calc(85vh / 8 / 3);
+  }
+
+  .labelId {
+    font-size: calc(85vh / 8 * 0.16);
+  }
+}
