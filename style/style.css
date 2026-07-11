@@ -258,12 +258,13 @@ body {
 /* ===== HEADER & FOOTER ===== */
 
 .app-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #21201d;
   border-bottom: 1px solid #3d3b37;
+  padding: 14px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .header-content {
@@ -415,5 +416,5 @@ body {
 
 .footer-divider {
   color: #3d3b37;
-  user-select: none;
+  /* user-select: none; */
 }
