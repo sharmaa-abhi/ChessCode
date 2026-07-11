@@ -7,7 +7,10 @@ body {
   background-color: #302e2b;
   font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* ===== LAYOUT ===== */
@@ -17,6 +20,8 @@ body {
   gap: 24px;
   justify-content: center;
   align-items: flex-start;
+  flex: 1;
+  padding: 24px;
 }
 
 .board-container {
@@ -123,7 +128,7 @@ body {
   background-color: #262522;
   border: 1px solid #3d3b37;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0,0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
@@ -243,10 +248,172 @@ body {
 .modal img {
   box-sizing: border-box;
   width: 180px;
-  border : 5px solid transparent;
+  border: 5px solid transparent;
 }
+
 .modal img:hover {
   border: 5px solid yellow;
 }
 
+/* ===== HEADER & FOOTER ===== */
 
+.app-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #21201d;
+  border-bottom: 1px solid #3d3b37;
+}
+
+.header-content {
+  max-width: 1250px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 26px;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.logo-area:hover .logo-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.app-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.badge {
+  background-color: #3d3b37;
+  color: #bababa;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #4d4b47;
+  letter-spacing: 0.5px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #262522;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #3d3b37;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* White turn indicator states */
+.status-indicator.white-turn {
+  border-color: #ebecd0;
+  box-shadow: 0 0 10px rgba(235, 236, 208, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.status-indicator.white-turn .status-dot {
+  background-color: #ebecd0;
+  box-shadow: 0 0 8px #ebecd0;
+}
+
+.status-indicator.white-turn #status-text {
+  color: #ebecd0;
+}
+
+/* Black turn indicator states */
+.status-indicator.black-turn {
+  border-color: #779556;
+  box-shadow: 0 0 10px rgba(119, 149, 86, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.status-indicator.black-turn .status-dot {
+  background-color: #779556;
+  box-shadow: 0 0 8px #779556;
+}
+
+.status-indicator.black-turn #status-text {
+  color: #779556;
+}
+
+/* FOOTER STYLING */
+.app-footer {
+  background-color: #21201d;
+  border-top: 1px solid #3d3b37;
+  padding: 20px 24px;
+  margin-top: auto;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.footer-content {
+  max-width: 1250px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #8b8984;
+  font-size: 13px;
+}
+
+.footer-left p {
+  margin: 0;
+  color: #8b8984;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-link {
+  color: #bababa;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.footer-divider {
+  color: #3d3b37;
+  user-select: none;
+}

@@ -33,8 +33,20 @@ let moveState = null;
 // turn variables
 let inTurn = "white";
 
+function updateHeaderStatus() {
+  const statusText = document.getElementById("status-text");
+  const statusIndicator = document.getElementById("game-status");
+  if (statusText) {
+    statusText.textContent = `${inTurn.charAt(0).toUpperCase() + inTurn.slice(1)}'s Turn`;
+  }
+  if (statusIndicator) {
+    statusIndicator.className = `status-indicator ${inTurn}-turn`;
+  }
+}
+
 function changeTurn() {
   inTurn = inTurn === "white" ? "black" : "white";
+  updateHeaderStatus();
 }
 
 // function to check
@@ -1316,6 +1328,7 @@ function clearPreviousSelfHighlight(piece) {
 }
 
 function globalEvent() {
+  updateHeaderStatus();
   ROOT_DIV.addEventListener("click", function (event) {
     if (event.target.localName === "img") {
       const clickId = event.target.parentNode.id;
@@ -1433,6 +1446,7 @@ function globalEvent() {
 window.getInTurn = () => inTurn;
 window.setInTurn = (val) => {
   inTurn = val;
+  updateHeaderStatus();
 };
 
 export {
