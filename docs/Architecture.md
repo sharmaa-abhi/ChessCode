@@ -1,6 +1,6 @@
 # 🏗️ ChessCode — Architecture & Design
 
-**Last Updated:** July 9, 2026
+**Last Updated:** July 20, 2026
 
 This document covers the system architecture, module layers, data structures, and visual flowcharts for the entire ChessCode project.
 

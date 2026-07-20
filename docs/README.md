@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Project Documentation
 
-**Last Updated:** July 9, 2026  
+**Last Updated:** July 20, 2026  
 
 > A browser-based chess game built with **vanilla HTML, CSS, and JavaScript** using ES Modules.
 

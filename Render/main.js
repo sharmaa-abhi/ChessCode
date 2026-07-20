@@ -2,7 +2,10 @@ import { ROOT_DIV } from "../Helper/constant.js";
 import * as pieces from "../Data/pieces.js";
 import { globalData, keySquareMapper } from "../index.js";
 
-const globalPiece = new Object(); // global object to store piece data
+const globalPiece = {
+  black_Pawns: [],
+  white_Pawns: []
+}; // global object to store piece data
 
 // function globalStateRender (this function is useful to render pieces from globalStateData) => use when updating globalState
 function globalStateRender() {
@@ -99,7 +102,7 @@ function initGameRender(data) {
       // Render blackPawn
       if (square.id[1] == 7) {
         square.piece = pieces.blackPawn(square.id);
-        globalPiece.black_Pawn = square.piece; // store black pawn piece in global object
+        globalPiece.black_Pawns.push(square.piece); // store black pawn piece in global object array
       }
 
       // Render blackKnight
@@ -144,7 +147,7 @@ function initGameRender(data) {
       // Render whitePawn
       if (square.id[1] == 2) {
         square.piece = pieces.whitePawn(square.id);
-        globalPiece.white_Pawn = square.piece; // store white pawn piece in global object
+        globalPiece.white_Pawns.push(square.piece); // store white pawn piece in global object array
       }
 
       // Render whiteKnight

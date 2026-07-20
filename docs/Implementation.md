@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Implementation Reference
 
-**Last Updated:** July 9, 2026
+**Last Updated:** July 20, 2026
 
 This document covers all functions (with quick reference), piece movement rules, and implementation details.
 
