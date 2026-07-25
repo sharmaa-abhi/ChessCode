@@ -1,6 +1,6 @@
 # 🪲 ChessCode — Bugs & Code Audit
 
-**Last Updated:** July 9, 2026  
+**Last Updated:** July 20, 2026  
 **Status:** All critical bugs fixed; game fully playable  
 **Total Bugs Found:** 13 | **Total Fixed:** 13 | **Outstanding:** 0
 

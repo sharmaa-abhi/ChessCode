@@ -1,5 +1,5 @@
 import { ROOT_DIV } from "../Helper/constant.js";
-import { globalData, keySquareMapper } from "../index.js";
+import { globalData, keySquareMapper, chessTimer } from "../index.js";
 import { clearHighlight } from "../Render/main.js";
 import { selfHighlight, globalPiece } from "../Render/main.js";
 import {
@@ -47,6 +47,7 @@ function updateHeaderStatus() {
 function changeTurn() {
   inTurn = inTurn === "white" ? "black" : "white";
   updateHeaderStatus();
+  chessTimer.switchTurn();
 }
 
 // function to check

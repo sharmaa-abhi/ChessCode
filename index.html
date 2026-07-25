@@ -27,10 +27,30 @@
   </header>
 
   <main id="flex">
-    <div id="root"></div>
-    <div id="chessboardmovelogger">
-      <div class="logger-header">Moves</div>
-      <ol></ol>
+    <div class="board-container">
+      <div id="root"></div>
+    </div>
+    <div class="side-panel">
+      <div class="timers-widget">
+        <div class="timer-card black-card">
+          <div class="timer-player-info">
+            <span class="player-dot black-dot"></span>
+            <span class="player-name">Black</span>
+          </div>
+          <div id="black-timer" class="timer">10:00</div>
+        </div>
+        <div class="timer-card white-card">
+          <div class="timer-player-info">
+            <span class="player-dot white-dot"></span>
+            <span class="player-name">White</span>
+          </div>
+          <div id="white-timer" class="timer">10:00</div>
+        </div>
+      </div>
+      <div id="chessboardmovelogger">
+        <div class="logger-header">Moves</div>
+        <ol></ol>
+      </div>
     </div>
   </main>
 
