@@ -94,10 +94,26 @@ function initGameRender(data) {
       squareDiv.id = square.id;
       squareDiv.classList.add(square.color, "square");
 
-      const labelId = document.createElement("span");
-      labelId.textContent = square.id;
-      labelId.classList.add("labelId", `${square.color}-label-id`);
-      squareDiv.appendChild(labelId);
+      const file = square.id[0];
+      const rank = square.id[1];
+
+      // Rank label on leftmost column ('a' file)
+      if (file === "a") {
+        const rankLabel = document.createElement("span");
+        rankLabel.textContent = rank;
+        rankLabel.setAttribute("aria-hidden", "true");
+        rankLabel.classList.add("labelId", "rank-label", `${square.color}-label-id`);
+        squareDiv.appendChild(rankLabel);
+      }
+
+      // File label on bottom row (rank '1')
+      if (rank === "1") {
+        const fileLabel = document.createElement("span");
+        fileLabel.textContent = file;
+        fileLabel.setAttribute("aria-hidden", "true");
+        fileLabel.classList.add("labelId", "file-label", `${square.color}-label-id`);
+        squareDiv.appendChild(fileLabel);
+      }
 
       // Render blackPawn
       if (square.id[1] == 7) {

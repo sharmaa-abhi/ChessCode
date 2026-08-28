@@ -100,12 +100,21 @@ body {
 
 .labelId {
   position: absolute;
-  color: #302e2b;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   font-family: "Inter", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  left: 2px;
-  top: 0.5px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rank-label {
+  top: 3px;
+  left: 4px;
+}
+
+.file-label {
+  bottom: 2px;
+  right: 4px;
 }
 
 .white-label-id {
@@ -153,6 +162,19 @@ body {
   padding: 8px 0;
   list-style-type: none;
   counter-reset: move-counter;
+  position: relative;
+}
+
+#chessboardmovelogger ol:empty::after {
+  content: "No moves yet. Make a move to start.";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #646464;
+  font-size: 14px;
+  font-style: italic;
+  letter-spacing: 0.5px;
 }
 
 #chessboardmovelogger li {
@@ -260,7 +282,7 @@ body {
 .app-header {
   background-color: #21201d;
   border-bottom: 1px solid #3d3b37;
-  padding: 14px 24px;
+  padding: 14px 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -268,8 +290,10 @@ body {
 }
 
 .header-content {
-  max-width: 1250px;
+  max-width: 1224px;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -457,10 +481,11 @@ body {
 }
 
 .player-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .player-dot.white-dot {
@@ -469,8 +494,8 @@ body {
 }
 
 .player-dot.black-dot {
-  background-color: #3d3b37;
-  border: 1px solid #779556;
+  background-color: #1a1917;
+  border: 1px solid #4d4b47;
 }
 
 .player-name {

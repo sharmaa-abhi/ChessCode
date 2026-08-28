@@ -34,22 +34,22 @@
       <div class="timers-widget">
         <div class="timer-card black-card">
           <div class="timer-player-info">
-            <span class="player-dot black-dot"></span>
+            <span class="player-dot black-dot" aria-hidden="true"></span>
             <span class="player-name">Black</span>
           </div>
           <div id="black-timer" class="timer">10:00</div>
         </div>
         <div class="timer-card white-card">
           <div class="timer-player-info">
-            <span class="player-dot white-dot"></span>
+            <span class="player-dot white-dot" aria-hidden="true"></span>
             <span class="player-name">White</span>
           </div>
           <div id="white-timer" class="timer">10:00</div>
         </div>
       </div>
-      <div id="chessboardmovelogger">
+      <div id="chessboardmovelogger" aria-label="Move history">
         <div class="logger-header">Moves</div>
-        <ol></ol>
+        <ol aria-live="polite" aria-atomic="false" aria-relevant="additions"></ol>
       </div>
     </div>
   </main>
