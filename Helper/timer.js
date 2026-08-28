@@ -1,3 +1,28 @@
+function updateActivePlayerTimer(currentTurn = "white") {
+  const whiteCard = document.querySelector(".timer-card.white-card");
+  const blackCard = document.querySelector(".timer-card.black-card");
+
+  if (!whiteCard || !blackCard) return;
+
+  if (currentTurn === "white") {
+    whiteCard.classList.add("active-player");
+    whiteCard.setAttribute("aria-current", "time");
+    whiteCard.setAttribute("aria-label", "White player's turn - Active clock");
+
+    blackCard.classList.remove("active-player");
+    blackCard.removeAttribute("aria-current");
+    blackCard.setAttribute("aria-label", "Black player's turn - Inactive");
+  } else {
+    blackCard.classList.add("active-player");
+    blackCard.setAttribute("aria-current", "time");
+    blackCard.setAttribute("aria-label", "Black player's turn - Active clock");
+
+    whiteCard.classList.remove("active-player");
+    whiteCard.removeAttribute("aria-current");
+    whiteCard.setAttribute("aria-label", "White player's turn - Inactive");
+  }
+}
+
 class ChessTimer {
   constructor() {
     this.whiteTime = 600; // 10 minutes in seconds
@@ -8,6 +33,8 @@ class ChessTimer {
 
     this.whiteElement = document.getElementById("white-timer");
     this.blackElement = document.getElementById("black-timer");
+
+    updateActivePlayerTimer(this.activeColor);
   }
 
   start() {
@@ -46,6 +73,7 @@ class ChessTimer {
     this.activeColor = "white";
     this.hasStarted = false;
     this.updateUI();
+    updateActivePlayerTimer("white");
 
     if (this.whiteElement) {
       this.whiteElement.classList.remove("active", "low-time");
@@ -73,6 +101,8 @@ class ChessTimer {
   }
 
   updateUI() {
+    updateActivePlayerTimer(this.activeColor);
+
     if (this.whiteElement) {
       this.whiteElement.textContent = this.formatTime(this.whiteTime);
       if (this.hasStarted && this.activeColor === "white") {
@@ -133,4 +163,4 @@ class ChessTimer {
   }
 }
 
-export { ChessTimer };
+export { ChessTimer, updateActivePlayerTimer };

@@ -20,6 +20,7 @@ import {
 import { globalStateRender } from "../Render/main.js";
 import { logMoves } from "../Helper/logging.js";
 import { pawnPromotion } from "../Helper/modelCreator.js";
+import { updateActivePlayerTimer } from "../Helper/timer.js";
 
 // Whether highlight mode is active.
 let highlightState = false;
@@ -42,6 +43,7 @@ function updateHeaderStatus() {
   if (statusIndicator) {
     statusIndicator.className = `status-indicator ${inTurn}-turn`;
   }
+  updateActivePlayerTimer(inTurn);
 }
 
 function changeTurn() {

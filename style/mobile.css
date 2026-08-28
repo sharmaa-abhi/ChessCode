@@ -42,9 +42,9 @@
     height: calc(min(90vw, 560px) / 8 / 3);
   }
 
-  /* Square labels – scale with square size (desktop ratio: 12px / 75px ≈ 16%) */
+  /* Square labels – responsive clamp sizing */
   .labelId {
-    font-size: calc(min(90vw, 560px) / 8 * 0.16);
+    font-size: clamp(0.7rem, 1.6vw, 0.85rem);
   }
 
   /* Move logger matches board width */
@@ -99,9 +99,17 @@
 
   /* Square labels – scale with square size */
   .labelId {
-    font-size: calc(96vw / 8 * 0.16);
-    left: 1px;
-    top: 0px;
+    font-size: clamp(0.62rem, 2.8vw, 0.78rem);
+  }
+
+  .rank-label {
+    top: 2px;
+    left: 3px;
+  }
+
+  .file-label {
+    bottom: 2px;
+    right: 3px;
   }
 
   /* Move logger */
@@ -183,7 +191,7 @@
   }
 
   .labelId {
-    font-size: calc(98vw / 8 * 0.16);
+    font-size: clamp(0.55rem, 3vw, 0.7rem);
   }
 
   /* Move logger compact */
@@ -256,7 +264,7 @@
   }
 
   .labelId {
-    font-size: calc(85vh / 8 * 0.16);
+    font-size: clamp(0.55rem, 2.2vh, 0.75rem);
   }
 }
 

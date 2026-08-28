@@ -32,14 +32,14 @@
     </div>
     <div class="side-panel">
       <div class="timers-widget">
-        <div class="timer-card black-card">
+        <div class="timer-card black-card" aria-label="Black player's turn - Inactive">
           <div class="timer-player-info">
             <span class="player-dot black-dot" aria-hidden="true"></span>
             <span class="player-name">Black</span>
           </div>
           <div id="black-timer" class="timer">10:00</div>
         </div>
-        <div class="timer-card white-card">
+        <div class="timer-card white-card active-player" aria-current="time" aria-label="White player's turn - Active clock">
           <div class="timer-player-info">
             <span class="player-dot white-dot" aria-hidden="true"></span>
             <span class="player-name">White</span>
@@ -47,8 +47,11 @@
           <div id="white-timer" class="timer">10:00</div>
         </div>
       </div>
-      <div id="chessboardmovelogger" aria-label="Move history">
-        <div class="logger-header">Moves</div>
+      <div id="chessboardmovelogger" role="region" aria-labelledby="move-logger-heading" tabindex="0">
+        <div class="logger-header" id="move-logger-heading">
+          <span class="logger-icon" aria-hidden="true">📜</span>
+          <span class="logger-title">Move History</span>
+        </div>
         <ol aria-live="polite" aria-atomic="false" aria-relevant="additions"></ol>
       </div>
     </div>
