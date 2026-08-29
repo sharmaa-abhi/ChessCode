@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Project Documentation
 
-**Last Updated:** July 20, 2026  
+**Last Updated:** August 29, 2026  
 
 > A browser-based chess game built with **vanilla HTML, CSS, and JavaScript** using ES Modules.
 
@@ -19,13 +19,15 @@ ChessCode renders a full 8×8 chess board in the browser with all pieces on corr
 - ✅ **Move highlighting** (green dots for valid moves)
 - ✅ **Capture detection** (red highlights on enemy squares)
 - ✅ **Selection glow** (yellow highlight for selected piece)
-- ✅ **Last-move highlighting** — Source and destination squares highlighted after each move
 - ✅ **Castling** — King-side and Queen-side for both colors
 - ✅ **Pawn promotion** — Modal selection (Queen, Rook, Bishop, Knight)
 - ✅ **Move logger** — Real-time move history panel with chess notation and piece symbols
-- ✅ **Turn indicator** — Visual display of whose turn it is
+- ✅ **Turn indicator** — Header status bar showing whose turn it is
+- ✅ **Rank/file labels** — Board coordinates (a-h, 1-8) displayed on edges
 - ✅ **Efficient lookups** using `keySquareMapper`
 - ✅ **Mobile responsive** — Scales to tablets, phones, and landscape orientations
+- ✅ **App header** — Logo, title, version badge, and live game status
+- ✅ **App footer** — Copyright, documentation link
 
 ## 🚧 Not Yet Implemented
 
@@ -51,11 +53,11 @@ ChessCode renders a full 8×8 chess board in the browser with all pieces on corr
 
 ```
 chessCode/
-├── index.html                 → Entry point (board + timer + logger layout)
-├── index.js                   → Bootstrap (3 steps: init, render, events)
+├── index.html                 → Entry point (header, board, side panel, footer)
+├── index.js                   → Bootstrap (3 steps: init, render, events); exposes state for testing
 ├── server.js                  → Local dev server (Node.js, port 8082)
 ├── style/
-│   ├── style.css             → Desktop styling (board, timers, logger, modals)
+│   ├── style.css             → Desktop styling (header, board, timers, logger, modals, footer)
 │   └── mobile.css            → Mobile responsive layout (tablets, phones, landscape)
 ├── Data/
 │   ├── data.js              → Board builder (Square, squareRow, initGame)
@@ -64,11 +66,11 @@ chessCode/
 │   ├── constant.js          → ROOT_DIV shared constant
 │   ├── commonHelper.js      → Move calculation & capture utilities
 │   ├── logging.js           → Move logger (chess notation UI)
-│   ├── timer.js             → Chess timer system (per-player countdown)
+│   ├── timer.js             → Chess timer system (per-player countdown) + updateActivePlayerTimer()
 │   └── modelCreator.js      → Pawn promotion modal
-├── Render/main.js           → DOM rendering
-├── Events/Global.js         → Event handlers, turn system, game logic
-├── Assets/Pieces/           → Piece images (white/ & black/)
+├── Render/main.js           → DOM rendering (board, pieces, rank/file labels)
+├── Events/Global.js         → Event handlers, turn system, game logic, header status updates
+├── Assets/pieces/           → Piece images (white/ & black/)
 └── docs/                    → Documentation (this folder)
 ```
 
@@ -83,14 +85,15 @@ initGame()                 initGameRender()             globalEvent()
   └─ squareRow() × 8         └─ Creates 64 divs           └─ One listener on ROOT_DIV
       └─ Square() × 8             └─ Places pieces               ├─ Turn validation
                                        └─ pieceRender()           ├─ Piece handler dispatch
-                                                                  ├─ moveElement() → move piece
+                                       └─ rank/file labels        ├─ moveElement() → move piece
                                                                   ├─ changeTurn() → switch turn
+                                                                  ├─ updateHeaderStatus()
                                                                   └─ chessTimer.switchTurn()
 ```
 
 1. **Data:** Build 8×8 board array (`globalData`)
-2. **Render:** Draw squares, place pieces, initialize timers
-3. **Events:** Listen for clicks — validate turn → dispatch to piece handler → execute move → switch turn → switch timer
+2. **Render:** Draw squares, place pieces, add rank/file labels, initialize timers
+3. **Events:** Listen for clicks — validate turn → dispatch to piece handler → execute move → switch turn → switch timer → update header
 
 ---
 
@@ -98,17 +101,17 @@ initGame()                 initGameRender()             globalEvent()
 
 | File | Layer | Responsibility |
 |------|-------|---------------|
-| `index.js` | Entry | Calls `initGame`, `initGameRender`, `globalEvent`; exports `globalData`, `keySquareMapper`, `globalPiece` |
+| `index.js` | Entry | Calls `initGame`, `initGameRender`, `globalEvent`; exports `globalData`, `keySquareMapper`, `globalPiece`, `chessTimer`; exposes state on `window.__chess` for testing |
 | `Data/data.js` | Data | Builds the 8×8 board array in memory (`globalData`) |
 | `Data/pieces.js` | Data | Creates piece objects with image path, piece name, and position |
 | `Helper/constant.js` | Helper | Shares `ROOT_DIV` across all files |
 | `Helper/commonHelper.js` | Helper | Move range calculators, capture detection, ray-blocking utilities |
 | `Helper/logging.js` | Helper | Logs moves to the UI panel with chess notation and Unicode piece symbols |
-| `Helper/timer.js` | Helper | `ChessTimer` class — per-player countdown, low-time warnings, timeout detection |
+| `Helper/timer.js` | Helper | `ChessTimer` class — per-player countdown, low-time warnings, timeout detection; `updateActivePlayerTimer()` — toggles active timer card styling |
 | `Helper/modelCreator.js` | Helper | `ModalCreater` class and `pawnPromotion()` — promotion piece selection UI |
-| `Render/main.js` | Render | Draws squares, places images, handles highlights and moves on screen |
-| `Events/Global.js` | Events | All 12 piece click handlers, turn management (`inTurn`), `changeTurn()`, `moveElement()`, last-move tracking, timer integration |
-| `style/style.css` | Style | Board, timers, logger, modals, last-move highlights, timeout overlay |
+| `Render/main.js` | Render | Draws squares, places images, adds rank/file labels, handles highlights and moves on screen |
+| `Events/Global.js` | Events | All 12 piece click handlers, turn management (`inTurn`), `changeTurn()`, `moveElement()`, `updateHeaderStatus()`, timer integration; exposes `window.getInTurn()`/`window.setInTurn()` for testing |
+| `style/style.css` | Style | Header, board, timers, logger, modals, footer, timeout overlay |
 | `style/mobile.css` | Style | Mobile responsive breakpoints (tablet, phone, landscape) |
 
 ---
@@ -136,8 +139,6 @@ keySquareMapper["e4"]  // → { id: "e4", color: "white", piece: null }
 | `selfHighlightState` | The piece object currently glowing yellow |
 | `moveState` | The piece object that will be moved on next click |
 | `inTurn` | Current turn — `"white"` or `"black"` |
-| `lastMoveFrom` | Square ID where last move originated (for highlighting) |
-| `lastMoveTo` | Square ID where last move landed (for highlighting) |
 
 ---
 
@@ -161,15 +162,13 @@ User clicks a valid move (green dot or red capture)
     │
     ├─ moveElement(moveState, targetId)
     │   ├─ Log move to move logger
-    │   ├─ Clear previous last-move highlights
     │   ├─ Update globalData (vacate old square, place on new)
     │   ├─ Move DOM image element
-    │   ├─ Apply new last-move highlights
     │   ├─ Check for pawn promotion → show modal if applicable
     │   ├─ Check for check (stub)
     │   └─ changeTurn()
     │       ├─ Toggle inTurn (white ↔ black)
-    │       ├─ Update turn indicator UI
+    │       ├─ updateHeaderStatus()
     │       └─ chessTimer.switchTurn()
     └─ Clear highlights and moveState
 ```
@@ -193,14 +192,14 @@ User clicks a valid move (green dot or red capture)
 
 | File | Exports |
 |------|---------| 
-| `index.js` | `globalData`, `keySquareMapper`, `globalPiece` |
+| `index.js` | `globalData`, `keySquareMapper`, `globalPiece`, `chessTimer` |
 | `Data/data.js` | `initGame`, `Square` |
 | `Render/main.js` | `initGameRender`, `clearHighlight`, `selfHighlight`, `globalStateRender`, `globalPiece` |
 | `Events/Global.js` | `globalEvent`, `movePieceFromXtoY`, `moveElement`, `clearPreviousSelfHighlight`, `inTurn` |
 | `Helper/constant.js` | `ROOT_DIV` |
 | `Helper/commonHelper.js` | `checkPieceOfOpponentOnElement`, `checkSquareCaptureId`, `giveXxxHighlightedIds`, `giveXxxCaptureIds`, `checkWhetherPieceExistOrNot` |
 | `Helper/logging.js` | `logMoves` |
-| `Helper/timer.js` | `chessTimer`, `ChessTimer` |
+| `Helper/timer.js` | `ChessTimer`, `updateActivePlayerTimer` |
 | `Helper/modelCreator.js` | `ModalCreater`, `pawnPromotion` |
 
 ---
@@ -219,10 +218,12 @@ User clicks a valid move (green dot or red capture)
 
 - Board: 8×8 CSS grid (600×600px desktop, scales on mobile)
 - Pieces: PNG images (75×75px desktop, proportional on mobile)
-- **Highlights:** Yellow glow (selected) | Green dot (valid move) | Red (capture) | Light yellow (last move)
-- **Timers:** Active glow, low-time red pulse animation
+- **Highlights:** Yellow glow (selected) | Green dot (valid move) | Red (capture)
+- **Timers:** Card-based layout with active-player glow, low-time red pulse animation
 - **Fonts:** Inter (UI), JetBrains Mono (timer, moves)
 - **Theme:** Dark chess.com-inspired (charcoal/olive green)
+- **Header:** App logo, title, version badge, live game status indicator
+- **Footer:** Copyright, documentation link
 
 ## 📝 Code Conventions
 
@@ -231,6 +232,7 @@ User clicks a valid move (green dot or red capture)
 - Use `square`, not `sqaure`
 - Turn tracked via `inTurn` variable ("white" / "black")
 - Piece names follow `COLOR_TYPE` format (e.g., `WHITE_PAWN`, `BLACK_KING`)
+- Asset paths use lowercase: `./Assets/pieces/` (not `./Assets/Pieces/`)
 
 ## 📚 Documentation Index
 
@@ -251,6 +253,7 @@ User clicks a valid move (green dot or red capture)
 - Turn is managed by `inTurn` variable, toggled by `changeTurn()` after each move
 - Timer switches automatically with each turn via `chessTimer.switchTurn()`
 - `movePieceFromXtoY()` in `Global.js` is **replaced** by `moveElement()` — kept only for export
+- `window.__chess` object exposes game state for browser testing
 
 ## 📄 License
 

@@ -1,6 +1,6 @@
 # 🏗️ ChessCode — Architecture & Design
 
-**Last Updated:** July 20, 2026
+**Last Updated:** August 29, 2026
 
 This document covers the system architecture, module layers, data structures, and visual flowcharts for the entire ChessCode project.
 
@@ -19,6 +19,7 @@ This document covers the system architecture, module layers, data structures, an
 │  • globalEvent()   — single delegated click listener │
 │  • 12 piece click handlers (turn-gated)              │
 │  • changeTurn()    — toggle turn, update UI, timer   │
+│  • updateHeaderStatus() — sync header status bar     │
 │  • moveElement()   — execute moves with logging      │
 │  • checkForPawnPromotion() / callBackPawnPromotion()  │
 │  • checkForCheck() — stub for check detection        │
@@ -34,16 +35,18 @@ This document covers the system architecture, module layers, data structures, an
 │ • checkSquare    │                │ • globalStateRender() │
 │   CaptureId      │                │ • selfHighlight()     │
 │ • giveXXX        │                │ • clearHighlight()    │
-│   Ids()          │                │                       │
-│ • giveXXX        │                └────────────┬─────────┘
-│   CaptureIds()   │                             │
-│                  │                             │
+│   Ids()          │                │ • renderHighlight()   │
+│ • giveXXX        │                │ • rank/file labels    │
+│   CaptureIds()   │                │                       │
+│                  │                └────────────┬─────────┘
 │ logging.js       │                             │
 │ • logMoves()     │                             │
 │                  │                             │
 │ timer.js         │                             │
 │ • ChessTimer     │                             │
 │ • switchTurn()   │                             │
+│ • updateActive   │                             │
+│   PlayerTimer()  │                             │
 │                  │                             │
 │ modelCreator.js  │                             │
 │ • ModalCreater   │                             │
@@ -57,6 +60,8 @@ This document covers the system architecture, module layers, data structures, an
 │                                                      │
 │  index.js — globalData (8×8 array) + keySquareMapper │
 │            + globalPiece (named piece refs)           │
+│            + chessTimer (timer instance)              │
+│            + window.__chess (testing API)             │
 │  Data/data.js — Square(), squareRow(), initGame()    │
 │  Data/pieces.js — 12 piece factory functions         │
 │  Helper/constant.js — ROOT_DIV                       │
@@ -73,6 +78,7 @@ graph TD
     B --> C[Data/data.js]
     B --> D[Render/main.js]
     B --> E[Events/Global.js]
+    B --> K[Helper/timer.js]
 
     D --> F[Helper/constant.js]
     D --> G[Data/pieces.js]
@@ -84,7 +90,7 @@ graph TD
     E --> H[Helper/commonHelper.js]
     E --> I[Helper/logging.js]
     E --> J[Helper/modelCreator.js]
-    E --> K[Helper/timer.js]
+    E --> K
 
     H --> B
     J --> G
@@ -109,11 +115,16 @@ sequenceDiagram
     JS->>JS: build keySquareMapper {}
     JS->>Render: initGameRender(globalData)
     Render->>Render: create 64 square divs
+    Render->>Render: add rank/file labels
     Render->>Render: pieceRender(data) — place img tags
     Render->>Render: populate globalPiece (piece refs)
-    JS->>Event: globalEvent()
-    Event->>Event: attach single click listener to ROOT_DIV
+    JS->>Timer: new ChessTimer()
     Timer->>Timer: initialize displays (10:00 / 10:00)
+    Timer->>Timer: updateActivePlayerTimer("white")
+    JS->>Event: globalEvent()
+    Event->>Event: updateHeaderStatus()
+    Event->>Event: attach single click listener to ROOT_DIV
+    JS->>JS: expose window.__chess for testing
 ```
 
 ---
@@ -137,7 +148,7 @@ flowchart TD
     G --> L[whiteQueenClick / blackQueenClick]
     G --> M[whiteKingClick / blackKingClick]
 
-    D --> N[changeTurn + timer switch]
+    D --> N[changeTurn + updateHeaderStatus + timer switch]
 
     B -- span --> O{moveState exists?}
     O -- YES --> P[moveElement to span parent square]
@@ -166,7 +177,7 @@ stateDiagram-v2
     PieceSelected --> Captured : click red capture square
     Moved --> TurnSwitch : move completes
     Captured --> TurnSwitch : capture completes
-    TurnSwitch --> Idle : changeTurn() + timer switch
+    TurnSwitch --> Idle : changeTurn() + updateHeaderStatus() + timer switch
 ```
 
 **Variables:**
@@ -177,8 +188,6 @@ stateDiagram-v2
 | `selfHighlightState` | `piece or null` | Piece object currently glowing yellow |
 | `moveState` | `piece or null` | Piece ready to be moved on next valid click |
 | `inTurn` | `string` | Current turn — `"white"` or `"black"` |
-| `lastMoveFrom` | `string or null` | Square ID of last move origin (for `.lastMoveHighlight`) |
-| `lastMoveTo` | `string or null` | Square ID of last move destination (for `.lastMoveHighlight`) |
 
 ---
 
@@ -186,18 +195,18 @@ stateDiagram-v2
 
 | File | Layer | Responsibility |
 |---|---|---|
-| `index.html` | Entry | Board layout with timer panel, turn indicator, move logger |
-| `index.js` | Bootstrap | Runs 3-step init; exports `globalData`, `keySquareMapper`, `globalPiece` |
+| `index.html` | Entry | App header (logo, status), board container, side panel (timers, move logger), footer |
+| `index.js` | Bootstrap | Runs 3-step init; exports `globalData`, `keySquareMapper`, `globalPiece`, `chessTimer`; exposes `window.__chess` for testing |
 | `Data/data.js` | Data | `Square()`, `squareRow()`, `initGame()` — builds board array |
 | `Data/pieces.js` | Data | 12 piece factory functions with `move` flag for castling-tracked pieces |
 | `Helper/constant.js` | Shared | Exports `ROOT_DIV` |
 | `Helper/commonHelper.js` | Logic | Move range calculators, capture detection, check-detection helpers |
 | `Helper/logging.js` | UI | Move logger with Unicode chess symbols and chess notation |
-| `Helper/timer.js` | Logic/UI | `ChessTimer` class — countdown, timeout, low-time warnings |
+| `Helper/timer.js` | Logic/UI | `ChessTimer` class — countdown, timeout, low-time warnings; `updateActivePlayerTimer()` — toggles timer card active state |
 | `Helper/modelCreator.js` | UI | Pawn promotion modal with piece selection |
-| `Render/main.js` | Render | All DOM operations: draw, highlight, move, clear |
-| `Events/Global.js` | Events | All click handlers, turn management, move execution, timer integration |
-| `style/style.css` | Style | Board, timers, logger, modals, last-move highlights, timeout overlay |
+| `Render/main.js` | Render | All DOM operations: draw, highlight, move, clear, rank/file labels |
+| `Events/Global.js` | Events | All click handlers, turn management, move execution, `updateHeaderStatus()`, timer integration; exposes `window.getInTurn()`/`window.setInTurn()` |
+| `style/style.css` | Style | Header, board, timers, logger, modals, footer, timeout overlay |
 | `style/mobile.css` | Style | Mobile responsive breakpoints (tablet, phone, landscape) |
 
 ---
@@ -283,7 +292,7 @@ Created by factory functions in `Data/pieces.js`.
 ```js
 {
   current_Position: "e2",            // String — current square ID (updated on move)
-  img:              "./Assets/Pieces/white/pawn.png",  // Asset path
+  img:              "./Assets/pieces/white/pawn.png",  // Asset path (lowercase 'pieces')
   piece_name:       "WHITE_PAWN",    // Identifier — format: COLOR_TYPE
 }
 ```
@@ -377,7 +386,7 @@ sequenceDiagram
 
 ```
 Assets/
-  Pieces/
+  pieces/
     white/
       pawn.png
       rook.png
@@ -394,7 +403,9 @@ Assets/
       king.png
 ```
 
-Path format in piece objects: `"./Assets/Pieces/{color}/{type}.png"`
+Path format in piece objects: `"./Assets/pieces/{color}/{type}.png"`
+
+> ⚠️ Note: The folder is lowercase `pieces/`, not `Pieces/`.
 
 ---
 
@@ -413,12 +424,14 @@ flowchart TD
     E --> F[(globalData\n8×8 board array in memory)]
 
     F --> G["initGameRender(globalData)\nRender/main.js"]
-    G --> H[Create 64 square divs\nand add to screen]
+    G --> H[Create 64 square divs\nwith rank/file labels\nand add to screen]
     H --> I[Assign pieces to squares\nusing pieces.js factories]
     I --> J["pieceRender(data)\nAdd piece images to DOM"]
 
-    J --> K["globalEvent()\nEvents/Global.js"]
-    K --> L([✅ Game is Ready!\nWaiting for clicks...])
+    J --> K0["new ChessTimer()\nInitialize timers"]
+    K0 --> K["globalEvent()\nEvents/Global.js"]
+    K --> K1["updateHeaderStatus()\nSync header display"]
+    K1 --> L([✅ Game is Ready!\nWaiting for clicks...])
 
     style A fill:#2d6a4f,color:#fff
     style L fill:#2d6a4f,color:#fff
@@ -520,8 +533,8 @@ flowchart TD
     B --> C[Find new target square in globalData\nSet piece on it]
     C --> D["clearHighlight()\nRemove all green dots from board"]
     D --> E[Remove yellow glow from old square]
-    E --> F[Copy old square's HTML\ninto new square's HTML on screen]
-    F --> G[Clear old square's HTML]
+    E --> F[Move piece img element\nto new square in DOM]
+    F --> G[Clear old square's piece img]
     G --> H[Update piece.current_Position = targetId]
     H --> I([✅ Move Complete!])
 
@@ -545,25 +558,28 @@ flowchart LR
     subgraph HELPER ["🔧 Helper Layer"]
         CONST["constant.js\nROOT_DIV"]
         COMMON["commonHelper.js\nMove calculation\nfunctions"]
+        TIMER["timer.js\nChessTimer\nupdateActivePlayerTimer"]
     end
 
     subgraph RENDER ["🖥️ Render Layer"]
-        MAIN["main.js\ninitGameRender\npieceRender\nglobalStateRender\nmoveElement\nselfHighlight\nclearHighlight"]
+        MAIN["main.js\ninitGameRender\npieceRender\nglobalStateRender\nmoveElement\nselfHighlight\nclearHighlight\nrank/file labels"]
     end
 
     subgraph EVENTS ["🖱️ Event Layer - ALL HANDLERS ✅"]
-        GLOB["Global.js\n12 piece handlers\n(white & black)\nAll wired to globalEvent"]
+        GLOB["Global.js\n12 piece handlers\nupdateHeaderStatus\nAll wired to globalEvent"]
     end
 
     IDX -->|"calls initGame()"| DJS
     IDX -->|"calls initGameRender()"| MAIN
     IDX -->|"calls globalEvent()"| GLOB
+    IDX -->|"creates ChessTimer"| TIMER
 
     MAIN -->|"uses piece factories"| PJS
     MAIN -->|"uses ROOT_DIV"| CONST
     GLOB -->|"uses ROOT_DIV"| CONST
     GLOB -->|"calls render functions"| MAIN
     GLOB -->|"calls move calculators"| COMMON
+    GLOB -->|"calls updateActivePlayerTimer"| TIMER
     COMMON -->|"reads globalData"| IDX
     MAIN -->|"reads globalData"| IDX
 
@@ -579,7 +595,7 @@ flowchart LR
 ## Pawn Click Summary Table
 
 | Step | White Pawn | Black Pawn |
-|------|-----------|-----------|
+|------|-----------|-----------| 
 | 1 | Check if same pawn clicked | Check if same pawn clicked |
 | 2 | Check if square is capture target | Check if square is capture target |
 | 3 | Deselect (if same) or Move (if capture) | Deselect (if same) or Move (if capture) |
@@ -594,7 +610,7 @@ flowchart LR
 
 | Flow | Triggered By | Key Functions Called |
 |------|-------------|---------------------|
-| **App Start** | Browser loads page | `initGame` → `initGameRender` → `globalEvent` |
+| **App Start** | Browser loads page | `initGame` → `initGameRender` → `new ChessTimer()` → `globalEvent` → `updateHeaderStatus` |
 | **Click ANY piece img** | User clicks pawn, rook, bishop, knight, queen, or king | Dispatches to appropriate handler (whitePawnClick, whiteRookClick, etc.) |
 | **Click green dot** | User clicks valid move square | `moveElement` → `clearHighlight` → `globalStateRender` |
 | **Any piece selected** | Any click handler runs | `clearPreviousSelfHighlight` → `selfHighlight` → `globalStateRender` |
