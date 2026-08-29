@@ -23,7 +23,7 @@ All comprehensive documentation lives in the [`docs/`](./docs/) directory:
 | [Architecture.md](./docs/Architecture.md) | System design, module layers, data structures, flowcharts |
 | [Implementation.md](./docs/Implementation.md) | All 70+ functions + piece movement rules reference |
 | [UI_UX.md](./docs/UI_UX.md) | Visual design system, colors, CSS classes, responsive layout |
-| [Bugs_and_Audit.md](./docs/Bugs_and_Audit.md) | Bug history (13 found, 10 fixed, 3 outstanding), code quality audit |
+| [Bugs_and_Audit.md](./docs/Bugs_and_Audit.md) | Bug history (13 found, 11 fixed, 2 non-blocking), code quality audit |
 | [Final_Report.md](./docs/Final_Report.md) | Feature completion status matrix, roadmap |
 | [CHANGELOG.md](./docs/CHANGELOG.md) | Chronological update history |
 | [Future_Implementation.md](./docs/Future_Implementation.md) | Roadmap for upcoming features & check detection design |

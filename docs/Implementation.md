@@ -212,7 +212,7 @@ Promotion check:  id?.includes("8")  (white)
                   id?.includes("1")  (black)
 ```
 
-> ⚠️ **Known Issue:** The promotion check uses `id?.includes("8")` instead of `id?.[1] === "8"`, which could match column positions containing "8" in rare edge cases. See Bugs_and_Audit.md #10.
+> ⚠️ **Known Issue:** The promotion check uses `id?.includes("8")` instead of `id?.[1] === "8"`. Since square IDs are always 2 characters (e.g., "a8"), `includes("8")` works correctly in practice, but the pattern is fragile. See Bugs_and_Audit.md #10.
 
 ---
 

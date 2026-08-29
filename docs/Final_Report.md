@@ -1,6 +1,6 @@
 # ✅ ChessCode — Final Report
 
-**Last Updated:** July 20, 2026  
+**Last Updated:** August 29, 2026  
 **Project Phase:** Fully playable chess with timers, castling, and pawn promotion
 
 ---
@@ -62,7 +62,7 @@
 | Check detection | ⏳ Stub | `checkForCheck()` exists but doesn't validate king safety |
 | Checkmate detection | ❌ Not Implemented | No game-end logic |
 | Stalemate detection | ❌ Not Implemented | No draw detection |
-| Timer timeout | ✅ Complete | Game ends with winner declared overlay |
+| Timer timeout | ✅ Complete | Game ends with winner declared overlay + restart button |
 
 ---
 
@@ -98,13 +98,16 @@
 | `docs/Bugs_and_Audit.md` | ✅ Current |
 | `docs/Final_Report.md` | ✅ Current |
 | `docs/CHANGELOG.md` | ✅ Current |
+| `docs/Future_Implementation.md` | ✅ Current |
 
 ---
 
 ## ⚠️ Known Issues
 
-1. **Incomplete `checkForCheck()`** — Stub function, doesn't validate king safety
-2. **`movePieceFromXtoY()` is dead code** — Replaced by `moveElement()`, kept for export compatibility
+1. **`if (inTurn == "X");` semicolons in switch cases (Bug #8)** — Dead code; turn enforcement works via `captureInTurn` guard above the switch. Should be cleaned up.
+2. **`checkForPawnPromotion()` uses `includes()` (Bug #10)** — Works for standard 2-char square IDs but is a fragile pattern. Should use `id?.[1] === "8"` instead.
+3. **Incomplete `checkForCheck()`** — Stub function, doesn't validate king safety
+4. **`movePieceFromXtoY()` is dead code** — Replaced by `moveElement()`, kept for export compatibility
 
 ---
 
@@ -141,11 +144,12 @@
 - ✅ Castling (both sides, both colors)
 - ✅ Pawn promotion (modal selection)
 - ✅ Move logger with chess notation
-- ✅ Last-move highlighting
-- ✅ Premium dark theme UI
+- ✅ Premium dark theme UI with header/footer
 - ✅ Mobile responsive layout
+- ✅ Comprehensive documentation (8 docs files)
 
 **What's Missing (~10%):**
 - ⏳ **Check/Checkmate detection** — Core chess rule enforcement
 - ⏳ **Stalemate/draw** — Game-end conditions
 - ⏳ **En passant** — Special pawn rule
+- ⚠️ **2 non-blocking code quality issues** — See Bugs_and_Audit.md

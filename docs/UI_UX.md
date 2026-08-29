@@ -1,6 +1,6 @@
 # 🎨 ChessCode — UI/UX Design
 
-**Last Updated:** July 20, 2026
+**Last Updated:** August 29, 2026
 
 Covers: Visual design system, color palette, CSS class system, board layout, timer/logger UI, and the highlighting state model.
 
@@ -53,25 +53,32 @@ All sizes scale proportionally using `calc()` with viewport units:
 
 **Desktop:**
 ```
-┌─────────────────────────────────────────────────────────┐
-│  body#flex (display: flex, gap: 24px)                   │
-│                                                          │
-│  ┌────────────────────┐  ┌────────────────────────────┐ │
-│  │  .board-container  │  │  .side-panel               │ │
-│  │                    │  │                            │ │
-│  │  ┌──────────────┐  │  │  ┌──────────────────────┐ │ │
-│  │  │ #black-timer │  │  │  │ #turn-indicator      │ │ │
-│  │  └──────────────┘  │  │  │  ⚪ White's Turn     │ │ │
-│  │  ┌──────────────┐  │  │  └──────────────────────┘ │ │
-│  │  │    #root     │  │  │  ┌──────────────────────┐ │ │
-│  │  │  (8×8 board) │  │  │  │ #chessboardmovelogger│ │ │
-│  │  │              │  │  │  │  ┌─ Moves ────────┐  │ │ │
-│  │  └──────────────┘  │  │  │  │ 1. e2→e4  e7→e5│  │ │ │
-│  │  ┌──────────────┐  │  │  │  │ 2. ...         │  │ │ │
-│  │  │ #white-timer │  │  │  │  └────────────────┘  │ │ │
-│  │  └──────────────┘  │  │  └──────────────────────┘ │ │
-│  └────────────────────┘  └────────────────────────────┘ │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│  .app-header (sticky, #game-status turn indicator)           │
+├──────────────────────────────────────────────────────────────┤
+│  #flex (display: flex, gap: 24px)                            │
+│                                                              │
+│  ┌────────────────────┐  ┌─────────────────────────────────┐ │
+│  │  .board-container  │  │  .side-panel                    │ │
+│  │                    │  │                                 │ │
+│  │  ┌──────────────┐  │  │  ┌───────────────────────────┐ │ │
+│  │  │    #root     │  │  │  │ .timers-widget            │ │ │
+│  │  │  (8×8 board) │  │  │  │ ┌───────────┬───────────┐ │ │ │
+│  │  │              │  │  │  │ │● Black    │○ White    │ │ │ │
+│  │  │              │  │  │  │ │  10:00    │  10:00    │ │ │ │
+│  │  │              │  │  │  │ └───────────┴───────────┘ │ │ │
+│  │  │              │  │  │  └───────────────────────────┘ │ │
+│  │  │              │  │  │  ┌───────────────────────────┐ │ │
+│  │  │              │  │  │  │ #chessboardmovelogger     │ │ │
+│  │  │              │  │  │  │  ┌─ Moves ────────────┐   │ │ │
+│  │  │              │  │  │  │  │ 1. e2→e4   e7→e5   │   │ │ │
+│  │  │              │  │  │  │  │ 2. ...             │   │ │ │
+│  │  │              │  │  │  │  └────────────────────┘   │ │ │
+│  │  └──────────────┘  │  │  └───────────────────────────┘ │ │
+│  └────────────────────┘  └─────────────────────────────────┘ │
+├──────────────────────────────────────────────────────────────┤
+│  .app-footer                                                 │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 **Mobile (≤600px):** Board and logger stack vertically (flex-direction: column).
@@ -100,20 +107,23 @@ All sizes scale proportionally using `calc()` with viewport units:
 | `.captureColor` | Square `div` | Enemy piece in range | Red-orange background `#EE4b2b` |
 | `.lastMoveHighlight` | Square `div` | After move completes | Translucent yellow on source + destination |
 
+### Status Indicator Classes
+
+| Class | Applied To | Trigger | Effect |
+|---|---|---|---|
+| `.status-indicator` | `#game-status` div | Always | Base pill styling in header |
+| `.status-indicator.white-turn` | `#game-status` div | White's turn | Cream border + glow + cream status dot |
+| `.status-indicator.black-turn` | `#game-status` div | Black's turn | Green border + glow + green status dot |
+
 ### Timer Classes
 
 | Class | Applied To | Trigger | Effect |
 |---|---|---|---|
-| `.timer` | Timer `div` | Always | Base timer styling |
-| `.active-timer` | Timer `div` | Current player's turn | Green border, bright text, glow |
-| `.low-time` | Timer `div` | < 30 seconds remaining | Red background, pulsing text |
-
-### Turn Indicator Classes
-
-| Class | Applied To | Trigger | Effect |
-|---|---|---|---|
-| `.turn-dot-white` | `#turn-dot` | White's turn | White dot with glow |
-| `.turn-dot-black` | `#turn-dot` | Black's turn | Dark dot with border |
+| `.timer-card` | Timer card `div` | Always | Base timer card styling |
+| `.timer-card.active-player` | Timer card `div` | Current player's turn | Elevated, color-matched border + glow |
+| `.timer` | Timer `div` | Always | Base timer text styling (JetBrains Mono) |
+| `.timer.active` | Timer `div` | Current player counting | Bright white text with glow |
+| `.timer.low-time` | Timer `div` | < 30 seconds remaining | Red text, pulsing glow animation |
 
 ### DOM Children (highlight dot)
 
@@ -164,19 +174,16 @@ flowchart TD
 
 ```
 ┌─────────────────────────────────┐
-│  Black         10:00            │  ← #black-timer (top of board)
-├─────────────────────────────────┤
-│                                 │
-│          8×8 Board              │
-│                                 │
-├─────────────────────────────────┤
-│  White         09:42            │  ← #white-timer (bottom, .active-timer)
+│  .timers-widget (in side panel)    │
+│  ┌─────────────┐┌─────────────┐  │
+│  │● Black 10:00││○ White 10:00│  │
+│  └─────────────┘└─────────────┘  │
 └─────────────────────────────────┘
 ```
 
-- **Active timer** has green accent, bright white text with subtle glow
-- **Low-time** (<30s) pulses red with `animation: pulse-time 1s infinite`
-- **Timeout** shows full-screen overlay with winner announced
+- **Active timer card** has color-matched border (cream for white, green for black), elevated shadow, bright text
+- **Low-time** (<30s) pulses red with `animation: pulse-red 1s infinite alternate`
+- **Timeout** shows full-screen overlay with winner announced and "Restart Game" button
 
 ---
 

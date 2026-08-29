@@ -1,8 +1,8 @@
 # 🪲 ChessCode — Bugs & Code Audit
 
-**Last Updated:** July 20, 2026  
+**Last Updated:** August 29, 2026  
 **Status:** All critical bugs fixed; game fully playable  
-**Total Bugs Found:** 13 | **Total Fixed:** 13 | **Outstanding:** 0
+**Total Bugs Found:** 13 | **Total Fixed:** 11 | **Outstanding:** 2 (non-blocking)
 
 ---
 
@@ -17,9 +17,9 @@
 | 5 | Unreachable code | 🟡 Medium | ✅ Fixed |
 | 6 | Unused renderHighlight() | 🟢 Low | ✅ Removed |
 | 7 | Unused highlightState | 🟢 Low | ✅ Kept |
-| 8 | Turn enforcement broken | 🔴 Critical | ✅ Fixed (July 4) |
+| 8 | Turn enforcement `if` semicolons | 🟡 Medium | ⚠️ Still present (harmless — turn guard above switch handles it) |
 | 9 | Black king can't capture | 🔴 Critical | ✅ Fixed (July 4) |
-| 10 | Pawn promotion wrong rank | 🟠 High | ✅ Fixed (July 4) |
+| 10 | Pawn promotion wrong rank | 🟠 High | ⚠️ Not fixed — still uses `includes("8")` |
 | 11 | Pawn storage overwritten | 🟡 Medium | ✅ Fixed (July 4) |
 | 12 | Dead Greet() function | 🟢 Low | ✅ Removed (July 4) |
 | 13 | Dead renderHighlight() | 🟢 Low | ✅ Removed (July 4) |
@@ -28,13 +28,15 @@
 
 ## 🟢 Bugs Fixed (July 4, 2026)
 
-### Bug #8: Turn Enforcement Completely Broken
-**Type:** Critical Logic Error  
-**Location:** `Events/Global.js` — `globalEvent()` switch statement
+### Bug #8: Turn Enforcement `if` Semicolons (Still Present)
+**Type:** Dead Code (originally Critical)  
+**Location:** `Events/Global.js` — `globalEvent()` switch statement (lines ~1363–1411)
 
-**Problem:** All 12 cases in the switch statement had `if (inTurn == "white");` with a **semicolon** at the end. This made the `if` a no-op — every piece handler executed regardless of turn.
+**Problem:** All 12 cases in the switch statement have `if (inTurn == "white");` or `if (inTurn == "black");` with a **semicolon** at the end. This makes each `if` a no-op — the piece handler runs regardless of what the `if` evaluates.
 
-**Fix:** Removed the broken `if` statements entirely. Turn validation is already handled by the `captureInTurn` guard above the switch statement.
+**Why it works anyway:** Turn enforcement is handled by the `captureInTurn` guard *above* the switch statement (lines ~1354–1360), which intercepts cross-turn clicks on opponent pieces. The `if` semicolons are effectively dead code.
+
+**Status:** ⚠️ Still present in the codebase. Should be cleaned up but is non-blocking.
 
 ---
 
@@ -48,13 +50,15 @@
 
 ---
 
-### Bug #10: Pawn Promotion Matches Wrong Ranks
+### Bug #10: Pawn Promotion Matches Wrong Ranks (Not Yet Fixed)
 **Type:** Logic Error  
-**Location:** `Events/Global.js` — `checkForPawnPromotion()`
+**Location:** `Events/Global.js` — `checkForPawnPromotion()` (lines ~102–121)
 
-**Problem:** Used `id?.includes("8")` — `String.includes()` matches anywhere in the string, not just the rank digit.
+**Problem:** Uses `id?.includes("8")` — `String.includes()` matches anywhere in the string, not just the rank digit. For example, a pawn on `h4` would not false-match since no single-digit column contains "8", but the pattern is fragile.
 
-**Fix:** Changed to `id?.[1] === "8"` and `id?.[1] === "1"` which specifically checks only the rank digit.
+**Recommended Fix:** Change to `id?.[1] === "8"` and `id?.[1] === "1"` to specifically check only the rank digit.
+
+**Status:** ⚠️ Not yet applied. The current code still uses `includes()`. In practice, since square IDs are always 2 characters (e.g., "a8", "h1"), `includes("8")` only matches when the rank is 8 — so it works correctly for standard play.
 
 ---
 
@@ -100,7 +104,7 @@ Duplicate `if (piece == selfHighlightState)` check was unreachable. Fixed: Remov
 
 # 🔍 Code Audit Report
 
-**Last Audit:** July 4, 2026  
+**Last Audit:** August 29, 2026  
 **Status:** ✅ Code compiles and runs — all critical issues resolved
 
 ---
@@ -116,7 +120,7 @@ Duplicate `if (piece == selfHighlightState)` check was unreachable. Fixed: Remov
 | keySquareMapper | ✅ Correct — properly built in `index.js` and used everywhere |
 | Pawn movement logic | ✅ Correct — white moves up (+), black moves down (-) |
 | Event delegation | ✅ Correct — single listener on ROOT_DIV properly routes all clicks |
-| Asset paths | ✅ Valid — all `./Assets/Pieces/` paths reference existing images |
+| Asset paths | ✅ Valid — all `./Assets/pieces/` paths reference existing images |
 
 ---
 
@@ -124,11 +128,11 @@ Duplicate `if (piece == selfHighlightState)` check was unreachable. Fixed: Remov
 
 | Issue | Severity | Status |
 |-------|----------|--------|
-| String `"null"` instead of actual `null` in `data.js` | 🟡 Medium | Could fix — use `null` instead of `"null"` |
-| Dead commented code block in `constant.js` | 🟡 Medium | Could clean up — ~60 lines of old code |
-| Variable name typo `sqaureId` in `commonHelper.js` | 🟠 High | Should fix — `sqaureId` → `squareId` |
+| `if (inTurn == "X");` semicolons in switch cases (Bug #8) | 🟡 Medium | Dead code — turn guard above switch handles enforcement |
+| `checkForPawnPromotion()` uses `includes()` (Bug #10) | 🟡 Medium | Works for standard IDs but fragile pattern |
+| Variable name typo `sqaureId` in `commonHelper.js` comment | 🟢 Low | Function param uses correct `squareId` |
 | `movePieceFromXtoY()` is dead code | 🟢 Low | Replaced by `moveElement()`, kept for export |
-| `highlightState` variable never checked | 🟢 Low | Infrastructure for future features |
+| `renderHighlight()` in `main.js` not used in main flow | 🟢 Low | Utility function, not called by any handler |
 
 ---
 

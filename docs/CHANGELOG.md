@@ -4,6 +4,20 @@ All notable changes to this project are documented chronologically.
 
 ---
 
+## August 29, 2026
+
+### Documentation Audit & Sync
+- Updated timestamps across all 8 markdown files in `docs/` and root `README.md`
+- **Bugs_and_Audit.md:** Corrected Bug #8 and #10 descriptions to match actual codebase state — `if` semicolons still present (harmless dead code), pawn promotion still uses `includes("8")`
+- **UI_UX.md:** Fixed page layout diagram (timers are in side panel, not around the board), corrected CSS class names (`.status-indicator.white-turn`/`.black-turn` instead of non-existent `.turn-dot-*` classes), updated timer class documentation
+- **Final_Report.md:** Updated known issues list, added `Future_Implementation.md` to documentation status table
+- **Implementation.md:** Clarified pawn promotion known issue description
+- **Future_Implementation.md:** Updated timestamp
+- **CHANGELOG.md:** Added this entry
+- Verified all documentation references against current codebase module signatures and data structures
+
+---
+
 ## July 25, 2026
 
 ### Project Completion Milestone

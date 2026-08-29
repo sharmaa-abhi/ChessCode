@@ -1,6 +1,6 @@
 # 🚀 ChessCode — Future Implementation Roadmap
 
-**Last Updated:** July 20, 2026  
+**Last Updated:** August 29, 2026  
 **Current Completion:** ~90% — Fully playable 2-player chess
 
 This document outlines all planned features, their priority, estimated effort, and implementation approach.
