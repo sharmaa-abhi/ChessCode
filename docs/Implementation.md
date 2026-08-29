@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Implementation Reference
 
-**Last Updated:** July 20, 2026
+**Last Updated:** August 29, 2026
 
 This document covers all functions (with quick reference), piece movement rules, and implementation details.
 
@@ -38,7 +38,7 @@ This document covers all functions (with quick reference), piece movement rules,
 ## `Helper/constant.js`
 
 | # | Thing | What It Does |
-|---|-------|--------------|
+|---|-------|--------------| 
 | 16 | `ROOT_DIV` | Grabs `<div id="root">` from HTML so all files can use it |
 
 ## `Helper/commonHelper.js` — Utilities
@@ -65,60 +65,72 @@ This document covers all functions (with quick reference), piece movement rules,
 | # | Function/Class | What It Does |
 |---|----------------|--------------|
 | 31 | `ChessTimer` class | Per-player countdown timer with timeout detection |
-| 32 | `chessTimer.switchTurn()` | Switch active clock to the other player |
-| 33 | `chessTimer.stop()` | Stop the timer entirely |
-| 34 | `chessTimer.reset()` | Reset both clocks to 10:00 |
-| 35 | `chessTimer._onTimeout(color)` | Handle flag fall — show game-over overlay |
+| 32 | `chessTimer.start()` | Start the countdown timer |
+| 33 | `chessTimer.switchTurn()` | Switch active clock to the other player (starts timer on first call) |
+| 34 | `chessTimer.stop()` | Stop the timer entirely |
+| 35 | `chessTimer.reset()` | Reset both clocks to 10:00 |
+| 36 | `chessTimer.formatTime(seconds)` | Format seconds as `M:SS` string |
+| 37 | `chessTimer.updateUI()` | Update timer display elements and active/low-time classes |
+| 38 | `chessTimer._onTimeout(color)` | Handle flag fall — show game-over overlay |
+| 39 | `updateActivePlayerTimer(currentTurn)` | Toggle `.active-player` class on timer cards and update ARIA attributes |
 
 ## `Helper/logging.js` — Move Logger
 
 | # | Function | What It Does |
 |---|----------|--------------|
-| 36 | `logMoves(move, turn)` | Adds move entry to moves panel with chess notation and Unicode symbols |
+| 40 | `logMoves(move, turn)` | Adds move entry to moves panel with chess notation and Unicode symbols |
 
 ## `Helper/modelCreator.js` — Pawn Promotion
 
 | # | Function/Class | What It Does |
 |---|----------------|--------------|
-| 37 | `ModalCreater` class | Creates modal overlays that blur the board |
-| 38 | `pawnPromotion(color, callback, id)` | Shows promotion modal with 4 piece choices |
+| 41 | `ModalCreater` class | Creates modal overlays that blur the board |
+| 42 | `pawnPromotion(color, callback, id)` | Shows promotion modal with 4 piece choices |
 
 ## `Render/main.js` — Drawing on Screen
 
 | # | Function | What It Does |
 |---|----------|--------------|
-| 39 | `initGameRender(data)` | Draws all 64 squares and places pieces. Stores piece refs in `globalPiece` |
-| 40 | `pieceRender(data)` | Puts piece `<img>` elements on squares |
-| 41 | `globalStateRender()` | Adds or removes highlight dots on squares |
-| 42 | `selfHighlight(piece)` | Adds yellow glow to the selected piece |
-| 43 | `clearHighlight()` | Removes ALL green dots and red highlights |
+| 43 | `initGameRender(data)` | Draws all 64 squares with rank/file labels, places pieces. Stores piece refs in `globalPiece` |
+| 44 | `pieceRender(data)` | Puts piece `<img>` elements on squares |
+| 45 | `globalStateRender()` | Adds or removes highlight dots on squares |
+| 46 | `selfHighlight(piece)` | Adds yellow glow to the selected piece |
+| 47 | `clearHighlight()` | Removes ALL green dots and red highlights |
+| 48 | `renderHighlight(squareId)` | Adds a green dot to a specific square (utility, not used in main flow) |
 
 ## `Events/Global.js` — Handling Clicks & Game Logic
 
 | # | Function | What It Does |
 |---|----------|--------------|
-| 44 | `changeTurn()` | Toggle `inTurn` (white↔black), update UI, switch timer |
-| 45 | `checkForCheck()` | Stub — calculates attack squares but doesn't validate yet |
-| 46 | `checkForPawnPromotion(piece, id)` | Returns true if pawn reached final rank |
-| 47 | `callBackPawnPromotion(piece, id)` | Callback for modal — replaces pawn with selected piece |
-| 48 | `moveElement(piece, id, castle)` | Main move function — logs, updates data, moves DOM, handles castling, checks promotion, changes turn |
-| 49 | `captureInTurn(square)` | Handles clicking opponent piece on capture-highlighted square |
-| 50 | `clearHighlightLocal()` | Removes all green dots + sets highlightState to false |
-| 51 | `movePieceFromXtoY(from, to)` | Old move function — replaced by `moveElement()`, kept for export |
-| 52 | `whitePawnClick(square)` | White pawn handler — forward moves + diagonal captures |
-| 53 | `blackPawnClick(square)` | Black pawn handler — forward moves downward |
-| 54 | `whiteBishopClick(square)` | Diagonal moves + captures |
-| 55 | `blackBishopClick(square)` | Diagonal moves + captures |
-| 56 | `whiteRookClick(square)` | Straight-line moves + captures |
-| 57 | `blackRookClick(square)` | Straight-line moves + captures |
-| 58 | `whiteKnightClick(square)` | L-shaped moves + captures |
-| 59 | `blackKnightClick(square)` | L-shaped moves + captures |
-| 60 | `whiteQueenClick(square)` | All 8 directions + captures |
-| 61 | `blackQueenClick(square)` | All 8 directions + captures |
-| 62 | `whiteKingClick(square)` | 1-square all directions + castling |
-| 63 | `blackKingClick(square)` | 1-square all directions + castling |
-| 64 | `globalEvent()` | Main click listener — validates turn, dispatches to handler |
-| 65 | `clearPreviousSelfHighlight(piece)` | Removes yellow glow from previously selected piece |
+| 49 | `updateHeaderStatus()` | Sync header `#game-status` and `#status-text` with current `inTurn`; calls `updateActivePlayerTimer()` |
+| 50 | `changeTurn()` | Toggle `inTurn` (white↔black), call `updateHeaderStatus()`, switch timer |
+| 51 | `checkForCheck()` | Stub — calculates attack squares but doesn't validate yet |
+| 52 | `checkForPawnPromotion(piece, id)` | Returns true if pawn reached final rank |
+| 53 | `callBackPawnPromotion(piece, id)` | Callback for modal — replaces pawn with selected piece |
+| 54 | `moveElement(piece, id, castle)` | Main move function — logs, updates data, moves DOM, handles castling, checks promotion, changes turn |
+| 55 | `captureInTurn(square)` | Handles clicking opponent piece on capture-highlighted square |
+| 56 | `clearHighlightLocal()` | Removes all green dots + sets highlightState to false |
+| 57 | `movePieceFromXtoY(from, to)` | Old move function — replaced by `moveElement()`, kept for export |
+| 58 | `whitePawnClick(square)` | White pawn handler — forward moves + diagonal captures |
+| 59 | `blackPawnClick(square)` | Black pawn handler — forward moves downward |
+| 60 | `whiteBishopClick(square)` | Diagonal moves + captures |
+| 61 | `blackBishopClick(square)` | Diagonal moves + captures |
+| 62 | `whiteRookClick(square)` | Straight-line moves + captures |
+| 63 | `blackRookClick(square)` | Straight-line moves + captures |
+| 64 | `whiteKnightClick(square)` | L-shaped moves + captures |
+| 65 | `blackKnightClick(square)` | L-shaped moves + captures |
+| 66 | `whiteQueenClick(square)` | All 8 directions + captures |
+| 67 | `blackQueenClick(square)` | All 8 directions + captures |
+| 68 | `whiteKingClick(square)` | 1-square all directions + castling |
+| 69 | `blackKingClick(square)` | 1-square all directions + castling |
+| 70 | `globalEvent()` | Main click listener — calls `updateHeaderStatus()`, validates turn, dispatches to handler |
+| 71 | `clearPreviousSelfHighlight(piece)` | Removes yellow glow from previously selected piece |
+
+### Testing APIs (exposed on `window`)
+| # | API | What It Does |
+|---|-----|--------------|
+| 72 | `window.getInTurn()` | Returns current turn value |
+| 73 | `window.setInTurn(val)` | Sets turn and updates header status |
 
 ---
 
@@ -196,9 +208,11 @@ col2 = charCode(col + 1) + (row + 1)  // right diagonal
 When a pawn reaches the final rank (row 8 for white, row 1 for black), `checkForPawnPromotion()` returns `true`. After the move is executed, `pawnPromotion(color, callback, id)` shows a modal overlay with 4 choices: Queen, Rook, Bishop, Knight.
 
 ```
-Promotion check:  id?.[1] === "8"  (white)
-                  id?.[1] === "1"  (black)
+Promotion check:  id?.includes("8")  (white)
+                  id?.includes("1")  (black)
 ```
+
+> ⚠️ **Known Issue:** The promotion check uses `id?.includes("8")` instead of `id?.[1] === "8"`, which could match column positions containing "8" in rare edge cases. See Bugs_and_Audit.md #10.
 
 ---
 
@@ -357,9 +371,11 @@ You open the game
   │
   ├── Board data is made (8×8 grid of square objects)
   │
-  ├── Board is drawn on screen (64 square divs + piece images)
+  ├── Board is drawn on screen (64 square divs + rank/file labels + piece images)
   │
   ├── Timers initialized (10:00 for both players)
+  │
+  ├── Header status set ("White's Turn")
   │
   └── Click listener starts watching...
 
@@ -372,8 +388,8 @@ It's White's turn (timer not started yet)
 You click a green dot or red capture square
   ├── Piece moves there ♟️
   ├── Move is logged 📝
-  ├── Previous squares get last-move highlight 🟨
   ├── Turn switches to Black ⬛
+  ├── Header updates ("Black's Turn")
   ├── Black's timer starts counting down ⏱️
   └── Highlights clear
 
@@ -385,4 +401,4 @@ Timer reaches 0:00? ⏰
   └── Game over! Winner declared on time.
 ```
 
-> 💡 **Quick Rule:** Every function either **builds data**, **draws on screen**, **responds to a click**, or **manages game state (turn/timer)**. That's it!
+> 💡 **Quick Rule:** Every function either **builds data**, **draws on screen**, **responds to a click**, or **manages game state (turn/timer/header)**. That's it!
