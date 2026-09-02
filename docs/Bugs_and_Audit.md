@@ -1,6 +1,6 @@
 # 🪲 ChessCode — Bugs & Code Audit
 
-**Last Updated:** August 29, 2026  
+**Last Updated:** September 2, 2026
 **Status:** All critical bugs fixed; game fully playable  
 **Total Bugs Found:** 13 | **Total Fixed:** 11 | **Outstanding:** 2 (non-blocking)
 
@@ -104,7 +104,7 @@ Duplicate `if (piece == selfHighlightState)` check was unreachable. Fixed: Remov
 
 # 🔍 Code Audit Report
 
-**Last Audit:** August 29, 2026  
+**Last Audit:** September 2, 2026
 **Status:** ✅ Code compiles and runs — all critical issues resolved
 
 ---
@@ -132,7 +132,6 @@ Duplicate `if (piece == selfHighlightState)` check was unreachable. Fixed: Remov
 | `checkForPawnPromotion()` uses `includes()` (Bug #10) | 🟡 Medium | Works for standard IDs but fragile pattern |
 | Variable name typo `sqaureId` in `commonHelper.js` comment | 🟢 Low | Function param uses correct `squareId` |
 | `movePieceFromXtoY()` is dead code | 🟢 Low | Replaced by `moveElement()`, kept for export |
-| `renderHighlight()` in `main.js` not used in main flow | 🟢 Low | Utility function, not called by any handler |
 
 ---
 

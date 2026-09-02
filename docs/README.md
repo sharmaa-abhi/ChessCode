@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Project Documentation
 
-**Last Updated:** August 29, 2026  
+**Last Updated:** September 2, 2026
 
 > A browser-based chess game built with **vanilla HTML, CSS, and JavaScript** using ES Modules.
 
@@ -33,7 +33,7 @@ ChessCode renders a full 8×8 chess board in the browser with all pieces on corr
 
 | Feature | Status |
 |---------|--------|
-| Check / Checkmate detection | ⏳ Stub exists, needs completion |
+| Check / Checkmate detection | ⏳ Planned; `checkForCheck()` is currently incomplete |
 | Stalemate detection | ❌ Future |
 | En passant | ❌ Future |
 | Move history / undo | ❌ Future |

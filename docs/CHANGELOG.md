@@ -4,6 +4,16 @@ All notable changes to this project are documented chronologically.
 
 ---
 
+## September 2, 2026
+
+### Documentation Status Sync
+- Updated all Markdown files to reflect the current playable feature set.
+- Clarified that check, checkmate, stalemate, and en passant are not implemented yet.
+- Corrected current references to the incomplete `checkForCheck()` hook.
+- Removed stale current references to the deleted `renderHighlight()` utility.
+
+---
+
 ## August 29, 2026
 
 ### Documentation Audit & Sync

@@ -1,8 +1,8 @@
 # ♟️ ChessCode
 
-**Last Updated:** August 29, 2026
+**Last Updated:** September 2, 2026
 
-A browser-based chess game built with vanilla HTML, CSS, and JavaScript (ES Modules). Fully playable with turn management, chess timers, castling, pawn promotion, and move logging.
+A browser-based chess game built with vanilla HTML, CSS, and JavaScript (ES Modules). Playable with turn management, chess timers, castling, pawn promotion, and move logging. Check, checkmate, stalemate, and en passant remain on the roadmap.
 
 ## 🚀 Quick Start
 

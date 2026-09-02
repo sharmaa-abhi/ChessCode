@@ -1,6 +1,6 @@
 # 🚀 ChessCode — Future Implementation Roadmap
 
-**Last Updated:** August 29, 2026  
+**Last Updated:** September 2, 2026
 **Current Completion:** ~90% — Fully playable 2-player chess
 
 This document outlines all planned features, their priority, estimated effort, and implementation approach.
@@ -30,7 +30,7 @@ This document outlines all planned features, their priority, estimated effort, a
 
 ### 1.1 Check Detection
 
-**Status:** `checkForCheck()` stub exists in `Events/Global.js`  
+**Status:** `checkForCheck()` is an incomplete hook in `Events/Global.js`
 **Goal:** After every move, detect if the opponent's king is in check.
 
 **Approach:**

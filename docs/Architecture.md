@@ -1,6 +1,6 @@
 # 🏗️ ChessCode — Architecture & Design
 
-**Last Updated:** August 29, 2026
+**Last Updated:** September 2, 2026
 
 This document covers the system architecture, module layers, data structures, and visual flowcharts for the entire ChessCode project.
 
@@ -35,7 +35,7 @@ This document covers the system architecture, module layers, data structures, an
 │ • checkSquare    │                │ • globalStateRender() │
 │   CaptureId      │                │ • selfHighlight()     │
 │ • giveXXX        │                │ • clearHighlight()    │
-│   Ids()          │                │ • renderHighlight()   │
+│   Ids()          │                │ • highlight rendering │
 │ • giveXXX        │                │ • rank/file labels    │
 │   CaptureIds()   │                │                       │
 │                  │                └────────────┬─────────┘

@@ -1,6 +1,6 @@
 # 🎨 ChessCode — UI/UX Design
 
-**Last Updated:** August 29, 2026
+**Last Updated:** September 2, 2026
 
 Covers: Visual design system, color palette, CSS class system, board layout, timer/logger UI, and the highlighting state model.
 

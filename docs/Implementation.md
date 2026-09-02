@@ -1,6 +1,6 @@
 # ♟️ ChessCode — Implementation Reference
 
-**Last Updated:** August 29, 2026
+**Last Updated:** September 2, 2026
 
 This document covers all functions (with quick reference), piece movement rules, and implementation details.
 
@@ -96,7 +96,6 @@ This document covers all functions (with quick reference), piece movement rules,
 | 45 | `globalStateRender()` | Adds or removes highlight dots on squares |
 | 46 | `selfHighlight(piece)` | Adds yellow glow to the selected piece |
 | 47 | `clearHighlight()` | Removes ALL green dots and red highlights |
-| 48 | `renderHighlight(squareId)` | Adds a green dot to a specific square (utility, not used in main flow) |
 
 ## `Events/Global.js` — Handling Clicks & Game Logic
 
@@ -104,7 +103,7 @@ This document covers all functions (with quick reference), piece movement rules,
 |---|----------|--------------|
 | 49 | `updateHeaderStatus()` | Sync header `#game-status` and `#status-text` with current `inTurn`; calls `updateActivePlayerTimer()` |
 | 50 | `changeTurn()` | Toggle `inTurn` (white↔black), call `updateHeaderStatus()`, switch timer |
-| 51 | `checkForCheck()` | Stub — calculates attack squares but doesn't validate yet |
+| 51 | `checkForCheck()` | Incomplete hook — attack-square calculation exists, but king safety is not enforced |
 | 52 | `checkForPawnPromotion(piece, id)` | Returns true if pawn reached final rank |
 | 53 | `callBackPawnPromotion(piece, id)` | Callback for modal — replaces pawn with selected piece |
 | 54 | `moveElement(piece, id, castle)` | Main move function — logs, updates data, moves DOM, handles castling, checks promotion, changes turn |
