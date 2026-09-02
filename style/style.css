@@ -13,14 +13,6 @@ body {
   min-height: 100vh;
 }
 
-.logo-image {
-  display: block;
-  width: 176px;
-  height: auto;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
-  transition: transform 0.3s ease;
-}
-
 /* ===== LAYOUT ===== */
 
 #flex {
@@ -32,8 +24,11 @@ body {
   padding: 24px;
 }
 
-.logo-area:hover .logo-image {
-  transform: rotate(2deg) scale(1.03);
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 }
 
 .side-panel {
@@ -76,31 +71,15 @@ body {
 
 .highlightYellow {
   background-color: #f7f769;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.logo-image {
-  display: block;
-  width: 176px;
-  height: auto;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
-  transition: transform 0.3s ease;
-}
 }
 
 .piece {
-#flex {
+  width: 75px;
   height: 75px;
   margin: auto;
   display: block;
   cursor: pointer;
-  flex: 1;
-  padding: 24px;
 }
-
-.logo-area:hover .logo-image {
-  transform: rotate(2deg) scale(1.03);
 
 .captureColor {
   background-color: #ee4b2b;
@@ -347,6 +326,18 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.logo-image {
+  display: block;
+  width: 176px;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.logo-area:hover .logo-image {
+  transform: rotate(2deg) scale(1.03);
 }
 
 .app-title {
