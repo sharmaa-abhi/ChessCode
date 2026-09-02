@@ -290,8 +290,8 @@
   .logo-area {
     gap: 8px;
   }
-  .app-title {
-    font-size: 18px;
+  .logo-image {
+    width: 156px;
   }
   .footer-content {
     flex-direction: column;
@@ -305,8 +305,8 @@
 }
 
 @media screen and (max-width: 400px) {
-  .app-title {
-    font-size: 16px;
+  .logo-image {
+    width: 142px;
   }
   .badge {
     display: none;
