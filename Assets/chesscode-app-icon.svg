@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">ChessCode app icon</title>
+  <desc id="desc">A glowing neon chess knight framed by coding braces</desc>
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34404e"/>
+      <stop offset="0.25" stop-color="#111923"/>
+      <stop offset="0.7" stop-color="#060b11"/>
+      <stop offset="1" stop-color="#18261f"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dbffe4"/>
+      <stop offset="0.35" stop-color="#72ff9b"/>
+      <stop offset="1" stop-color="#18db68"/>
+    </linearGradient>
+    <filter id="greenGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="smallGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="246" height="246" rx="47" fill="#030609" stroke="#0b1118" stroke-width="10"/>
+  <rect x="12" y="12" width="232" height="232" rx="40" fill="url(#shell)" stroke="#42505d" stroke-width="3"/>
+  <path d="M31 28C78 11 177 12 225 30" fill="none" stroke="#b8c8d4" stroke-opacity=".6" stroke-width="3" stroke-linecap="round"/>
+  <path d="M29 215C77 239 181 241 227 217" fill="none" stroke="#3cff81" stroke-opacity=".26" stroke-width="4"/>
+  <g fill="none" stroke="url(#neon)" stroke-linecap="round" stroke-linejoin="round" filter="url(#greenGlow)">
+    <path d="M62 72c-10 0-14 7-14 17v16c0 11-5 16-15 16 10 0 15 5 15 16v16c0 10 4 17 14 17M194 72c10 0 14 7 14 17v16c0 11 5 16 15 16-10 0-15 5-15 16v16c0 10-4 17-14 17" stroke-width="9"/>
+    <path d="M161 204H88l10-13c15-8 23-21 23-39v-24c0-15 8-26 23-34l24-13 23 10c10 5 17 14 19 25l4 20 14 8-14 14-23-4c-8 18-21 29-40 37" stroke-width="9"/>
+    <path d="M125 108c14 2 25-3 35-15l12-15-26 7-17-5-13 16M147 72c9 6 14 14 16 25 2 9 6 14 15 18" stroke-width="7"/>
+    <circle cx="146" cy="84" r="4" fill="#d7ffe1" stroke="none"/>
+    <path d="M89 205h83M82 218h97" stroke-width="8"/>
+  </g>
+  <path d="M31 58C59 35 193 26 226 59" fill="none" stroke="#ffffff" stroke-opacity=".08" stroke-width="13" stroke-linecap="round" filter="url(#smallGlow)"/>
+</svg>

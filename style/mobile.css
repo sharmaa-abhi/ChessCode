@@ -291,10 +291,7 @@
     gap: 8px;
   }
   .logo-image {
-    width: 156px;
-  }
-  .logo-mark {
-    width: 156px;
+    width: 52px;
   }
   .footer-content {
     flex-direction: column;
@@ -309,10 +306,7 @@
 
 @media screen and (max-width: 400px) {
   .logo-image {
-    width: 142px;
-  }
-  .logo-mark {
-    width: 142px;
+    width: 48px;
   }
   .badge {
     display: none;
