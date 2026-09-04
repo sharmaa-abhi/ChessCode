@@ -338,11 +338,20 @@ body {
   width: 176px;
   height: 40px;
   margin: 5px 0 0 3px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, #637d42, #2e4025 72%);
+  background: linear-gradient(145deg, #a4b781 0%, #637d42 28%, #344b2a 68%, #1e2d1a 100%);
+  clip-path: polygon(0 18%, 4% 0, 96% 0, 100% 18%, 100% 82%, 96% 100%, 4% 100%, 0 82%);
   transform: translateZ(-14px) skewY(-2deg);
-  box-shadow: 0 7px 0 #182216, 0 12px 18px rgba(0, 0, 0, 0.42);
+  filter: drop-shadow(0 7px 0 #182216) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.42));
   opacity: 0.95;
+}
+
+.logo-mark::after {
+  content: "";
+  position: absolute;
+  inset: 2px 5px;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0.28), transparent 36%);
+  clip-path: inherit;
+  pointer-events: none;
 }
 
 .logo-image {
