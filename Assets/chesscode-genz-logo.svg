@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 104" role="img" aria-labelledby="title desc">
+  <title id="title">ChessCode</title>
+  <desc id="desc">A neon green chess knight with coding braces and the ChessCode wordmark</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f2a35"/>
+      <stop offset="0.48" stop-color="#090e14"/>
+      <stop offset="1" stop-color="#15251d"/>
+    </linearGradient>
+    <linearGradient id="wordmark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e4ffe9"/>
+      <stop offset="0.42" stop-color="#6dff9b"/>
+      <stop offset="1" stop-color="#25e878"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.15 0 0 0 0 1 0 0 0 0 0.42 0 0 0 1 0" result="greenBlur"/>
+      <feMerge><feMergeNode in="greenBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-50%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="1.3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="3" y="3" width="414" height="98" rx="25" fill="#05080c" stroke="#28343e" stroke-width="5"/>
+  <rect x="9" y="9" width="402" height="86" rx="20" fill="url(#panel)" stroke="#101921" stroke-width="2"/>
+  <path d="M26 14h366" stroke="#93a5b2" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+  <g fill="none" stroke="url(#wordmark)" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M59 77h42M67 74c9-6 13-13 13-22V42c0-7 4-12 10-16l12-7 12 5c4 2 7 6 8 11l2 10 7 4-7 7-10-2c-4 9-10 15-20 18" stroke-width="4.5"/>
+    <path d="M91 25c5 3 8 7 9 13 1 5 3 8 8 10M68 49c7 1 13-2 18-7l6-7-12 3-8-3-6 7z" stroke-width="4.5"/>
+    <circle cx="88" cy="31" r="2" fill="#b7ffc9" stroke="none"/>
+    <path d="M43 35c-5 0-7 3-7 8v7c0 5-2 7-6 7 4 0 6 2 6 7v7c0 5 2 8 7 8M119 35c5 0 7 3 7 8v7c0 5 2 7 6 7-4 0-6 2-6 7v7c0 5-2 8-7 8" stroke-width="4" filter="url(#softGlow)"/>
+  </g>
+  <text x="151" y="66" fill="url(#wordmark)" font-family="Trebuchet MS, sans-serif" font-size="42" font-weight="700" letter-spacing="-1.5" filter="url(#softGlow)">Chess</text>
+  <text x="274" y="66" fill="#8affad" font-family="Trebuchet MS, sans-serif" font-size="42" font-weight="700" letter-spacing="-1.5">Code</text>
+  <circle cx="391" cy="27" r="3" fill="#54ff8c"/>
+</svg>

@@ -334,24 +334,7 @@ body {
 }
 
 .logo-mark {
-  position: absolute;
-  width: 176px;
-  height: 40px;
-  margin: 5px 0 0 3px;
-  background: linear-gradient(145deg, #a4b781 0%, #637d42 28%, #344b2a 68%, #1e2d1a 100%);
-  clip-path: polygon(0 18%, 4% 0, 96% 0, 100% 18%, 100% 82%, 96% 100%, 4% 100%, 0 82%);
-  transform: translateZ(-14px) skewY(-2deg);
-  filter: drop-shadow(0 7px 0 #182216) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.42));
-  opacity: 0.95;
-}
-
-.logo-mark::after {
-  content: "";
-  position: absolute;
-  inset: 2px 5px;
-  background: linear-gradient(105deg, rgba(255, 255, 255, 0.28), transparent 36%);
-  clip-path: inherit;
-  pointer-events: none;
+  display: none;
 }
 
 .logo-image {
@@ -360,15 +343,15 @@ body {
   display: block;
   width: 176px;
   height: auto;
-  filter: drop-shadow(0 2px 0 #151914) drop-shadow(0 5px 5px rgba(0, 0, 0, 0.48));
-  transform: rotateX(4deg) rotateY(-5deg);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  transform: rotateX(2deg) rotateY(-3deg);
   transform-origin: left center;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .logo-area:hover .logo-image {
   transform: rotateX(0deg) rotateY(0deg) translateY(-2px) scale(1.03);
-  filter: drop-shadow(0 3px 0 #151914) drop-shadow(0 9px 8px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
 }
 
 .app-title {
